@@ -1,0 +1,148 @@
+{
+    /*
+    	// Place your snippets for XML here. Each snippet is defined under a snippet name and has a prefix, body and 
+    	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+    	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+    	// same ids are connected.
+    	// Example:
+    	"Print to console": {
+    		"prefix": "log",
+    		"body": [
+    			"console.log('$1');",
+    			"$2"
+    		],
+    		"description": "Log output to console"
+    	}
+    */
+
+    "Ora new Document": {
+        "prefix": "oraNewDoc",
+        "body": [
+            "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>",
+            "<qry:doc-definition xmlns:qry=\"lg.lan/qry\" name=\"ejemplo simple\">",
+            "\t",
+            "</qry:doc-definition>"
+        ],
+        "description": "Ora new document tag"
+    },
+
+    "Ora new main": {
+        "prefix": "oraMain",
+        "body": [
+            "<qry:main>",
+            "\t<qry:select>",
+            "\t\t",
+            "\t</qry:select>",
+            "\t<qry:out>",
+            "\t\t",
+            "\t</qry:out>",
+            "</qry:main>"
+        ],
+        "description": "Ora new main structure with query and out tags"
+    },
+
+    "Ora new Declare": {
+        "prefix": "oraVars",
+        "body": [
+            "<qry:declare>",
+            "\t<qry:variable name=\"var01\" type=\"string\" value=\"Texto default 01\"/>",
+            "\t<qry:variable name=\"var02\" type=\"string\" value=\"Texto default 02\"/>",
+            "\t<qry:variable name=\"var03\" type=\"string\" value=\"Texto default 03\"/>",
+            "</qry:declare>"
+        ],
+        "description": "Ora new declare variables section"
+    },
+
+    "Ora set variable": {
+        "prefix": "oraSet",
+        "body": [
+            "<qry:set-variable name=\"string\" value=\"string\" operation=\"init|+|-|*|/|rnd\"/>"
+        ],
+        "description": "Ora new main structure with query and out tags"
+    },
+
+    "Ora new Query": {
+        "prefix": "oraQuery",
+        "body": [
+            "<qry:query name=\"sectionName\" > ",
+            "\t<qry:select>",
+            "\t\t",
+            "\t</qry:select>",
+            "\t<qry:out>",
+            "\t\t",
+            "\t</qry:out>",
+            "</qry:query>"
+        ],
+        "description": "Ora create a new query section"
+    },
+
+    "Ora insert Query": {
+        "prefix": "oraInsertQry",
+        "body": [
+            "<qry:insert-query name=\"nombreQueryQueApunta\" doc-param=\"#ROW/#PARAM\"/>"
+        ],
+        "description": "Ora insert a new query alredy defined"
+    },
+
+    "Ora Select": {
+        "prefix": "oraSelect",
+        "body": [
+            "<qry:select dump=\"1|0\">\t<!-- 1 genera archivo de salida, 0 u omision no genera nada -->",
+            "\t<!-- SELECT algo FROM tabla -->",
+            "</qry:select>"
+        ],
+        "description": "Ora sew select query tag"
+    },
+
+    "Ora new Element": {
+        "prefix": "oraElement",
+        "body": [
+            "<qry:element name=\"string\">",
+            "\t<qry:attribute name=\"nombreAtributo01\" value=\"valor01\" length=\"longitud01\" align=\"none|left|right|center\" format-number=\"2|.3|,4\"/>",
+            "\t<qry:attribute name=\"nombreAtributo02\" value=\"valor02\" length=\"longitud02\" align=\"none|left|right|center\" format-number=\"2|.3|,4\"/>",
+            "\t<!-- Mas elementos anidados -->",
+            "</qry:element>"
+        ],
+        "description": "Ora sew element tag with properties"
+    },
+
+    "Ora ForEach": {
+        "prefix": "oraForeach",
+        "body": [
+            "<qry:for-each-row doc=\"$nombreDocumento\" > <!-- Omitir nombre toma select local -->",
+            "\t<qry:element name=\"string\" >",
+            "</qry:for-each-row>"
+        ],
+        "description": "Ora new foreach loop estructure"
+    },
+
+    "Ora If Else": {
+        "prefix": "oraIf",
+        "body": [
+            "<qry:if left=\"valorIzq\" operator=\"equal|not-equal|less-equal|greater-equal|less|greater\" right=\"valorDer\" type=\"string|integer|double\">",
+            "\t",
+            "<qry:else/>",
+            "\t",
+            "</qry:if>"
+        ],
+        "description": "Ora new if else estructure"
+    },
+
+    "Ora While": {
+        "prefix": "oraWhile",
+        "body": [
+            "<qry:while left=\"valorIzq\" operator=\"equal|not-equal|less-equal|greater-equal|less|greater\" right=\"valorDer\" type=\"string|integer|double\">",
+            "\t",
+            "</qry:while>"
+        ],
+        "description": "Ora new while loop estructure"
+    },
+
+    "Ora Print": {
+        "prefix": "oraPrint",
+        "body": [
+            "<qry:print output=\"stdout|stderr\" value=\"Mensaje de salida + {$variable}\"/>"
+        ],
+        "description": "Ora print a messaje"
+    }
+}
