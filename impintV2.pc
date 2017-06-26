@@ -2590,7 +2590,7 @@ char *Cargos(int largos[],char *v_columna,char *campo, char *ord_fec)
 
    strcpy(v_txt[0].arr,"aviso de deuda             ");
    strcpy(v_txt[1].arr,"carta documento o telegrama");
-   strcpy(v_txt[2].arr,"reconexión                 ");
+   strcpy(v_txt[2].arr,"reconexiï¿½n                 ");
    v_txt[0].len=27;
    v_txt[1].len=27;
    v_txt[2].len=27;
@@ -2598,7 +2598,7 @@ char *Cargos(int largos[],char *v_columna,char *campo, char *ord_fec)
       Str2Varchar(ord_fec,v_ord_fec);
 	  for(i=0; i<3; i++)
    	  {
-      	EXEC SQL SELECT 'Cargo por '||:v_txt[i]||': $'||TO_CHAR(PPR_PRECIO,'9990.00')||' más IVA'
+      	EXEC SQL SELECT 'Cargo por '||:v_txt[i]||': $'||TO_CHAR(PPR_PRECIO,'9990.00')||' mï¿½s IVA'
 	    INTO   :v_descripcion[i]
 	    FROM PRECIOS_PRESTACION
 	    WHERE TIT_CLAVE = :v_tit_clave[i]
@@ -2734,12 +2734,6 @@ char *Documentos(int largos[],char *columnas,char *campo,long srv_cod,
    int r,aux;
    int f,sumar=0;
    char campoaux[1024];
-
-   /* Depurar (1, "Busco en DOCUMENTOS\n");
-    * Depurar (2, "Busco todos los documentos cuyo tramite sea %d\n", trt_num);
-    * Depurar (3, "i=%d ancho=%d\n", i, ancho);
-    * Depurar (3, "campo=%s\n", campo);
-    */
 
    /*
       Cambio del 10-9-2003, para que se acceda a la nueva vista
@@ -3075,7 +3069,7 @@ char *Totales_Tramite(int largos[],char *v_columna,char *campo,long trt_num)
       sprintf(campo,"%.2lf",v_suma_doc);
    }else if((strcmp(v_columna,"TTR_SUMA_DEC"))==0){
       if(v_suma_dec!=0) {
-		sprintf(campo,"Deuda Cargo Decreto Nº. 2067/08: %.2lf (*)\n", v_suma_dec);
+		sprintf(campo,"Deuda Cargo Decreto Nï¿½. 2067/08: %.2lf (*)\n", v_suma_dec);
 		largos[0]=strlen(campo);
 	  } else {
 		sprintf(campo,"\n");

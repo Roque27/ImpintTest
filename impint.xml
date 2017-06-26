@@ -11,6 +11,8 @@
         <qry:variable name="nro_ord" type="integer"/>
         <qry:variable name="nrobarra" type="integer"/>
         <qry:variable name="srv_cod" type="integer"/>
+        <qry:variable name="cnt_num" type="integer"/>
+        <qry:variable name="trt_num" type="integer"/>
 
         <qry:variable name="ban" type="integer"/>
 
@@ -21,10 +23,12 @@
         <qry:variable name="campo" type="string"/>
 
         <qry:variable name="l_tor_descripcion" type="string"/>
+
+        <qry:variable name="srv_cod_ori" type="integer"/>
+        <qry:variable name="cnt_num_ori" type="integer"/>
+        <qry:variable name="trt_num_ori" type="integer"/>
+        <qry:variable name="prs_num_ori" type="integer"/>
         
-        <qry:variable name="trt_num" type="integer"/>
-        
-        <qry:variable name="cnt_num" type="integer"/>
         <qry:variable name="v_tabla" type="string"/>
         <qry:variable name="v_columna" type="string"/>
 
@@ -169,6 +173,9 @@
         </qry:select>
         <qry:out>
             <qry:for-each-row>
+                <qry:if left="{$v_tabla}" operator="not-equal" right="DOCUMENTOS" type="string">
+                    <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
+                </qry:if>
                 <qry:element name="notificacionTexto">
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
                         <qry:if left="ban" operator="equal" right="1" type="integer">
@@ -890,6 +897,11 @@
         </qry:select>
         <qry:out>
             <qry:for-each-row>
+                <qry:if left="{#ROW:/ROW/@SRV_CODIGO_ORIGEN}" operator="equal" right="0" type="integer">
+                    
+                </qry:if>
+
+
                 <qry:element name="ordenativo">
                     <qry:if left="{$v_columna}" operator="equal" right="ORD_NUMERO" type="string">
                         <qry:if left="{$nro_ord}" operator="greater" right="0" type="integer">
