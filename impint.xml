@@ -847,7 +847,7 @@
     </qry:query>
 
     <!-- COMPLETADO -->
-    <qry:query name="Lecturas"> <!-- Lecturas -->
+    <qry:query name="Lecturas">
         <qry:select dump="0">
             SELECT LCT_VALOR_LEIDO AS LCT_VALOR_LEIDO
             FROM LECTURAS
