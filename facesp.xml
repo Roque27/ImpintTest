@@ -1,0 +1,1643 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry" name="SICLG.Impresion.Documento">
+	<qry:declare>
+		<!-- Parametros generales -->
+		<qry:variable name="VCAL" type="integer"/>
+		<qry:variable name="FECOL2" type="integer"/>
+		<qry:variable name="tabla_doc" type="string"/>
+		<qry:variable name="tabla_itm" type="string"/>
+		<qry:variable name="tabla_cdi" type="string"/>
+		<qry:variable name="tabla_lct" type="string"/>
+		<qry:variable name="tabla_coh" type="string"/>
+		<qry:variable name="tabla_iaf" type="string"/>
+		<!-- Para no calculos de lecturas -->
+		<qry:variable name="lct_consumo" type="double"/>
+		<qry:variable name="lct_calorias_promedio" type="double"/>
+		<qry:variable name="lct_consumo_a_9300" type="double"/>
+		<!-- Globales del documento -->
+		<qry:variable name="existe_cmi" type="integer"/>
+		<qry:variable name="srv_codigo" type="integer"/>
+		<qry:variable name="cnt_numero" type="integer"/>
+		<qry:variable name="doc_fecha_emision" type="string"/>
+		<qry:variable name="doc_periodo" type="integer"/>
+		<qry:variable name="doc_anio" type="integer"/>
+		<qry:variable name="doc_importe" type="double"/>
+		<qry:variable name="tipo-amparo" type="string" value="ninguno"/>
+		<!-- Contadores, sumarizadores, etc. -->
+		<qry:variable name="copia" type="integer"/>
+		<qry:variable name="factnum" type="integer" value="0"/>
+		<qry:variable name="lineasXpagina" type="integer" value="52"/>
+		<qry:variable name="nueva-columna" type="integer" value="26"/>
+		<qry:variable name="lineasXdetalle" type="integer" value="10"/>
+		<qry:variable name="pagina" type="integer" value="1"/>
+		<qry:variable name="pagina-actual" type="integer" value="1"/>
+		<qry:variable name="modulo" type="string"/>
+		<qry:variable name="total-empresa" type="double"/>
+		<qry:variable name="total-bloque" type="double"/>
+		<qry:variable name="total-modulo" type="double"/>
+		<qry:variable name="total-general" type="double"/>
+		<qry:variable name="total-facturado" type="double"/>
+		<qry:variable name="total-subsidio" type="double"/>
+		<qry:variable name="eximicion-pago" type="double"/>
+		<qry:variable name="nro-linea" type="integer" value="0"/>
+		<qry:variable name="hay-cfg" type="integer" value="0"/>
+		<qry:variable name="ancho" type="integer" value="0"/>
+		<qry:variable name="ancho_aux" type="integer" value="0"/>
+		<qry:variable name="poner-separador" type="integer" value="0"/>
+		<qry:variable name="importe2067" type="string"/>
+		<!-- Para el grafico de consumo -->
+		<qry:variable name="max-tic" type="integer" value="15"/>
+		<qry:variable name="coh-max" type="integer" value="0"/>
+		<qry:variable name="coh-tic" type="double" value="0"/>
+		<qry:variable name="nro-tic" type="integer" value="0"/>
+		<qry:variable name="len-max" type="integer" value="0"/>
+		<qry:variable name="anio" type="integer" value="0"/>
+		<!-- Leyendas decreto 2067 -->
+		<qry:variable name="hay_leyenda2067" type="integer" value="0"/>
+		<qry:variable name="leyenda2067_1" type="string"/>
+		<qry:variable name="leyenda2067_2" type="string"/>
+		<qry:variable name="leyenda2067_3" type="string"/>
+		<qry:variable name="ff2067" type="string"/>
+		<!-- Leyanda para tarifas P y PNR sobre Bonificación s/ Res MEyM Nº129/16 -->
+		<qry:variable name="hay_leyendaR129" type="integer" value="0"/>
+	</qry:declare>
+	<qry:main>
+		<qry:out>
+			<qry:element name="facesp">
+				<qry:insert-query name="PARAM_GRAL_VCAL"/>
+				<qry:insert-query name="PARAM_GRAL_FECOL2"/>
+				<qry:if left="#PARAM:/doc/@doc_desde" operator="not-equal" right="" type="string">
+				    <qry:insert-query name="DETERMINA_TABLA" doc-param="#PARAM:"/>
+					<qry:insert-query name="DOCUMENTOS_A" doc-param="#PARAM:"/>
+				</qry:if>
+				<qry:if left="#PARAM:/doc/@doc_desde" operator="equal" right="" type="string">
+					<qry:set-variable name="tabla_doc" value="documentos"/>
+					<qry:set-variable name="tabla_itm" value="items"/>
+					<qry:set-variable name="tabla_cdi" value="consumos_diarios"/>
+					<qry:set-variable name="tabla_lct" value="lecturas"/>
+					<qry:set-variable name="tabla_coh" value="consumos_historicos"/>
+					<qry:set-variable name="tabla_iaf" value="items_a_facturar"/>
+					<qry:insert-query name="DOCUMENTOS_B" doc-param="#PARAM:"/>
+				</qry:if>
+			</qry:element>
+		</qry:out>
+	</qry:main>
+	<qry:query name="DETERMINA_TABLA">
+		<qry:select dump="0">
+			select count(*) existe,
+			  to_char(to_date(varios.valor_parametro('FF2067'), 'dd/mm/yyyy'), 'yyyymmdd') ff2067
+			  from documentos d
+			  where d.doc_tipo = {#PARAM:/doc/@doc_tipo}
+			  and d.doc_numero between {#PARAM:/doc/@doc_desde} and {#PARAM:/doc/@doc_hasta}
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="ff2067" value="#ROW:/ROW/@FF2067"/>
+				<qry:if left="#ROW:/ROW/@EXISTE" operator="greater" right="0" type="integer">
+					<qry:set-variable name="tabla_doc" value="documentos"/>
+					<qry:set-variable name="tabla_itm" value="items"/>
+					<qry:set-variable name="tabla_cdi" value="consumos_diarios"/>
+					<qry:set-variable name="tabla_lct" value="lecturas"/>
+					<qry:set-variable name="tabla_coh" value="consumos_historicos"/>
+					<qry:set-variable name="tabla_iaf" value="items_a_facturar"/>
+				<qry:else/>
+					<qry:set-variable name="tabla_doc" value="documentosh"/>
+					<qry:set-variable name="tabla_itm" value="itemsh"/>
+					<qry:set-variable name="tabla_cdi" value="consumos_diariosh"/>
+					<qry:set-variable name="tabla_lct" value="lecturash"/>
+					<qry:set-variable name="tabla_coh" value="consumos_historicosh"/>
+					<qry:set-variable name="tabla_iaf" value="items_a_facturarh"/>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DOCUMENTOS_A">
+		<qry:select dump="0">
+			select d.doc_tipo, to_char(d.doc_numero) doc_numero
+			  from ~$tabla_doc! d
+			  where d.doc_tipo = {#PARAM:/doc/@doc_tipo}
+			  and d.doc_numero between {#PARAM:/doc/@doc_desde} and {#PARAM:/doc/@doc_hasta}
+			  order by d.grf_codigo_facturado, d.doc_numero
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="copia" value="0"/>
+				<qry:while left="$copia" operator="less" right="#PARAM:/doc/@copias" type="integer">
+					<qry:insert-query name="FACTURA" doc-param="#ROW:"/>
+					<qry:set-variable name="copia" value="1" operation="+"/>
+				</qry:while>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DOCUMENTOS_B">
+		<qry:select dump="0">
+			select d.doc_tipo, to_char(d.doc_numero) doc_numero
+			  from ~$tabla_doc! d
+			  where d.grf_codigo_facturado = {#PARAM:/doc/@grf_codigo_facturado}
+			  and d.doc_anio = {#PARAM:/doc/@doc_anio}
+			  and d.doc_periodo = {#PARAM:/doc/@doc_periodo}
+			  and d.srv_codigo between {#PARAM:/doc/@srv_desde} and {#PARAM:/doc/@srv_hasta}
+			  order by d.grf_codigo_facturado, d.doc_numero
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="copia" value="0"/>
+				<qry:while left="$copia" operator="less" right="#PARAM:/doc/@copias" type="integer">
+					<qry:insert-query name="FACTURA" doc-param="#ROW:"/>
+					<qry:set-variable name="copia" value="1" operation="+"/>
+				</qry:while>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="FACTURA">
+		<qry:out>
+			<qry:set-variable name="total-general" value="0"/>
+			<qry:set-variable name="total-subsidio" value="0"/>
+			<qry:set-variable name="eximicion-pago" value="0"/>
+			<qry:set-variable name="factnum" value="1" operation="+"/>
+			<qry:set-variable name="tipo-amparo" value="ninguno"/>
+			<qry:set-variable name="hay_leyendaR129" value="0"/>
+			<qry:print output="stderr" value="{$time} Generando documento {$factnum}: {#PARAM:/ROW/@DOC_TIPO} {#PARAM:/ROW/@DOC_NUMERO}"/>
+			<qry:element name="factura">
+				<qry:insert-query name="EXISTE_CMI" doc-param="#PARAM:"/>
+				<qry:insert-query name="HAY_CDI" doc-param="#PARAM:"/>
+				<qry:insert-query name="SUBSIDIO" doc-param="#PARAM:"/>
+				<qry:attribute name="ff2067" value="$ff2067"/>
+				<qry:element name="cabecera">
+					<qry:element name="documento">
+						<qry:attribute name="doc_tipo" value="#PARAM:/ROW/@DOC_TIPO"/>
+						<qry:attribute name="doc_numero" value="#PARAM:/ROW/@DOC_NUMERO"/>
+						<qry:insert-query name="DOC" doc-param="#PARAM:"/>
+					</qry:element>
+					<qry:set-variable name="nro-linea" value="0"/>
+					<qry:element name="lecturas">
+						<qry:insert-query name="LECT" doc-param="#PARAM:"/>
+						<qry:attribute name="cantidad" value="$nro-linea"/>
+						<!-- completa con lineas en blanco -->
+						<qry:while left="$nro-linea" operator="less" right="10" type="integer">
+							<qry:set-variable name="nro-linea" value="1" operation="+"/>
+							<qry:element name="lectura"/>
+						</qry:while>
+					</qry:element>
+				</qry:element>
+				<qry:element name="detalle">
+					<qry:set-variable name="pagina" value="1"/>
+					<qry:set-variable name="nro-linea" value="0"/>
+					<qry:set-variable name="total-modulo" value="0"/>
+					<qry:set-variable name="hay_leyenda2067" value="0"/>
+					<qry:insert-query name="EMPRESAS" doc-param="#PARAM:"/>
+					<!-- total documento -->
+					<qry:set-variable name="total-general" value="2" operation="rnd"/>
+					<qry:set-variable name="doc_importe" value="2" operation="rnd"/>
+					<qry:if left="$total-general" operator="not-equal" right="$doc_importe" type="double">
+						<qry:print output="stderr" value="El importe del documento {#PARAM:/ROW/@DOC_TIPO} {#PARAM:/ROW/@DOC_NUMERO} ({$doc_importe}) difiere del total de sus items ({$total-general})."/>
+						<qry:exit value="-1"/>
+					</qry:if>
+					<!-- mensajes al cliente como l^237!neas de factura -->
+					<qry:insert-query name="MENSAJE-3360"/>
+					<qry:insert-query name="MENSAJES"/>
+					<!-- completa la p^225!gina con lineas en blanco -->
+					<qry:if left="$nro-linea" operator="greater" right="0" type="integer">
+						<qry:attribute name="paginas" value="$pagina"/>
+						<qry:while left="$nro-linea" operator="less" right="$lineasXpagina" type="integer">
+							<qry:set-variable name="nro-linea" value="1" operation="+"/>
+							<qry:element name="linea">
+								<qry:attribute name="a" value="$nro-linea"/>
+							</qry:element>
+						</qry:while>
+					<qry:else/>
+						<qry:if left="$pagina" operator="greater" right="1" type="integer">
+							<qry:set-variable name="pagina" value="1" operation="-"/>
+						</qry:if>
+						<qry:attribute name="paginas" value="$pagina"/>
+					</qry:if>
+				</qry:element>
+				<qry:element name="pie">
+					<!-- Resoluci^243!n 1982 -->
+					<qry:element name="total-facturado">
+						<qry:set-variable name="total-facturado" value="$total-general"/>
+						<qry:set-variable name="total-facturado" value="$total-subsidio" operation="-"/>
+						<qry:attribute name="descripcion" value="TOTAL FACTURADO" length="60" align="left"/>
+						<qry:attribute name="importe" value="$total-facturado" length="67" align="right" format-number=".2"/>
+					</qry:element>
+					<qry:element name="total-subsidio">
+						<qry:if left="$tipo-amparo" operator="equal" right="no-facturar" type="string">
+							<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+							<qry:attribute name="importe" value="" length="67" align="right" fill=" "/>
+						</qry:if>
+						<qry:if left="$tipo-amparo" operator="equal" right="no-cobrar" type="string">
+							<qry:attribute name="descripcion" value="EXIMICION PAGO POR MEDIDA JUDICIAL (&amp;&amp;)" length="60" align="left" fill=" "/>
+							<qry:attribute name="importe" value="$eximicion-pago" length="67" align="right" format-number=".2"/>
+						</qry:if>
+						<qry:if left="$tipo-amparo" operator="equal" right="ninguno" type="string">
+							<qry:attribute name="descripcion" value="SUBSIDIO AL CONSUMO" length="60" align="left"/>
+							<qry:attribute name="importe" value="$total-subsidio" length="67" align="right" format-number=".2"/>
+						</qry:if>
+					</qry:element>
+					<qry:element name="total-a-pagar">
+						<qry:attribute name="descripcion" value="TOTAL A PAGAR" length="60" align="left"/>
+						<qry:attribute name="importe" value="$total-general" length="67" align="right" format-number=".2"/>
+					</qry:element>
+					<!-- Fin resoluci^243!n 1982 -->
+					<qry:element name="tarifas">
+						<qry:insert-query name="TARIFAS" doc-param="#PARAM:"/>
+					</qry:element>
+					<qry:element name="info-cliente">
+						<qry:insert-query name="PLAZO_PAGO"/>
+						<qry:insert-query name="TASA_PROMEDIO" doc-param="#PARAM:"/>
+						<qry:insert-query name="CAT_PURE"/>
+						<qry:insert-query name="MENSAJE_PURE" doc-param="#PARAM:"/>
+					</qry:element>
+					<qry:element name="consumos">
+						<qry:insert-query name="CONSUMOS"/>
+					</qry:element>
+				</qry:element>
+				<qry:attribute name="hay_cfg" value="$hay-cfg"/>
+			</qry:element>
+		</qry:out>
+	</qry:query>
+	<qry:query name="PARAM_GRAL_VCAL">
+		<qry:select dump="0">
+			SELECT PGR_VALOR FROM PARAM_GRAL WHERE PGR_CODIGO = 'VCAL'
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="VCAL" value="#ROW:/ROW/@PGR_VALOR"/>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="PARAM_GRAL_FECOL2">
+		<qry:select dump="0">
+			SELECT PGR_VALOR FROM PARAM_GRAL WHERE PGR_CODIGO = 'FECOL2'
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="FECOL2" value="#ROW:/ROW/@PGR_VALOR"/>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="EXISTE_CMI">
+		<qry:select desc="Busca si hay item CMI para ver como agrupa los items para ser mostrados en en el documento">
+			SELECT count(*) hv_existe_cmi
+			  FROM ~$tabla_itm!
+			  WHERE doc_tipo = {#PARAM:/ROW/@DOC_TIPO}
+			    AND doc_numero = {#PARAM:/ROW/@DOC_NUMERO}
+			    AND tit_clave = 'CMI'
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="existe_cmi" value="#ROW:/ROW/@HV_EXISTE_CMI"/>
+				<qry:attribute name="existe_cmi" value="#ROW:/ROW/@HV_EXISTE_CMI"/>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="HAY_CDI">
+		<qry:select desc="hay consumos diarios?">
+			SELECT COUNT(*) hay_cdi
+			  FROM ~$tabla_cdi!
+			  WHERE doc_tipo = {#PARAM:/ROW/@DOC_TIPO}
+			    AND doc_numero = {#PARAM:/ROW/@DOC_NUMERO}
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:attribute name="hay_cdi" value="#ROW:/ROW/@HAY_CDI"/>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DOC">
+		<qry:select dump="0">
+			SELECT TO_CHAR(D.DOC_NUMERO) DOC_NUMERO,
+			       T.IVV_GRUPO,
+			       D.DOC_ANIO,
+			       D.DOC_PERIODO,
+				   d.tfa_codigo,  -- no estoy segura de que se utilice
+			   -- reemplaza agregar_guion_nro
+			       LTRIM(SUBSTR(TO_CHAR(d.doc_numero, '000000000000'), -12, 4)) || '-' || LTRIM(SUBSTR(TO_CHAR(D.DOC_NUMERO, '000000000000'), -8, 8)) con_guion,
+			   -- del buscar_datos_doc
+				   TO_CHAR(d.DOC_FECHA_EMISION,'dd/mm/yyyy') doc_fecha_emision_fmt,
+			       LTRIM(TO_CHAR(NVL(d.DOC_IMPORTE, 0),'9999999999990.00')) DOC_IMPORTE,
+			       LTRIM(TO_CHAR(NVL(d.DOC_CONSUMO, 0),'9999999999990.0000')) DOC_CONSUMO,
+			       d.DOC_M3_RES_CALCULADA,
+			       d.DOC_PER_RES_CALCULADA,
+			       /* kalave 28/02/2005 req. 2086 */
+			       TO_CHAR(d.DOC_FECHA_EMISION,'yyyymmdd') doc_fecha_emision,
+			   -- del Buscar_Datos_Pers
+			  	   D.SRV_CODIGO,
+			       LTRIM(TO_CHAR(D.CNT_NUMERO,'00')) CNT_NUMERO,
+			       SUBSTR(Prs.PRS_RAZON_SOCIAL,1,60) prs_razon_social,
+			       T.IVV_CODIGO,
+			       SUBSTR(T.IVV_DESCRIPCION,1,35) ivv_descripcion,
+			       SUBSTR(Prs.PRS_CUIT, 1,2) || '-' || SUBSTR(Prs.PRS_CUIT, 3,8) || '-'||  SUBSTR(Prs.PRS_CUIT, 11,1) prs_cuit,
+			       Prs.PRS_NUMERO_IB,
+			   -- del buscar_srv_cnt
+			       SUBSTR(L.CLL_NOMBRE,1,30) || ' ' || TO_CHAR(S.SRV_NRO) || DECODE(S.SRV_BIS,'N',' ',NULL, NULL, S.SRV_BIS) ||
+					  DECODE(S.SRV_TORRE,NULL, NULL, ' ' || s.srv_TORRE) ||
+				      DECODE(S.SRV_PISO,NULL, NULL, ' ' || s.srv_piso) ||
+					  DECODE(S.SRV_DEPTO,NULL, NULL, ' ' || s.srv_DEPTO) || ' - ' ||
+			          DECODE(S.SRV_C_POSTAL,NULL, NULL, '(' || S.SRV_C_POSTAL || ') ') ||
+			          SUBSTR(A.AGF_NOMBRE,1,30) direccion_suministro,
+			       S.SRV_SUMINISTRO_ORIGINAL,
+			       S.SRV_ORDEN_LECTURA,
+				   R.RTA_CODIGO,
+				   r.GRF_CODIGO,
+				   DECODE(cnt.cnt_direccion_pago, NULL,SUBSTR(L_cnt.CLL_NOMBRE,1,30) || ' ' || TO_CHAR(cnt.cnt_NRO_pago) ||
+				      DECODE(cnt.cnt_BIS,'N',' ',NULL, NULL, cnt.cnt_BIS) ||
+					  DECODE(cnt.cnt_TORRE_pago,NULL, NULL, ' ' || cnt.cnt_TORRE_pago) ||
+				      DECODE(cnt.cnt_PISO_pago,NULL, NULL, ' ' || cnt.cnt_piso_pago) ||
+					  DECODE(cnt.cnt_DEPTO_pago,NULL, NULL, ' ' || cnt.cnt_DEPTO_pago),
+				      SUBSTR(cnt.cnt_direccion_pago,1,30)) direccion_contrato,
+			       DECODE(cnt.cnt_direccion_pago, NULL,
+			          DECODE(cnt.cnt_C_POSTAL_pago,NULL, NULL, '(' || cnt.cnt_c_postal_pago || ') ') ||
+					  SUBSTR(Agf_cnt.AGF_NOMBRE,1,30),
+				      SUBSTR(cnt.cnt_direccion_pago,31,30)) localidad_contrato,
+			       SUBSTR(cat.CAT_DESCRIPCION,1,30) cat_descripcion,
+			       /* kalave 24/02/2005 req. 2087 */
+			       SUBSTR(Cnt.CNT_AUX1,10,2) cnt_aux1,
+				   /* fab req 3360 */
+				   FUN_DATOS_IMPRESION_F_ELECTR(d.doc_tipo, d.doc_numero) msgs_fac_elec,
+				   tcl.tcl_descripcion,
+				   tcl.tcl_codigo,
+				   DECODE(d.doc_periodo, 01, 'Enero ', 02, 'Febrero ', 03, 'Marzo ', 04, 'Abril ', 05, 'Mayo ', 06, 'Junio ',
+	       				07, 'Julio ', 08, 'Agosto ', 09, 'Setiembre ', 10, 'Octubre ', 11, 'Noviembre ', 12, 'Diciembre ') || TO_CHAR(d.doc_anio) periodo,
+	       		   A.AGF_CODIGO cod_loc_suministro
+			  FROM /* fab req 3360
+					SUCURSALES sce,
+					AREAS_GEOGRAFICAS gce,
+					NUMERACION nce,
+				   */
+			       CALLES L,
+			       AREAS_GEOGRAFICAS A,
+			       RUTAS R,
+				   SERVICIOS S,
+				   AREAS_GEOGRAFICAS agf_cnt,
+				   CALLES l_cnt,
+			       CATEGORIAS cat,
+			       CONTRATOS Cnt,
+			       PERSONAS prs,
+			       TIPOS_IVA T,
+			       ~$tabla_doc! D,
+			       DOCUMENTOS_CUADRO DC,
+			       PRECIOS_TARIFA PT,
+			       TARIFAS tcl
+			  WHERE D.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			    AND D.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			    AND T.IVV_CODIGO = D.IVV_CODIGO
+				AND prs.prs_numero = d.prs_numero
+				AND cnt.SRV_CODIGO = d.srv_codigo
+			    AND Cnt.CNT_NUMERO = d.cnt_numero
+				AND l_cnt.cll_codigo = cnt.cll_codigo
+				AND l_cnt.agf_codigo = cnt.agf_codigo
+				AND agf_cnt.agf_codigo = cnt.agf_codigo
+			    AND cat.CAT_CODIGO = Cnt.CAT_CODIGO
+				AND D.SRV_CODIGO = S.SRV_CODIGO
+			    AND r.RTA_CODIGO = s.RTA_CODIGO
+			    AND r.SCF_CODIGO = s.SCF_CODIGO
+			    AND L.AGF_CODIGO = S.AGF_CODIGO
+			    AND L.CLL_CODIGO = S.CLL_CODIGO
+			    AND A.AGF_CODIGO = S.AGF_CODIGO
+				/* fab req 3360
+				AND nce.doc_tipo = d.doc_tipo
+				AND nce.num_prefijo = SUBSTR(TO_CHAR(d.doc_numero, '000000000000'), -12, 4)
+				AND sce.scf_codigo = nce.scf_codigo
+				AND gce.agf_codigo = sce.agf_codigo
+				*/
+			  	AND DC.DOC_TIPO = D.DOC_TIPO
+			    AND DC.DOC_NUMERO = D.DOC_NUMERO
+				AND PT.TAB_NUMERO = DC.TAB_NUMERO
+			    AND PT.TAB_FECHA_VIGENCIA = (SELECT MAX(P1.TAB_FECHA_VIGENCIA)
+			                                  FROM PRECIOS_TARIFA P1,
+			                                       DOCUMENTOS_CUADRO D1
+			                                  WHERE D1.DOC_TIPO = D.DOC_TIPO
+			                                    AND D1.DOC_NUMERO = D.DOC_NUMERO
+			                                    AND P1.TAB_NUMERO = D1.TAB_NUMERO)
+			    AND tcl.TCL_CODIGO = PT.TCL_CODIGO
+				ORDER BY D.GRF_CODIGO_FACTURADO,
+			           S.SCF_CODIGO,
+			           S.AGF_CODIGO,
+			           S.RTA_CODIGO,
+			           S.SRV_ORDEN_LECTURA,
+			           D.DOC_NUMERO
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<!-- asigna las variables usadas en otros queries -->
+				<qry:set-variable name="srv_codigo" value="#ROW:/ROW/@SRV_CODIGO"/>
+				<qry:set-variable name="cnt_numero" value="#ROW:/ROW/@CNT_NUMERO"/>
+				<qry:set-variable name="doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION"/>
+				<qry:set-variable name="doc_anio" value="#ROW:/ROW/@DOC_ANIO"/>
+				<qry:set-variable name="doc_periodo" value="#ROW:/ROW/@DOC_PERIODO"/>
+				<qry:set-variable name="doc_importe" value="#ROW:/ROW/@DOC_IMPORTE"/>
+				<qry:set-variable name="hay-cfg" value="0"/>
+				<!-- atributos del documento -->
+				<qry:attribute name="ivv_grupo" value="#ROW:/ROW/@IVV_GRUPO"/>
+				<qry:attribute name="doc_anio" value="#ROW:/ROW/@DOC_ANIO"/>
+				<qry:attribute name="doc_periodo" value="#ROW:/ROW/@DOC_PERIODO"/>
+				<qry:attribute name="tfa_codigo" value="#ROW:/ROW/@TFA_CODIGO"/>
+				<qry:attribute name="con_guion" value="#ROW:/ROW/@CON_GUION"/>
+				<qry:attribute name="doc_fecha_emision_fmt" value="#ROW:/ROW/@DOC_FECHA_EMISION_FMT"/>
+				<qry:attribute name="doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION"/>
+				<qry:attribute name="doc_importe" value="#ROW:/ROW/@DOC_IMPORTE"/>
+				<qry:attribute name="doc_consumo" value="#ROW:/ROW/@DOC_CONSUMO" length="15" format-number=" 2" align="right"/>
+				<qry:attribute name="doc_m3_res_calculada" value="#ROW:/ROW/@DOC_M3_RES_CALCULADA"/>
+				<qry:attribute name="doc_per_res_calculada" value="#ROW:/ROW/@DOC_PER_RES_CALCULADA"/>
+				<qry:attribute name="srv_codigo" value="#ROW:/ROW/@SRV_CODIGO"/>
+				<qry:attribute name="cnt_numero" value="#ROW:/ROW/@CNT_NUMERO"/>
+				<qry:attribute name="prs_razon_social" value="#ROW:/ROW/@PRS_RAZON_SOCIAL"/>
+				<qry:attribute name="ivv_codigo" value="#ROW:/ROW/@IVV_CODIGO"/>
+				<qry:attribute name="ivv_descripcion" value="#ROW:/ROW/@IVV_DESCRIPCION"/>
+				<qry:attribute name="prs_cuit" value="#ROW:/ROW/@PRS_CUIT"/>
+				<qry:attribute name="prs_numero_ib" value="#ROW:/ROW/@PRS_NUMERO_IB"/>
+				<qry:attribute name="direccion_suministro" value="#ROW:/ROW/@DIRECCION_SUMINISTRO"/>
+				<qry:attribute name="srv_suministro_original" value="#ROW:/ROW/@SRV_SUMINISTRO_ORIGINAL"/>
+				<qry:attribute name="srv_orden_lectura" value="#ROW:/ROW/@SRV_ORDEN_LECTURA"/>
+				<qry:attribute name="rta_codigo" value="#ROW:/ROW/@RTA_CODIGO"/>
+				<qry:attribute name="grf_codigo" value="#ROW:/ROW/@GRF_CODIGO"/>
+				<qry:attribute name="direccion_contrato" value="#ROW:/ROW/@DIRECCION_CONTRATO"/>
+				<qry:attribute name="localidad_contrato" value="#ROW:/ROW/@LOCALIDAD_CONTRATO"/>
+				<qry:attribute name="cat_descripcion" value="#ROW:/ROW/@CAT_DESCRIPCION"/>
+				<qry:attribute name="cnt_aux1" value="#ROW:/ROW/@CNT_AUX1"/>
+				<qry:attribute name="msgs_fac_elec" value="#ROW:/ROW/@MSGS_FAC_ELEC"/>
+				<qry:attribute name="tcl_descripcion" value="#ROW:/ROW/@TCL_DESCRIPCION"/>
+				<qry:attribute name="tcl_codigo" value="#ROW:/ROW/@TCL_CODIGO"/>
+				<qry:attribute name="periodo" value="#ROW:/ROW/@PERIODO"/>
+				<qry:attribute name="cod_loc_suministro" value="#ROW:/ROW/@COD_LOC_SUMINISTRO"/>
+				<!-- determina si muestra el mensaje para tarifas P y PNR sobre Bonificación s/ Res MEyM Nº129/16 -->
+				<qry:if left="#ROW:/ROW/@DOC_FECHA_EMISION" operator="greater" right="20160911" type="integer">
+					<qry:if left="#ROW:/ROW/@TCL_CODIGO" operator="equal" right="P" type="string">
+						<qry:set-variable name="hay_leyendaR129" value="1"/>
+					</qry:if>
+					<qry:if left="#ROW:/ROW/@TCL_CODIGO" operator="equal" right="PNR" type="string">
+						<qry:set-variable name="hay_leyendaR129" value="1"/>
+					</qry:if>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="LECT">
+		<qry:select dump="0">
+			  SELECT
+            	TO_CHAR(E.STE_NUMERO) STE_NUMERO,
+				TO_CHAR(L.LCT_FECHA_LECTURA_ANTERIOR,'dd/mm/yyyy') LCT_FECHA_LECTURA_ANTERIOR,
+				ROUND(L.LCT_VALOR_LEIDO_ANTERIOR) LCT_VALOR_LEIDO_ANTERIOR,
+				TO_CHAR(L.LCT_FECHA_LECTURA,'dd/mm/yyyy') LCT_FECHA_LECTURA,
+				ROUND(L.LCT_VALOR_LEIDO) LCT_VALOR_LEIDO,
+				TO_CHAR(ROUND(DECODE(L.LCT_CONSUMO_INFORMADO,
+                NULL, 	DECODE(NVL(L.LCT_FACTOR_FP,1.0), 0.0, 1.0, NVL(L.LCT_FACTOR_FP,1.0)) *
+						DECODE(NVL(L.LCT_FACTOR_FT,1.0), 0.0, 1.0, NVL(L.LCT_FACTOR_FT,1.0)) *
+						DECODE(NVL(L.LCT_FACTOR_FPV,1.0), 0.0, 1.0, NVL(L.LCT_FACTOR_FPV,1.0)),
+                1.0) *
+				DECODE(L.STE_FACTOR_EQUIPO, 0.0, S.STE_FACTOR_EQUIPO, L.STE_FACTOR_EQUIPO) *
+				DECODE(L.STE_FACTOR_EQUIPO, 0.0, Q.CDR_FACTOR, L.CDR_FACTOR),5),'90.00000')
+				FACTOR_CORRECCION,
+				to_char(round(NVL(L.LCT_CONSUMO_INFORMADO + NVL(L.LCT_CONSUMO_A_FACTURAR, NVL(L.LCT_CONSUMO,0)),
+				NVL(L.LCT_CONSUMO_A_FACTURAR, NVL(L.LCT_CONSUMO,0))),2), '9999999990.00') LCT_CONSUMO,
+				to_char(round(NVL(L.LCT_CONSUMO_INFORMADO + NVL(L.LCT_CONSUMO_A_FACTURAR, NVL(L.LCT_CONSUMO,0)), -1),6), '9999999990.00') LCT_CONSUMO_INFORMADO,
+				/*
+				to_char(round(NVL(L.LCT_CONSUMO_INFORMADO,NVL(L.LCT_CONSUMO,0)),6), '9999999990.00') LCT_CONSUMO_1,
+				to_char(round((L.LCT_VALOR_LEIDO-L.LCT_VALOR_LEIDO_ANTERIOR),6), '9999999990.00') LCT_CONSUMO_2,
+				to_char(round((POWER(10,Q.CDR_ENTEROS)-L.LCT_VALOR_LEIDO_ANTERIOR+L.LCT_VALOR_LEIDO),6), '9999999990.00') LCT_CONSUMO_3,
+				*/
+                round(L.LCT_CALORIAS_PROMEDIO) LCT_CALORIAS_PROMEDIO,
+                L.LCT_FACTURABLE,
+                to_char(trunc(DECODE({$VCAL}, 0, 0,
+					NVL(L.LCT_CONSUMO_INFORMADO + NVL(L.LCT_CONSUMO_A_FACTURAR, NVL(L.LCT_CONSUMO,0)),
+					NVL(L.LCT_CONSUMO_A_FACTURAR, NVL(L.LCT_CONSUMO,0)))*L.LCT_CALORIAS_PROMEDIO/{$VCAL}),2),'9999999990.00')
+				LCT_CONSUMO_A_9300
+			  FROM ~$tabla_lct! L, EQUIPOS E, STOCK_EQUIPOS S, CUADRANTES Q
+			  WHERE L.doc_tipo = {#PARAM:/ROW/@DOC_TIPO}
+				AND L.doc_numero = {#PARAM:/ROW/@DOC_NUMERO}
+                AND L.cdr_unidad = 'GAS'
+                AND E.srv_codigo = L.srv_codigo
+                AND E.grm_numero = L.grm_numero
+                AND E.eqp_orden = L.eqp_orden
+				AND S.STE_TIPO = E.STE_TIPO
+				AND S.STE_NUMERO = E.STE_NUMERO
+				AND Q.GRM_NUMERO = L.grm_numero
+				AND Q.EQP_ORDEN = L.eqp_orden
+				AND Q.CDR_UNIDAD = L.cdr_unidad
+				AND Q.SRV_CODIGO = E.srv_codigo
+				AND Q.CDR_ORDEN = L.cdr_orden
+			  ORDER BY L.LCT_FECHA_LECTURA
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="nro-linea" value="1" operation="+"/>
+				<qry:set-variable name="lct_consumo" value="#ROW:/ROW/@LCT_CONSUMO"/>
+				<qry:set-variable name="lct_consumo_a_9300" value="#ROW:/ROW/@LCT_CONSUMO_A_9300"/>
+				<qry:element name="lectura">
+					<qry:attribute name="ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="10" align="right"/>
+					<qry:attribute name="lct_fecha_lectura_anterior" value="#ROW:/ROW/@LCT_FECHA_LECTURA_ANTERIOR" length="10"/>
+					<qry:attribute name="lct_valor_leido_anterior" value="#ROW:/ROW/@LCT_VALOR_LEIDO_ANTERIOR" length="15" format-number=" 0" align="right"/>
+					<qry:if left="#ROW:/ROW/@LCT_CONSUMO_INFORMADO" operator="equal" right="-1" type="double">
+						<qry:attribute name="lct_fecha_lectura" value="#ROW:/ROW/@LCT_FECHA_LECTURA" length="10"/>
+						<qry:attribute name="lct_valor_leido" value="#ROW:/ROW/@LCT_VALOR_LEIDO" length="15" format-number=" 0" align="right"/>
+					<qry:else/>
+						<qry:attribute name="lct_fecha_lectura" value="Consumo " length="10" align="right"/>
+						<qry:attribute name="lct_valor_leido" value="Informado" length="15" align="left"/>
+					</qry:if>
+					<qry:attribute name="factor_correccion" value="#ROW:/ROW/@FACTOR_CORRECCION" length="15" format-number=".5" align="right"/>
+					<qry:attribute name="lct_facturable" value="#ROW:/ROW/@LCT_FACTURABLE"/>
+					<qry:attribute name="lct_consumo" value="$lct_consumo" length="15"  format-number=" 2" align="right"/>
+					<qry:attribute name="lct_calorias_promedio" value="#ROW:/ROW/@LCT_CALORIAS_PROMEDIO" length="15" format-number=" 0" align="right"/>
+					<qry:attribute name="lct_consumo_a_9300" value="$lct_consumo_a_9300" length="15" format-number=" 2" align="right"/>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="EMPRESAS">
+		<qry:select dump="0">
+			  SELECT DISTINCT
+			  	  i.doc_tipo,
+			  	  to_char(i.doc_numero) doc_numero,
+                  m.idm_empresa_impresion,
+				  cg.rv_meaning desc_empresa,
+				  DECODE(UPPER(cg.rv_high_value), 'TOTALIZAR', 'S', 'N') totaliza_empresa
+			  FROM CG_REF_CODES cg,
+			       ~$tabla_itm! I,
+			       TIPOS_ITEM T,
+			       IMPDOC_MODULO_ITEMS M
+			  WHERE I.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			    AND I.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			    AND T.TIT_CLAVE = I.TIT_CLAVE
+			    AND M.IDM_CODIGO(+) = T.IDM_CODIGO_GC
+				AND cg.rv_domain(+) = 'EMPRESA IMPRESION'
+				AND cg.rv_low_value(+) = m.idm_empresa_impresion
+			  ORDER BY m.idm_empresa_impresion
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="total-empresa" value="0"/>
+				<!-- Titulo de la empresa ocupa dos lineas -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="#ROW:/ROW/@DESC_EMPRESA" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="" length="67" align="right"/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:if left="$nro-linea" operator="not-equal" right="0" type="integer">
+					<qry:element name="linea">
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+				</qry:if>
+				<qry:insert-query name="BLOQUES" doc-param="#ROW:"/>
+				<qry:if left="#ROW:/ROW/@TOTALIZA_EMPRESA" operator="equal" right="S">
+					<!-- ocupa dos l^237!neas, el total y otra en blanco (si no es la primera de la pagina) -->
+					<qry:element name="linea">
+						<qry:attribute name="descripcion" value="SUBTOTAL {#ROW:/ROW/@DESC_EMPRESA}" length="60" align="left" fill=" "/>
+						<qry:attribute name="importe" value="$total-empresa" length="67" align="right" format-number=".2"/>
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+					<qry:if left="$nro-linea" operator="not-equal" right="0" type="integer">
+						<qry:element name="linea">
+							<qry:insert-query name="ATR_PAGINA"/>
+						</qry:element>
+					</qry:if>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="BLOQUES">
+		<qry:select dump="0">
+			  SELECT DISTINCT
+			  	  i.doc_tipo,
+			  	  to_char(i.doc_numero) doc_numero,
+				  m.idm_bloque_impresion,
+				  cg.rv_meaning desc_bloque,
+				  DECODE(UPPER(cg.rv_high_value), 'TOTALIZAR', 'S', 'N') totaliza_bloque
+			  FROM CG_REF_CODES cg,
+			       ~$tabla_itm! I,
+			       TIPOS_ITEM T,
+			       IMPDOC_MODULO_ITEMS M
+			  WHERE I.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			    AND I.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			    AND T.TIT_CLAVE = I.TIT_CLAVE
+			    AND M.IDM_CODIGO(+) = T.IDM_CODIGO_GC
+				AND cg.rv_domain(+) = 'BLOQUE IMPRESION'
+				AND cg.rv_low_value(+) = m.idm_bloque_impresion
+				AND M.IDM_EMPRESA_IMPRESION = {#PARAM:/ROW/@IDM_EMPRESA_IMPRESION}
+			  ORDER BY m.idm_bloque_impresion
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="total-bloque" value="0"/>
+				<qry:insert-query name="MODULOS" doc-param="#ROW:"/>
+				<qry:if left="#ROW:/ROW/@TOTALIZA_BLOQUE" operator="equal" right="S">
+					<!-- ocupa dos l^237!neas, el total y otra en blanco (si no es la primera de la pagina) -->
+					<qry:element name="linea">
+						<qry:attribute name="descripcion" value="#ROW:/ROW/@DESC_BLOQUE" length="60" align="left" fill=" "/>
+						<qry:attribute name="importe" value="$total-bloque" length="67" align="right" format-number=".2"/>
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+					<qry:if left="$nro-linea" operator="not-equal" right="0" type="integer">
+						<qry:element name="linea">
+							<qry:insert-query name="ATR_PAGINA"/>
+						</qry:element>
+					</qry:if>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="MODULOS">
+		<qry:select dump="0">
+			SELECT DISTINCT
+				i.doc_tipo,
+			    to_char(i.doc_numero) doc_numero,
+			    m.idm_bloque_impresion,
+				m.idm_leyenda_impresion idm_leyenda_impresion,
+				m.idm_orden_impresion,
+				t.tit_fideicomiso
+			FROM ~$tabla_itm! I,
+			     TIPOS_ITEM T,
+			     IMPDOC_MODULO_ITEMS M
+			WHERE I.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			  AND I.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			  AND T.TIT_CLAVE = I.TIT_CLAVE
+			  AND M.IDM_CODIGO(+) = T.IDM_CODIGO_GC
+			  AND M.IDM_BLOQUE_IMPRESION = {#PARAM:/ROW/@IDM_BLOQUE_IMPRESION}
+			ORDER BY m.idm_orden_impresion, substr(m.idm_leyenda_impresion,1,60)
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="total-modulo" value="0"/>
+				<qry:set-variable name="modulo" value="#ROW:/ROW/@IDM_LEYENDA_IMPRESION"/>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="#ROW:/ROW/@IDM_LEYENDA_IMPRESION" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="" length="67" align="right"/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:insert-query name="ITEMS" doc-param="#ROW:"/>
+				<!-- ocupa dos l^237!neas, el total y otra en blanco (si no es la primera de la pagina) -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="Subtotal" length="60" align="left" fill=" "/>
+					<qry:if left="#ROW:/ROW/@TIT_FIDEICOMISO" operator="equal" right="B" type="string">
+						<qry:if left="$tipo-amparo" operator="equal" right="no-facturar" type="string">
+							<qry:attribute name="importe" value="" length="67" align="right" fill=" "/>
+						<qry:else/>
+							<qry:attribute name="importe" value="$total-modulo" length="67" align="right" format-number=".2"/>
+						</qry:if>
+					<qry:else/>
+						<qry:attribute name="importe" value="$total-modulo" length="67" align="right" format-number=".2"/>
+					</qry:if>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:if left="$nro-linea" operator="not-equal" right="0" type="integer">
+					<qry:element name="linea">
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="ITEMS">
+		<qry:select dump="0">
+			SELECT substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,60) descripcion,
+			DECODE(substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,1), '0',
+			substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),4,60),
+			substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,60)) descripcion2,
+	          DECODE(i.tit_clave, 'T00', i.tit_clave, 'T01', i.tit_clave, 'T02', i.tit_clave,
+	                              'T03', i.tit_clave, 'T04', i.tit_clave, 'T05', i.tit_clave, 'T06', i.tit_clave,
+	                              'T07', i.tit_clave, 'T08', i.tit_clave, 'T09', i.tit_clave, 'T10', i.tit_clave,
+	                              'T11', i.tit_clave, 'T12', i.tit_clave, 'D00', i.tit_clave, 'D01', i.tit_clave,
+	                              'D02', i.tit_clave, 'D03', i.tit_clave, 'D04', i.tit_clave, 'D05', i.tit_clave,
+	                              'D06', i.tit_clave, 'D07', i.tit_clave, 'D08', i.tit_clave, 'D09', i.tit_clave,
+	                              'D10', i.tit_clave, 'D11', i.tit_clave, 'D12', i.tit_clave, 'FIR', i.tit_clave,
+								  'FB1', i.tit_clave, 'CDB', i.tit_clave, 'EMJ', i.tit_clave,
+	                              DECODE(SUBSTR(i.tit_clave,1,2), 'BM', i.tit_clave, ' ')) tit_clave,
+	          DECODE(t.tit_fideicomiso, null, 0, DECODE(INSTR(t.tit_descripcion, '(+)'), 0, 0, 1)) es_cfg,
+	          DECODE(SUBSTR(i.tit_clave,1,2), 'BM', SUBSTR(i.itm_detalle,1,1), ' ') itm_detalle,
+			  LTRIM(TO_CHAR(SUM(nvl(i.itm_cantidad,0)),'9999999999990.0000')) cantidad,
+			  LTRIM(TO_CHAR(SUM(nvl(i.itm_precio_unit, 0)),'9999999999990.0000')) itm_precio_unit,
+			  LTRIM(TO_CHAR(SUM(NVL(I.ITM_IMPORTE, 0)),'9999999999990.0000')) itm_importe,
+			  LTRIM(TO_CHAR(SUM(nvl(i.itm_cantidad,0))*SUM(nvl(i.itm_precio_unit, 0)),'999G9999G999G990D00')) importe2,
+	          DECODE(i.itm_porcentaje, NULL, NULL, TO_CHAR(i.itm_porcentaje) || '%') porcentaje,
+			  nvl(t.tit_subsidio, 'N') tit_subsidio
+		  FROM ~$tabla_itm! I,
+		       TIPOS_ITEM T,
+		       IMPDOC_LEYENDA_ITEMS L,
+			   IMPDOC_MODULO_ITEMS M
+		  WHERE I.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+		    AND I.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+		    AND T.TIT_CLAVE = I.TIT_CLAVE
+		    AND L.IDL_CODIGO (+)= T.IDL_CODIGO
+		    AND M.IDM_CODIGO = T.IDM_CODIGO_GC
+	        AND M.IDM_BLOQUE_IMPRESION = {#PARAM:/ROW/@IDM_BLOQUE_IMPRESION}
+	        AND M.IDM_LEYENDA_IMPRESION = {#PARAM:/ROW/@IDM_LEYENDA_IMPRESION}
+	        AND (I.ITM_IMPORTE != 0 OR T.TIT_CLAVE = 'FB1' OR T.TIT_CLAVE = 'CDB')
+		  GROUP BY decode(substr(FUN_ITM_DESC_COMP(
+            ~$existe_cmi!,
+            i.tit_clave,
+            i.itm_porcentaje,
+            i.itm_cantidad,
+            i.itm_precio_unit,
+            t.git_grupo,
+            t.idl_codigo,
+            t.tit_descripcion,
+            t.tit_consumo,
+            l.idl_descripcion,
+            t.tit_fact_minima
+      ),1,60), 'Factura Minima', 1, M.IDM_CODIGO),
+			substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,60),
+			DECODE(substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,1), '0',
+			substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),4,60),
+			substr(FUN_ITM_DESC_COMP(
+						~$existe_cmi!,
+						i.tit_clave,
+						i.itm_porcentaje,
+						i.itm_cantidad,
+						i.itm_precio_unit,
+						t.git_grupo,
+						t.idl_codigo,
+						t.tit_descripcion,
+						t.tit_consumo,
+						l.idl_descripcion,
+            t.tit_fact_minima
+			),1,60)),
+	          DECODE(i.tit_clave, 'T00', i.tit_clave, 'T01', i.tit_clave, 'T02', i.tit_clave,
+	                              'T03', i.tit_clave, 'T04', i.tit_clave, 'T05', i.tit_clave, 'T06', i.tit_clave,
+	                              'T07', i.tit_clave, 'T08', i.tit_clave, 'T09', i.tit_clave, 'T10', i.tit_clave,
+	                              'T11', i.tit_clave, 'T12', i.tit_clave, 'D00', i.tit_clave, 'D01', i.tit_clave,
+	                              'D02', i.tit_clave, 'D03', i.tit_clave, 'D04', i.tit_clave, 'D05', i.tit_clave,
+	                              'D06', i.tit_clave, 'D07', i.tit_clave, 'D08', i.tit_clave, 'D09', i.tit_clave,
+	                              'D10', i.tit_clave, 'D11', i.tit_clave, 'D12', i.tit_clave, 'FIR', i.tit_clave,
+								  'FB1', i.tit_clave, 'CDB', i.tit_clave, 'EMJ', i.tit_clave,
+	                              DECODE(SUBSTR(i.tit_clave,1,2), 'BM', i.tit_clave, ' ')),
+			  DECODE(t.tit_fideicomiso, null, 0, DECODE(INSTR(t.tit_descripcion, '(+)'), 0, 0, 1)),
+	          DECODE(SUBSTR(i.tit_clave,1,2), 'BM', SUBSTR(i.itm_detalle,1,1), ' '),
+	          DECODE(i.itm_porcentaje, NULL, NULL, TO_CHAR(i.itm_porcentaje) || '%'),
+			  nvl(t.tit_subsidio, 'N')
+		  ORDER BY decode(substr(FUN_ITM_DESC_COMP(~$existe_cmi!,
+            i.tit_clave,
+            i.itm_porcentaje,
+            i.itm_cantidad,
+            i.itm_precio_unit,
+            t.git_grupo,
+            t.idl_codigo,
+            t.tit_descripcion,
+            t.tit_consumo,
+            l.idl_descripcion,
+            t.tit_fact_minima
+      ),1,60), 'Factura Minima', 1, M.IDM_CODIGO), descripcion
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="total-general" value="#ROW:/ROW/@ITM_IMPORTE" operation="+"/>
+
+				<qry:if left="#ROW:/ROW/@ES_CFG" operator="equal" right="1" type="integer">
+					<qry:set-variable name="hay-cfg" value="1"/>
+				</qry:if>
+				<!-- resolucion 1982 -->
+				<qry:if left="#ROW:/ROW/@TIT_SUBSIDIO" operator="equal" right="S" type="string">
+					<qry:set-variable name="total-subsidio" value="#ROW:/ROW/@ITM_IMPORTE" operation="+"/>
+					<qry:if left="#ROW:/ROW/@TIT_CLAVE" operator="equal" right="CDB" type="string">
+						<qry:if left="$tipo-amparo" operator="equal" right="no-facturar" type="string">
+							<qry:set-variable name="hay_leyenda2067" value="1"/>
+							<qry:set-variable name="leyenda2067_1" value="(&amp;) El Costo de Gas Importado no facturado ascender^237!a a"/>
+							<qry:set-variable name="leyenda2067_2" value=", y en raz^243!n de la medida judicial"/>
+							<qry:set-variable name="leyenda2067_3" value="el Estado Nacional se encuentra impedido de evaluar el subsidio."/>
+							<qry:element name="linea">
+								<qry:attribute name="descripcion" value="    {#ROW:/ROW/@DESCRIPCION2}" length="60" align="left" fill=" "/>
+								<qry:if left="#ROW:/ROW/@ITM_IMPORTE" operator="equal" right="0" type="double">
+									<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+								<qry:else/>
+									<qry:attribute name="importe" value="#ROW:/ROW/@ITM_IMPORTE" length="67" align="right" format-number=".2"/>
+								</qry:if>
+								<qry:insert-query name="ATR_PAGINA"/>
+							</qry:element>
+						</qry:if>
+					</qry:if>
+					<qry:if left="#ROW:/ROW/@TIT_CLAVE" operator="equal" right="EMJ" type="string">
+						<qry:if left="$tipo-amparo" operator="equal" right="no-cobrar" type="string">
+							<qry:set-variable name="eximicion-pago" value="#ROW:/ROW/@ITM_IMPORTE"/>
+							<qry:set-variable name="hay_leyenda2067" value="1"/>
+							<qry:set-variable name="leyenda2067_1" value="(&amp;&amp;) El usuario se encuentra eximido del pago del Costo de Gas"/>
+							<qry:set-variable name="leyenda2067_2" value="Importado total por medida judicial, raz^243!n por la cual el"/>
+							<qry:set-variable name="leyenda2067_3" value="Estado Nacional se encuentra impedido de evaluar el subsidio."/>
+						</qry:if>
+					</qry:if>
+				<qry:else/>
+					<!-- totales -->
+					<qry:set-variable name="total-empresa" value="#ROW:/ROW/@ITM_IMPORTE" operation="+"/>
+					<qry:set-variable name="total-bloque" value="#ROW:/ROW/@ITM_IMPORTE" operation="+"/>
+					<qry:set-variable name="total-modulo" value="#ROW:/ROW/@ITM_IMPORTE" operation="+"/>
+					<qry:if left="#ROW:/ROW/@TIT_CLAVE" operator="equal" right="FB1" type="string">
+						<qry:if left="$tipo-amparo" operator="equal" right="no-facturar" type="string">
+							<qry:set-variable name="importe2067" value="#ROW:/ROW/@IMPORTE2"/>
+							<qry:if left="$hay_leyenda2067" operator="equal" right="0" type="integer">
+								<qry:set-variable name="hay_leyenda2067" value="1"/>
+								<qry:set-variable name="leyenda2067_1" value="(&amp;) El Costo de Gas Importado no facturado ascender^237!a a"/>
+								<qry:set-variable name="leyenda2067_2" value="."/>
+								<qry:set-variable name="leyenda2067_3" value=""/>
+							</qry:if>
+						</qry:if>
+					</qry:if>
+					<qry:element name="linea">
+						<qry:attribute name="descripcion" value="    {#ROW:/ROW/@DESCRIPCION2}" length="60" align="left" fill=" "/>
+						<qry:if left="#ROW:/ROW/@ITM_IMPORTE" operator="equal" right="0" type="double">
+							<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+						<qry:else/>
+							<qry:attribute name="importe" value="#ROW:/ROW/@ITM_IMPORTE" length="67" align="right" format-number=".2"/>
+						</qry:if>
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+				</qry:if>
+				<!-- resolucion 1982 -->
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="MENSAJE-3360">
+		<qry:select dump="0">
+			select substr(d.mef_detalle,1,67) mef_detalle
+			  from mens_detalle d, mens_fact_cnt m
+			  where m.srv_codigo = 0
+			    and m.cnt_numero = 0
+				and to_date({$doc_fecha_emision}, 'yyyymmdd') between mef_fecha_desde and mef_fecha_hasta
+				and d.mef_numero = m.mef_numero
+			  order by d.mef_orden
+		</qry:select>
+		<qry:out>
+			<qry:set-variable name="poner-separador" value="1"/>
+			<qry:for-each-row>
+				<qry:if left="$poner-separador" operator="equal" right="1" type="integer">
+					<qry:set-variable name="poner-separador" value="0"/>
+					<!-- linea en blanco -->
+					<qry:element name="linea">
+						<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+						<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+				</qry:if>
+				<!-- el mensaje ocupa una linea del detalle -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="{#ROW:/ROW/@MEF_DETALLE}" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+			</qry:for-each-row>
+			<qry:if left="$hay_leyenda2067" operator="equal" right="1" type="integer">
+				<!-- linea en blanco -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<!-- el mensaje ocupa tres lineas del detalle -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="$leyenda2067_1" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:if left="$tipo-amparo" operator="equal" right="no-cobrar" type="string">
+						<qry:attribute name="importe" value="{$leyenda2067_2}" length="67" align="left" fill=" "/>
+					<qry:else/>
+						<qry:attribute name="importe" value="pesos {$importe2067}{$leyenda2067_2}" length="67" align="left" fill=" "/>
+					</qry:if>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="$leyenda2067_3" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+			</qry:if>
+		</qry:out>
+	</qry:query>
+	<qry:query name="MENSAJES">
+		<qry:select dump="0">
+			select substr(d.mef_detalle,1,67) mef_detalle
+			  from mens_detalle d, mens_fact_cnt m
+			  where m.srv_codigo = {$srv_codigo}
+			    and m.cnt_numero = {$cnt_numero}
+				and to_date({$doc_fecha_emision}, 'yyyymmdd') between mef_fecha_desde and mef_fecha_hasta
+				and d.mef_numero = m.mef_numero
+			  order by d.mef_orden
+		</qry:select>
+		<qry:out>
+			<qry:set-variable name="poner-separador" value="1"/>
+			<qry:for-each-row>
+				<qry:if left="$poner-separador" operator="equal" right="1" type="integer">
+					<qry:set-variable name="poner-separador" value="0"/>
+					<!-- linea en blanco -->
+					<qry:element name="linea">
+						<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+						<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+						<qry:insert-query name="ATR_PAGINA"/>
+					</qry:element>
+				</qry:if>
+				<!-- el mensaje ocupa una linea del detalle -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="{#ROW:/ROW/@MEF_DETALLE}" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+			</qry:for-each-row>
+			<qry:if left="$hay_leyenda2067" operator="equal" right="1" type="integer">
+				<!-- linea en blanco -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<!-- el mensaje ocupa tres lineas del detalle -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="$leyenda2067_1" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:if left="$tipo-amparo" operator="equal" right="no-cobrar" type="string">
+						<qry:attribute name="importe" value="{$leyenda2067_2}" length="67" align="left" fill=" "/>
+					<qry:else/>
+						<qry:attribute name="importe" value="pesos {$importe2067}{$leyenda2067_2}" length="67" align="left" fill=" "/>
+					</qry:if>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="$leyenda2067_3" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+			</qry:if>
+			<!-- el mensaje para tarifas P y PNR sobre Bonificación s/ Res MEyM Nº129/16 -->
+			<!-- 	IMPORTANTE: este cpbte. incluye, de corresponder, la Bonificación
+					s/ Res MEyM Nº129/16 sobre el periodo actual, y el eventual
+					crédito a su favor y/o la opción de pago en 4 cuotas del saldo
+					adeudado sobre períodos anteriores, s/ Res. ENRG I-3960 -->
+			<qry:if left="$hay_leyendaR129" operator="equal" right="1" type="integer">
+				<!-- linea en blanco -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<!-- el mensaje ocupa cuatro lineas del detalle -->
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="IMPORTANTE: este cpbte. incluye, de corresponder, la Bonificaci^243!n" length="69" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="s/ Res MEyM N^186!129/16 sobre el periodo actual, y el eventual" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="cr^233!dito a su favor y/o la opci^243!n de pago en 4 cuotas del saldo" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+				<qry:element name="linea">
+					<qry:attribute name="descripcion" value="" length="60" align="left" fill=" "/>
+					<qry:attribute name="importe" value="adeudado sobre per^237!odos anteriores, s/ Res. ENRG I-3960" length="67" align="left" fill=" "/>
+					<qry:insert-query name="ATR_PAGINA"/>
+				</qry:element>
+			</qry:if>
+		</qry:out>
+	</qry:query>
+	<qry:query name="ATR_PAGINA">
+		<qry:out>
+			<qry:set-variable name="nro-linea" value="1" operation="+"/>
+			<qry:attribute name="a" value="$nro-linea"/>
+			<qry:if left="$nro-linea" operator="equal" right="1" type="integer">
+				<qry:attribute name="pagina" value="$pagina"/>
+			</qry:if>
+			<qry:if left="$nro-linea" operator="equal" right="$lineasXpagina" type="integer">
+				<qry:set-variable name="nro-linea" value="0"/>
+				<qry:set-variable name="pagina" value="1" operation="+"/>
+			</qry:if>
+		</qry:out>
+	</qry:query>
+	<qry:query name="TARIFAS">
+		<qry:select dump="0">
+			SELECT
+				D.DOC_TIPO DOC_TIPO_DCU,
+				TO_CHAR(D.DOC_NUMERO) DOC_NUMERO_DCU,
+				P.TAB_NUMERO,
+			    T.TCL_CODIGO,
+			    T.TCL_DESCRIPCION,
+			    --'Seg^250!n resoluci^243!n ENARGAS N^176!' || P.TAB_OBSERVACIONES || ' (EN PESOS) VIGENTE DESDE EL ' || TO_CHAR(P.TAB_FECHA_VIGENCIA, 'DD/MM/YYYY')  || ':' VIGENCIA
+			    'Seg^250!n resoluci^243!n ENARGAS Nro. ' || P.TAB_OBSERVACIONES || ' (en pesos).' VIGENCIA,
+			    SUBSTR(P.CLA_CODIGO, 1, 3) CLA_CODIGO
+			  FROM DOCUMENTOS_CUADRO D,
+			       PRECIOS_TARIFA P,
+				   TARIFAS T
+			  WHERE D.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			    AND D.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+				AND P.TAB_NUMERO = D.TAB_NUMERO
+			    AND P.TAB_FECHA_VIGENCIA = (SELECT MAX(P1.TAB_FECHA_VIGENCIA)
+			                                  FROM PRECIOS_TARIFA P1,
+			                                       DOCUMENTOS_CUADRO D1
+			                                  WHERE D1.DOC_TIPO = D.DOC_TIPO
+			                                    AND D1.DOC_NUMERO = D.DOC_NUMERO
+			                                    AND P1.TAB_NUMERO = D1.TAB_NUMERO)
+			    AND T.TCL_CODIGO = P.TCL_CODIGO
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="tarifa">
+					<qry:attribute name="doc_tipo_dcu" value="#ROW:/ROW/@DOC_TIPO_DCU"/>
+					<qry:attribute name="doc_numero_dcu" value="#ROW:/ROW/@DOC_NUMERO_DCU"/>
+					<qry:attribute name="tab_numero" value="#ROW:/ROW/@TAB_NUMERO"/>
+					<qry:attribute name="tcl_codigo" value="#ROW:/ROW/@TCL_CODIGO"/>
+					<qry:attribute name="cla_codigo" value="#ROW:/ROW/@CLA_CODIGO"/>
+					<qry:attribute name="tcl_descripcion" value="{#ROW:/ROW/@TCL_CODIGO} - {#ROW:/ROW/@TCL_DESCRIPCION}"/>
+					<qry:attribute name="vigencia" value="#ROW:/ROW/@VIGENCIA"/>
+					<qry:element name="detalles-tarifas">
+						<qry:insert-query name="COLUMNAS_DETALLES_TARIFAS" doc-param="#ROW:"/>
+					</qry:element>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="COLUMNAS_DETALLES_TARIFAS">
+		<qry:select dump="0">
+			SELECT distinct
+				DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) titulo,
+				length(DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value)) ancho,
+				dli.tab_numero,
+				con.tcl_codigo
+			  FROM CG_REF_CODES cg,
+			       CONCEPTOS con,
+			       DETALLES_LISTA dli
+			  WHERE  dli.tab_numero = {#PARAM:/ROW/@TAB_NUMERO}
+			    AND con.tcl_codigo = {#PARAM:/ROW/@TCL_CODIGO}
+				AND con.con_numero = dli.con_numero
+				AND con.con_imprime = 'S'
+				AND cg.rv_domain = 'TIPO CONCEPTO'
+				AND cg.rv_low_value = con.con_tipo
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:set-variable name="nro-linea" value="0"/>
+				<qry:set-variable name="ancho" value="#ROW:/ROW/@ANCHO"/>
+				<qry:element name="detalle">
+					<qry:insert-query name="DETALLES_TARIFAS" doc-param="#ROW:"/>
+					<qry:if left="$nro-linea" operator="greater" right="0" type="integer">
+						<qry:attribute name="titulo" value="#ROW:/ROW/@TITULO" length="$ancho" align="center"/>
+					<qry:else/>
+						<qry:attribute name="titulo" value="" length="$ancho" align="center"/>
+					</qry:if>
+					<qry:attribute name="lineas" value="$nro-linea"/>
+					<!-- completa lineas en blanco si es necesario -->
+					<qry:while left="$nro-linea" operator="less" right="$lineasXdetalle" type="integer">
+						<qry:set-variable name="nro-linea" value="1" operation="+"/>
+						<qry:element name="linea">
+							<qry:attribute name="nro" value="$nro-linea"/>
+							<qry:attribute name="descripcion" value="" length="$ancho"/>
+							<qry:attribute name="valor" value=""/>
+						</qry:element>
+					</qry:while>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DETALLES_TARIFAS">
+		<qry:select dump="0">
+			SELECT distinct
+				DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) titulo,
+    			con.con_escalon,
+				dli.tab_numero,
+				con.tcl_codigo,
+				DECODE(con.con_tipo, 'LEC', con.con_tipo, 'XXX') con_tipo
+			  FROM CG_REF_CODES cg,
+			       CONCEPTOS con,
+			       DETALLES_LISTA dli
+			  WHERE  dli.tab_numero = {#PARAM:/ROW/@TAB_NUMERO}
+			    AND con.tcl_codigo = {#PARAM:/ROW/@TCL_CODIGO}
+				AND con.con_numero = dli.con_numero
+				AND con.con_imprime = 'S'
+				AND cg.rv_domain = 'TIPO CONCEPTO'
+				AND cg.rv_low_value = con.con_Tipo
+			    and DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) = {#PARAM:/ROW/@TITULO}
+              ORDER BY con.con_escalon desc -- porque cuando tiene escalon la columna es mas ancha
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:if left="#ROW:/ROW/@CON_ESCALON" operator="equal" right="S">
+					<qry:insert-query name="ESCALONES" doc-param="#ROW:"/>
+				</qry:if>
+				<qry:if left="#ROW:/ROW/@CON_ESCALON" operator="equal" right="P">
+					<qry:if left="#ROW:/ROW/@CON_TIPO" operator="equal" right="LEC">
+						<qry:insert-query name="CONTRATOS_ESCALONES" doc-param="#ROW:"/>
+					<qry:else/>
+						<qry:insert-query name="DETALLE_TARIFA" doc-param="#ROW:"/>
+					</qry:if>
+				</qry:if>
+				<qry:if left="#ROW:/ROW/@CON_ESCALON" operator="equal" right="N">
+					<qry:insert-query name="DETALLE_TARIFA" doc-param="#ROW:"/>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="ESCALONES">
+		<qry:select dump="0">
+			SELECT DECODE(SUBSTR(TO_CHAR(esc.esc_cantidad_hasta),1,3),'999','Mas de ' || TO_CHAR(esc.esc_cantidad_desde) || ' m3:',
+					'De ' || TO_CHAR(esc.esc_cantidad_desde) || ' a ' || TO_CHAR(esc.esc_cantidad_hasta) || ' m3:') escala,
+			       pes.pes_precio_unit,
+			       con.con_tipo
+			  FROM  CG_REF_CODES cg,
+					ESCALONES esc,
+					CONCEPTOS con,
+					DETALLES_LISTA dli,
+					PRECIOS_ESCALONES pes
+			  WHERE  dli.tab_numero = {#PARAM:/ROW/@TAB_NUMERO}
+				AND cg.rv_domain = 'TIPO CONCEPTO'
+			    and DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) = {#PARAM:/ROW/@TITULO}
+			    AND con.tcl_codigo = {#PARAM:/ROW/@TCL_CODIGO}
+				AND con.con_numero = dli.con_numero
+				AND con.con_imprime = 'S'
+                AND con.con_escalon = 'S'
+			    AND con.con_tipo = cg.rv_low_value
+				AND esc.tcl_codigo = con.tcl_codigo
+				AND esc.con_numero = con.con_numero
+			    AND pes.tab_numero = dli.tab_numero
+			    AND pes.con_numero = con.con_numero
+			    AND pes.esc_numero = esc.esc_numero
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:if left="$nro-linea" operator="less" right="$lineasXdetalle" type="integer">
+					<qry:set-variable name="nro-linea" value="1" operation="+"/>
+					<qry:if left="$ancho" operator="less" right="32" type="integer">
+						<qry:set-variable name="ancho" value="32"/>
+					</qry:if>
+					<qry:set-variable name="ancho_aux" value="$ancho"/>
+					<qry:set-variable name="ancho_aux" value="10" operation="-"/>
+					<qry:element name="linea">
+						<qry:attribute name="con_tipo" value="#ROW:/ROW/@CON_TIPO"/>
+						<qry:attribute name="nro" value="$nro-linea"/>
+						<qry:attribute name="descripcion" value="#ROW:/ROW/@ESCALA" length="$ancho_aux" align="left"/>
+						<qry:attribute name="valor" value="#ROW:/ROW/@PES_PRECIO_UNIT" length="10" align="right" format-number=".6"/>
+					</qry:element>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="CONTRATOS_ESCALONES">
+		<qry:select dump="0">
+			SELECT DECODE(SUBSTR(TO_CHAR(coe.esc_cantidad_hasta),1,3),'999','Mas de ' || TO_CHAR(coe.esc_cantidad_desde) || ' m3:',
+					'De ' || TO_CHAR(coe.esc_cantidad_desde) || ' a ' || TO_CHAR(coe.esc_cantidad_hasta) || ' m3:') escala,
+			       pes.pes_precio_unit,
+			       con.con_tipo
+			  FROM  CG_REF_CODES cg,
+					ESCALONES esc,
+					CONCEPTOS con,
+					DETALLES_LISTA dli,
+					PRECIOS_ESCALONES pes,
+			        CONTRATOS_ESCALONES coe
+			  WHERE dli.tab_numero = {#PARAM:/ROW/@TAB_NUMERO}
+				AND cg.rv_domain = 'TIPO CONCEPTO'
+			    AND DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) = {#PARAM:/ROW/@TITULO}
+			    AND con.tcl_codigo = {#PARAM:/ROW/@TCL_CODIGO}
+				AND con.con_numero = dli.con_numero
+				AND con.con_imprime = 'S'
+                AND con.con_escalon = 'P'
+			    AND con.con_tipo = cg.rv_low_value
+				AND esc.tcl_codigo = con.tcl_codigo
+				AND esc.con_numero = con.con_numero
+			    AND pes.tab_numero = dli.tab_numero
+			    AND pes.con_numero = con.con_numero
+			    AND pes.esc_numero = esc.esc_numero
+			    AND coe.srv_codigo = {$srv_codigo}
+			    AND coe.cnt_numero = {$cnt_numero}
+			    AND coe.tcl_codigo = con.tcl_codigo
+			    AND coe.con_numero = dli.con_numero
+			    AND coe.esc_numero = esc.esc_numero
+			    AND coe.coe_fecha_vigencia = (SELECT max(coe_fecha_vigencia)
+                	FROM CONTRATOS_ESCALONES
+                    WHERE srv_codigo = coe.srv_codigo
+				    AND cnt_numero = coe.cnt_numero
+				    AND tcl_codigo = coe.tcl_codigo
+				    AND con_numero = coe.con_numero
+				    AND esc_numero = coe.esc_numero
+                    AND to_char(coe_fecha_vigencia, 'yyyymmdd') &lt;= {$doc_fecha_emision})
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:if left="$nro-linea" operator="less" right="$lineasXdetalle" type="integer">
+					<qry:set-variable name="nro-linea" value="1" operation="+"/>
+					<qry:if left="$ancho" operator="less" right="32" type="integer">
+						<qry:set-variable name="ancho" value="32"/>
+					</qry:if>
+					<qry:set-variable name="ancho_aux" value="$ancho"/>
+					<qry:set-variable name="ancho_aux" value="10" operation="-"/>
+					<qry:element name="linea">
+						<qry:attribute name="con_tipo" value="#ROW:/ROW/@CON_TIPO"/>
+						<qry:attribute name="nro" value="$nro-linea"/>
+						<qry:attribute name="descripcion" value="#ROW:/ROW/@ESCALA" length="$ancho_aux" align="left"/>
+						<qry:attribute name="valor" value="#ROW:/ROW/@PES_PRECIO_UNIT" length="10" align="right" format-number=".6"/>
+					</qry:element>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DETALLE_TARIFA">
+		<qry:select dump="0">
+			SELECT nvl(length(cg.rv_abbreviation),0) largo,
+				DECODE(con.tcl_codigo, 'SUB', DECODE(substr(con.con_tipo, 1, 2), 'CT', tit.tit_descripcion, cg.rv_abbreviation), cg.rv_abbreviation) descripcion,
+				dli.dli_precio_unit,
+				con.con_tipo,
+				con.con_numero,
+				dli.tab_numero tab_numero_esc,
+				con.tcl_codigo tcl_codigo_esc,
+				con.con_tipo
+			  FROM CG_REF_CODES cg,
+			       CONCEPTOS con,
+			       DETALLES_LISTA dli,
+             TIPOS_ITEM tit
+			  WHERE  dli.tab_numero = {#PARAM:/ROW/@TAB_NUMERO}
+			    AND con.tcl_codigo = {#PARAM:/ROW/@TCL_CODIGO}
+				AND con.con_numero = dli.con_numero
+				AND con.con_imprime = 'S'
+                --AND con.con_escalon = 'N'
+				AND cg.rv_domain = 'TIPO CONCEPTO'
+				AND cg.rv_low_value = con.con_Tipo
+				AND DECODE(cg.rv_high_value, NULL, cg.rv_meaning, cg.rv_high_value) = {#PARAM:/ROW/@TITULO}
+				AND dli.dli_precio_unit != 0
+				AND tit.tit_clave = DECODE(con.tcl_codigo, 'SUB', DECODE(substr(con.con_tipo, 1, 2), 'CT', replace(con.con_tipo, 'CT', 'SB'), 'ECO'), 'ECO')				
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:if left="$nro-linea" operator="less" right="$lineasXdetalle" type="integer">
+					<qry:set-variable name="nro-linea" value="1" operation="+"/>
+					<qry:if left="#ROW:/ROW/@LARGO" operator="equal" right="0" type="integer">
+						<qry:if left="$ancho" operator="less" right="12" type="integer">
+							<qry:set-variable name="ancho" value="12"/>
+						</qry:if>
+						<qry:element name="linea">
+							<qry:attribute name="con_tipo" value="#ROW:/ROW/@CON_TIPO"/>
+							<qry:attribute name="nro" value="$nro-linea"/>
+							<qry:attribute name="descripcion" value=""/>
+							<qry:attribute name="valor" value="#ROW:/ROW/@DLI_PRECIO_UNIT" length="$ancho" align="right" format-number=".6"/>
+						</qry:element>
+					</qry:if>
+					<qry:if left="#ROW:/ROW/@LARGO" operator="not-equal" right="0" type="integer">
+						<qry:if left="$ancho" operator="less" right="25" type="integer">
+							<qry:set-variable name="ancho" value="25"/>
+						</qry:if>
+						<qry:set-variable name="ancho_aux" value="$ancho"/>
+						<qry:set-variable name="ancho_aux" value="10" operation="-"/>
+						<qry:element name="linea">
+							<qry:attribute name="con_tipo" value="#ROW:/ROW/@CON_TIPO"/>
+							<qry:attribute name="nro" value="$nro-linea"/>
+							<qry:attribute name="descripcion" value="#ROW:/ROW/@DESCRIPCION" length="$ancho_aux" align="left"/>
+							<qry:attribute name="valor" value="#ROW:/ROW/@DLI_PRECIO_UNIT" length="10" align="right" format-number=".6"/>
+						</qry:element>
+					</qry:if>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="PLAZO_PAGO">
+		<qry:select dump="0">
+			SELECT FUN_MSG_PLAZO_PAGO({$srv_codigo}, {$cnt_numero}, {$doc_fecha_emision}) MSG_PLAZO_PAGO FROM DUAL
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="plazo-pago">
+					<qry:text value="#ROW:/ROW/@MSG_PLAZO_PAGO"/>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="TASA_PROMEDIO">
+		<qry:select dump="0">
+	    	SELECT 'Tasa promedio mensual vigente a la fecha de emisi^243!n ' ||
+	    		to_char(TRUNC(fun_tasa_prom_mensual(I.TIN_CODIGO, TO_DATE({$doc_fecha_emision}, 'yyyymmdd')),2), '90.00') || ' %'
+	    		tasa_promedio
+	        FROM INDICES I
+	        WHERE I.TIN_CODIGO = (SELECT T.TIN_CODIGO
+       			  			   	   FROM TARIFAS T,
+	        					        DOCUMENTOS_CUADRO D,
+            							PRECIOS_TARIFA P
+       							   WHERE D.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+         						     AND D.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+         							 AND P.TAB_NUMERO = D.TAB_NUMERO
+			 						 AND T.TCL_CODIGO = P.TCL_CODIGO
+         							 AND P.TAB_FECHA_VIGENCIA = (SELECT MAX(P1.TAB_FECHA_VIGENCIA)
+		                              	 					  	   FROM DOCUMENTOS_CUADRO D1,
+            						  	   						        PRECIOS_TARIFA P1
+       							      							   WHERE D1.DOC_TIPO = D.DOC_TIPO
+         							    						     AND D1.DOC_NUMERO = D.DOC_NUMERO
+         															 AND P1.TAB_NUMERO = D1.TAB_NUMERO))
+	          AND I.IND_FECHA = (SELECT MAX(IND_FECHA)
+	                           	 FROM INDICES
+	                             WHERE TIN_CODIGO = I.TIN_CODIGO
+	                             AND to_char(IND_FECHA,'yyyymmdd')  &lt;= {$doc_fecha_emision})
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="tasa_promedio">
+					<qry:text value="#ROW:/ROW/@TASA_PROMEDIO"/>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="MENSAJE_PURE">
+		<qry:select dump="0">
+			SELECT
+				DECODE(dc.TFA_CODIGO, 'B', TO_CHAR(TRUNC((dc.DOC_PERIODO+1)/2),'FM00'), TO_CHAR(dc.DOC_PERIODO,'FM00'))
+		        ||'/'||TO_CHAR(dc.DOC_ANIO,'FM0000') periodo_act,
+		        DECODE(dc.TFA_CODIGO, 'B', TO_CHAR(TRUNC((td.TDC_PERIODO_REF+1)/2),'FM00'), TO_CHAR(td.TDC_PERIODO_REF,'FM00'))
+				||'/'||TO_CHAR(td.TDC_ANIO_REF,'FM0000') periodo_ref,
+				ROUND(dc.DOC_CONSUMO,2) consumo_act,
+				ROUND(td.TDC_CONSUMO_REF,2) consumo_ref,
+				TO_CHAR(ROUND(td.TDC_PROMEDIO,1),'FM90.0') temp_act,
+				TO_CHAR(ROUND(td.TDC_PROMEDIO_REF,1),'FM90.0') temp_ref,
+				ROUND(td.TDC_CONSUMO_PER_AJUSTADO,2) consumo_act_aju
+			FROM TEMPERATURAS_DOCUMENTOS td, ~$tabla_doc! dc, CONTRATOS cn
+			WHERE dc.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			AND dc.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			AND td.DOC_TIPO = dc.DOC_TIPO
+			AND td.DOC_NUMERO = dc.DOC_NUMERO
+			AND cn.SRV_CODIGO = dc.SRV_CODIGO
+			AND cn.CNT_NUMERO = dc.CNT_NUMERO
+			AND cn.TCL_PUREGAS IN ('R','P')
+		    AND NOT td.TDC_PERIODO_REF IS NULL
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="mensaje_pure">
+					<qry:attribute name="periodo_act" value="#ROW:/ROW/@PERIODO_ACT" length="8" align="right"/>
+					<qry:attribute name="periodo_ref" value="#ROW:/ROW/@PERIODO_REF" length="8" align="right"/>
+					<qry:attribute name="consumo_act" value="#ROW:/ROW/@CONSUMO_ACT" length="8" align="right"/>
+					<qry:attribute name="consumo_ref" value="#ROW:/ROW/@CONSUMO_REF" length="8" align="right"/>
+					<qry:attribute name="temp_act" value="#ROW:/ROW/@TEMP_ACT" length="4" align="right"/>
+					<qry:attribute name="temp_ref" value="#ROW:/ROW/@TEMP_REF" length="4" align="right"/>
+					<qry:attribute name="consumo_act_aju" value="#ROW:/ROW/@CONSUMO_ACT_AJU" length="10" align="right"/>
+					<qry:element name="detalle">
+						<qry:insert-query name="DETALLE_PURE" doc-param="#PARAM:"/>
+					</qry:element>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="DETALLE_PURE">
+		<qry:select dump="0">
+			SELECT DISTINCT IAF.IAF_FECHA,
+				DECODE(PRG.PGR_CODIGO, 'PRE06', 1, 'CAS06', 2, 'PRE07', 3, 'CAS07', 4, 'PRE08', 5, 'CAS08', 6, 'PRE08', 7, 8) REFER, PRG.PGR_CODIGO,
+                decode(IAF_DETALLE_IMPRESO, NULL,
+	                substr(IAF_DETALLE, 17, 7) || ' - ' || substr(IAF_DETALLE, 25, instr(IAF_DETALLE,'Consumo:',1)-25) || '-' ||
+	                substr(IAF_DETALLE, instr(IAF_DETALLE,'Consumo:',1)+8, instr(IAF_DETALLE,'Dias:',1)-instr(IAF_DETALLE,'Consumo:',1)-9) || 'm3',
+                    IAF_DETALLE_IMPRESO
+                    ) IAF_DETALLE_IMPRESO
+			FROM ~$tabla_iaf! IAF, PARAM_GRAL PRG
+			WHERE IAF.DOC_TIPO = {#PARAM:/ROW/@DOC_TIPO}
+			AND IAF.DOC_NUMERO = {#PARAM:/ROW/@DOC_NUMERO}
+			AND IAF.TIT_CLAVE = PRG.PGR_VALOR
+			AND PRG.PGR_CODIGO in ('CAS06','PRE06','CAS07','PRE07','CAS08','PRE08','CAS09','PRE09')
+			ORDER BY DECODE(PRG.PGR_CODIGO, 'PRE06', 1, 'CAS06', 2, 'PRE07', 3, 'CAS07', 4, 'PRE08', 5, 'CAS08', 6, 'PRE08', 7, 8), IAF.IAF_FECHA
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="ref">
+					<qry:attribute name="refer" value="#ROW:/ROW/@REFER"/>
+					<qry:attribute name="pgr_codigo" value="#ROW:/ROW/@PGR_CODIGO"/>
+					<qry:attribute name="iaf_detalle_impreso" value="#ROW:/ROW/@IAF_DETALLE_IMPRESO"/>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="CAT_PURE">
+		<qry:select dump="0">
+			SELECT
+		        DECODE(cn.TCL_CODIGO, 'S', '   ',
+		    	DECODE(NVL(cn.TCL_PUREGAS,'?'), 'P', 'SG' || SUBSTR(cn.CNT_AUX1, 10, 2), '?', 'Sujeto Pasivo',
+		        DECODE(NVL(cn.CLA_PUREGAS,'?'), 'R1S', 'R1', 'R1B', 'R1', 'R2S', 'R2', 'R2B', 'R2', 'R3S',
+		        'R3', 'R3B', 'R3', '?', 'Sujeto Pasivo', 'Sujeto Pasivo'))) categoriaPURE
+			FROM CONTRATOS cn
+			WHERE cn.SRV_CODIGO = {$srv_codigo}
+			  AND cn.CNT_NUMERO = {$cnt_numero}
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:element name="categoria_pure">
+					<qry:text value="#ROW:/ROW/@CATEGORIAPURE"/>
+				</qry:element>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="CONSUMOS">
+		<qry:select dump="0">
+			select
+				coh_anio,
+				coh_periodo,
+			    decode(coh_periodo, 1, 'ENE',  2, 'FEB', 3, 'MAR', 4, 'ABR', 5, 'MAY', 6, 'JUN', 7, 'JUL', 8, 'AGO', 9, 'SET', 10, 'OCT', 11, 'NOV', 12, 'DIC') d_periodo,
+			    sum(coh_consumo) coh_consumo,
+			    to_char(round(sum(coh_consumo)/1000,1),'99990.0') tit_consumo,
+			    0 len_consumo
+			from consumos_historicosh
+			where srv_codigo = {$srv_codigo}
+			  and cnt_numero = {$cnt_numero}
+			  and ((coh_periodo &gt;= {$doc_periodo}
+			  and coh_anio = {$doc_anio}-1)
+			  or (coh_periodo &lt;= {$doc_periodo}
+			  and coh_anio = {$doc_anio}))
+			group by coh_anio, coh_periodo
+			union
+			select
+				coh_anio,
+				coh_periodo,
+			    decode(coh_periodo, 1, 'ENE',  2, 'FEB', 3, 'MAR', 4, 'ABR', 5, 'MAY', 6, 'JUN', 7, 'JUL', 8, 'AGO', 9, 'SET', 10, 'OCT', 11, 'NOV', 12, 'DIC') d_periodo,
+			    sum(coh_consumo) coh_consumo,
+			    to_char(round(sum(coh_consumo)/1000,1),'99990.0') tit_consumo,
+			    0 len_consumo
+			from consumos_historicos
+			where srv_codigo = {$srv_codigo}
+			  and cnt_numero = {$cnt_numero}
+			  and ((coh_periodo &gt;= {$doc_periodo}
+			  and coh_anio = {$doc_anio}-1)
+			  or (coh_periodo &lt;= {$doc_periodo}
+			  and coh_anio = {$doc_anio}))
+			group by coh_anio, coh_periodo
+			union
+			select
+				0 coh_anio,
+				0 coh_periodo,
+			    'XXX' d_periodo,
+			    max(coh_consumo) coh_consumo,
+			    to_char(round(max(coh_consumo)/1000,1),'99990.0') tit_consumo,
+				round(max(coh_consumo)/1000000) len_consumo
+            from (
+	            select coh_consumo
+				from consumos_historicosh
+				where srv_codigo = {$srv_codigo}
+				  and cnt_numero = {$cnt_numero}
+				  and ((coh_periodo &gt;= {$doc_periodo}
+				  and coh_anio = {$doc_anio}-1)
+				  or (coh_periodo &lt;= {$doc_periodo}
+				  and coh_anio = {$doc_anio}))
+	            union
+	            select coh_consumo			from consumos_historicos
+				where srv_codigo = {$srv_codigo}
+				  and cnt_numero = {$cnt_numero}
+				  and ((coh_periodo &gt;= {$doc_periodo}
+				  and coh_anio = {$doc_anio}-1)
+				  or (coh_periodo &lt;= {$doc_periodo}
+				  and coh_anio = {$doc_anio}))
+            ) x
+		</qry:select>
+		<qry:out>
+			<qry:for-each-row>
+				<qry:if left="#ROW:/ROW/@COH_ANIO" operator="equal" right="0" type="integer">
+					<qry:set-variable name="anio" value="#ROW:/ROW/@COH_ANIO"/>
+					<qry:set-variable name="coh-max" value="#ROW:/ROW/@COH_CONSUMO"/>
+					<qry:set-variable name="len-max" value="#ROW:/ROW/@LEN_CONSUMO"/>
+				<qry:else/>
+					<qry:set-variable name="coh-tic" value="#ROW:/ROW/@COH_CONSUMO"/>
+					<qry:set-variable name="coh-tic" value="$coh-max" operation="/"/>
+					<qry:set-variable name="coh-tic" value="$max-tic" operation="*"/>
+					<qry:set-variable name="coh-tic" value="0" operation="rnd"/>
+					<qry:set-variable name="nro-tic" value="$max-tic"/>
+					<qry:element name="consumo">
+						<qry:if left="$anio" operator="equal" right="#ROW:/ROW/@COH_ANIO" type="integer">
+							<qry:attribute name="anio" value="" length="6" align="center"/>
+						<qry:else/>
+							<qry:set-variable name="anio" value="#ROW:/ROW/@COH_ANIO"/>
+							<qry:attribute name="anio" value="#ROW:/ROW/@COH_ANIO" length="6" align="center"/>
+						</qry:if>
+						<qry:attribute name="periodo" value="#ROW:/ROW/@D_PERIODO" length="6" align="center"/>
+						<qry:if left="$len-max" operator="equal" right="0" type="integer">
+							<qry:attribute name="consumo" value="#ROW:/ROW/@TIT_CONSUMO" length="6" align="center" format-number=" 1"/>
+						<qry:else/>
+							<qry:attribute name="consumo" value="#ROW:/ROW/@TIT_CONSUMO" length="6" align="center" format-number=" 0"/>
+						</qry:if>
+						<qry:while left="$nro-tic" operator="greater" right="0" type="integer">
+							<qry:element name="tic">
+								<qry:if left="$coh-tic" operator="less" right="$nro-tic" type="integer">
+									<qry:attribute name="caracter" value=" " length="6" align="center"/>
+								</qry:if>
+								<qry:if left="$coh-tic" operator="greater-equal" right="$nro-tic" type="integer">
+									<qry:attribute name="caracter" value="" length="6" align="center"/>
+								</qry:if>
+							</qry:element>
+							<qry:set-variable name="nro-tic" value="1" operation="-"/>
+						</qry:while>
+					</qry:element>
+				</qry:if>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+	<qry:query name="SUBSIDIO">
+		<qry:select dump="0">
+			SELECT fun_busca_exclusion_d2067(d.srv_codigo, d.cnt_numero, d.doc_fecha_emision, 'AM') no_facturar,
+			       fun_busca_exclusion_d2067(d.srv_codigo, d.cnt_numero, d.doc_fecha_emision, 'AC') no_cobrar,
+			       (SELECT DECODE(count(*), 0, 0, 1)
+			          FROM items i, tipos_item ti
+			          WHERE i.doc_tipo = d.doc_tipo
+			            AND i.doc_numero = d.doc_numero
+			            AND ti.tit_clave = i.tit_clave
+			            AND i.itm_importe != 0
+			            AND NVL(ti.tit_subsidio, 'N') = 'S') con_subsidio
+			  FROM ~$tabla_doc! d
+			  WHERE d.doc_tipo = {#PARAM:/ROW/@DOC_TIPO}
+				AND d.doc_numero = {#PARAM:/ROW/@DOC_NUMERO}
+				AND d.doc_fecha_emision &lt;= to_date(varios.valor_parametro('FF2067'), 'dd/mm/yyyy')
+		</qry:select>
+		<qry:out>
+			<qry:attribute name="no_facturar" value="0"/>
+			<qry:attribute name="no_cobrar" value="0"/>
+			<qry:attribute name="con_subsidio" value="0"/>
+			<qry:for-each-row>
+				<qry:if left="{#ROW:/ROW/@NO_FACTURAR}" operator="equal" right="0" type="integer">
+					<qry:set-variable name="tipo-amparo" value="no-facturar"/>
+					<qry:attribute name="no_facturar" value="1"/>
+				<qry:else/>
+					<qry:attribute name="no_facturar" value="0"/>
+				</qry:if>
+				<qry:if left="{#ROW:/ROW/@NO_COBRAR}" operator="equal" right="0" type="integer">
+					<qry:set-variable name="tipo-amparo" value="no-cobrar"/>
+					<qry:attribute name="no_cobrar" value="1"/>
+				<qry:else/>
+					<qry:attribute name="no_cobrar" value="0"/>
+				</qry:if>
+				<qry:attribute name="con_subsidio" value="{#ROW:/ROW/@CON_SUBSIDIO}"/>
+			</qry:for-each-row>
+		</qry:out>
+	</qry:query>
+</qry:doc-definition>
