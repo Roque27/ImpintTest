@@ -857,6 +857,7 @@
             		WHERE SRV_CODIGO = {$srv_cod}
             		)
         </qry:select>
+        
         <qry:out>
             <qry:for-each-row>
                 <qry:element name="lectura">
