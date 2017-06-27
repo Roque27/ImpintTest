@@ -1087,16 +1087,12 @@ char *Notifi(char   *noti,
                      v_eno_texto.arr[0]=v_eno_texto.len=0;
                      if((strcmp(tabla,"DOCUMENTOS"))==0){
 
-                        Documentos(largos,&columnas[0][0],campo,
-                                   srv_cod,cnt_num,
-                                   trt_num,i,31, nro_ord);
+                        Documentos(largos,&columnas[0][0],campo,srv_cod,cnt_num,trt_num,i,31, nro_ord);
 
                      }else if((strcmp(tabla,"DOCUMENTOS_GAR"))==0){
-                        Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                    &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                        Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
 
-                        Documentos(largos,&columnas[0][0],campo,srv_cod_ori,
-                                   cnt_num_ori,trt_num_ori,i,31, nro_ord);
+                        Documentos(largos,&columnas[0][0],campo,srv_cod_ori,cnt_num_ori,trt_num_ori,i,31, nro_ord);
                      }
                      strcat(salida,campo);
                      i=0;

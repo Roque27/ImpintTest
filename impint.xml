@@ -24,10 +24,10 @@
 
         <qry:variable name="l_tor_descripcion" type="string"/>
 
-        <qry:variable name="srv_cod_ori" type="integer"/>
-        <qry:variable name="cnt_num_ori" type="integer"/>
-        <qry:variable name="trt_num_ori" type="integer"/>
-        <qry:variable name="prs_num_ori" type="integer"/>
+        <qry:variable name="srv_cod_temp" type="integer"/>
+        <qry:variable name="cnt_num_temp" type="integer"/>
+        <qry:variable name="trt_num_temp" type="integer"/>
+        <qry:variable name="prs_num_temp" type="integer"/>
         
         <qry:variable name="v_tabla" type="string"/>
         <qry:variable name="v_columna" type="string"/>
@@ -188,6 +188,14 @@
                             <qry:else/>
                                 <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
                                     <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                    <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
+                                        <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
+                                    <qry:else/>
+                                        <qry:insert-query name="Documentos" doc-param="#ROW:"/>
+                                    </qry:if>
+                                    <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                    <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                    <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                 </qry:if>
                             </qry:if>
                         <qry:else/>
@@ -210,6 +218,15 @@
                     <!-- loop Tarifas -->
                 </qry:element>
             </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="NotifiCargaTablas" > 
+        <qry:select>
+            
+        </qry:select>
+        <qry:out>
+            
         </qry:out>
     </qry:query>
 
@@ -897,10 +914,24 @@
         </qry:select>
         <qry:out>
             <qry:for-each-row>
+                <qry:set-variable name="srv_cod_temp" value="{$srv_cod}"/>
                 <qry:if left="{#ROW:/ROW/@SRV_CODIGO_ORIGEN}" operator="equal" right="0" type="integer">
-                    
+                    <qry:set-variable name="srv_cod" value="0"/>
+                <qry:else/>
+                    <qry:set-variable name="srv_cod" value="#ROW:/ROW/@SRV_CODIGO_ORIGEN"/>
                 </qry:if>
-
+                <qry:set-variable name="cnt_num_temp" value="{$cnt_num}"/>
+                <qry:if left="{#ROW:/ROW/@CNT_NUMERO_ORIGEN}" operator="equal" right="0" type="integer">
+                    <qry:set-variable name="cnt_num" value="0"/>
+                <qry:else/>
+                    <qry:set-variable name="cnt_num" value="#ROW:/ROW/@CNT_NUMERO_ORIGEN"/>
+                </qry:if>
+                <qry:set-variable name="trt_num_temp" value="{$trt_num}"/>
+                <qry:if left="{#ROW:/ROW/@TRT_NUMERO_ORIGEN}" operator="equal" right="0" type="integer">
+                    <qry:set-variable name="trt_num" value="0"/>
+                <qry:else/>
+                    <qry:set-variable name="trt_num" value="#ROW:/ROW/@TRT_NUMERO_ORIGEN"/>
+                </qry:if>
 
                 <qry:element name="ordenativo">
                     <qry:if left="{$v_columna}" operator="equal" right="ORD_NUMERO" type="string">
@@ -1409,7 +1440,7 @@
             	,COALESCE(DOC_RECARGO_VENC_3, 0) AS DOC_RECARGO_VENC_3
             	,DOC_ESTADO
             	,decode(doc_situacion, 'X', '(*)', 'C1', '(*)', 'C2', '(*)', 'C3', '(*)', '   ') LLAMADA_SIT_X
-            FROM DOCUMENTOS
+            FROM DOCUMENTOSDOCUMENTOS
             WHERE TRT_NUMERO = {$trt_num}
             	AND NVL(NVL(DOC_SALDO, DOC_IMPORTE), 0) &gt; 0
             	AND doc_situacion &lt;&gt; 'X'
