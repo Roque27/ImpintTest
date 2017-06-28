@@ -20,34 +20,50 @@
         <qry:variable name="v_tim_codigo" type="string"/>
 
         <qry:variable name="testData" type="data"/>
+        
+        <qry:variable name="internal-data" type="data"/>
+        <qry:variable name="id-is-empty" type="integer" value="0"/>
 
     </qry:declare>
     <qry:main>
         <qry:out>
-            <qry:element name="raiz">
-                <qry:insert-query name="tesQ"/>
-                <qry:insert-query name="testR"/>
+            <qry:insert-query name="LOAD_INTERNAL"/>
+            <qry:element name="ROWS">
+                <qry:if left="$id-is-empty" operator="equal" right="1" type="integer">
+                    <qry:for-each-row doc="$internal-data:">
+                        <qry:element name="ROW">
+                            <qry:attribute name="NOT_CODIGO" value="#ROW:/ROW/@NOT_CODIGO"/>
+                            <qry:attribute name="ENO_ORDEN" value="#ROW:/ROW/@ENO_ORDEN"/>
+                            <qry:attribute name="ENO_TIPO" value="#ROW:/ROW/@ENO_TIPO"/>
+                            <qry:attribute name="ENO_TEXTO" value="#ROW:/ROW/@ENO_TEXTO"/>
+                            <qry:attribute name="ENO_VAR_NOMBRE" value="#ROW:/ROW/@ENO_VAR_NOMBRE"/>
+                            <qry:attribute name="ENO_VAR_TIPO" value="#ROW:/ROW/@ENO_VAR_TIPO"/>
+                            <qry:attribute name="ENO_VAR_LONGITUD" value="#ROW:/ROW/@ENO_VAR_LONGITUD"/>
+                            <qry:attribute name="ENO_TIPO_CAMPO" value="#ROW:/ROW/@ENO_TIPO_CAMPO"/>
+                            <qry:attribute name="ENO_SUB_ORDEN" value="#ROW:/ROW/@ENO_SUB_ORDEN"/>
+                            <qry:attribute name="ENO_MARCA" value="#ROW:/ROW/@ENO_MARCA"/>
+                            <qry:attribute name="SCF_CODIGO" value="#ROW:/ROW/@SCF_CODIGO"/>
+                            <qry:attribute name="COLUMNA" value="#ROW:/ROW/@COLUMNA"/>
+                            <qry:attribute name="TABLA" value="#ROW:/ROW/@TABLA"/>
+                        </qry:element>
+                    </qry:for-each-row>
+                </qry:if>
             </qry:element>
         </qry:out>
     </qry:main>
 
-    <qry:query name="tesQ"> 
-        <qry:select>
-            SELECT S.SCF_DESCRIPCION AS SCF_DESCRIPCION
-            FROM SUCURSALES S
+    <qry:query name="LOAD_INTERNAL">
+        <qry:select dump="0">
+                select *
+                from estructura_notificacion e
+                join col_notificacion c
+                on e.eno_col# = c.col#
+                where e.not_codigo = 'I1'
+                order by c.tabla
         </qry:select>
         <qry:out>
-            <qry:set-variable name="testData" value="#ROW:" />
-        </qry:out>
-    </qry:query>
-
-    <qry:query name="testR" > 
-        <qry:out>
-            <qry:for-each-row doc="$testData:"> <!-- Omitir nombre toma select local -->
-                <qry:element name="elemento1">
-                    <qry:attribute name="v_scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION"/>
-                </qry:element>
-            </qry:for-each-row>
+            <qry:set-variable name="internal-data" value="#ROW:"/>
+            <qry:set-variable name="id-is-empty" value="1"/>
         </qry:out>
     </qry:query>
 
