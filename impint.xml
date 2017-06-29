@@ -65,15 +65,15 @@
         <qry:variable name="v_columna" type="string"/>
         <qry:variable name="largos" type="integer"/>
         <qry:variable name="campo" type="string"/>
-
         <qry:variable name="l_tor_descripcion" type="string"/>
-
         <qry:variable name="document_tbl_type" type="string"/>
+        <qry:variable name="eno_col" type="double"/>
+
         <qry:variable name="srv_cod_temp" type="integer"/>
         <qry:variable name="cnt_num_temp" type="integer"/>
         <qry:variable name="trt_num_temp" type="integer"/>
         <qry:variable name="prs_num_temp" type="integer"/>
-        
+
         <qry:variable name="v_tabla" type="string"/>
         <qry:variable name="v_columna" type="string"/>
 
@@ -102,7 +102,6 @@
         <qry:variable name="v_descripcion" type="string"/>
         <qry:variable name="v_ord_fec" type="string"/>
         
-
         <!-- Tipos_IVA -->
         <qry:variable name="ivv_cod" type="integer"/>
 
@@ -253,18 +252,6 @@
                     <qry:else/>
                         
                     </qry:if>
-                    <!-- loop Personas -->
-                    <!-- loop Contratos -->
-                    <!-- loop Servicios -->
-                    <!-- loop Lecturas -->
-                    <!-- loop Potencias -->
-                    <!-- loop Stock_Equipos -->
-                    <!-- loop Sucursales -->
-                    <!-- loop Bancos -->
-                    <!-- loop Cargos - strcmp(v_ord_fec.arr,ord_fec) -->
-                    <!-- loop Tarifas -->
-                    <!-- loop Tipos_IVA -->
-                    <!-- loop Tarifas -->
                 </qry:element>
             </qry:for-each-row>
         </qry:out>
@@ -272,10 +259,16 @@
 
     <qry:query name="NotifiCargaTablas" > 
         <qry:select>
-            
+            SELECT TABLA
+            	  ,COLUMNA
+            FROM COL_NOTIFICACION
+            WHERE COL# = {$eno_col}
         </qry:select>
         <qry:out>
-            
+            <qry:for-each-row>
+                <qry:set-variable name="v_tabla" value="#ROW:/ROW/@TABLA"/>
+                <qry:set-variable name="v_columna" value="#ROW:/ROW/@COLUMNA"/>
+            </qry:for-each-row>
         </qry:out>
     </qry:query>
 
