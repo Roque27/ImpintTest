@@ -1066,7 +1066,7 @@ char *Notifi(char   *noti,
          }
          else
          {
-         /*
+         /* 
           * Campo de texto variable.
           */
             EXEC SQL SELECT TABLA,
@@ -1290,8 +1290,6 @@ char *Personas(int largos[],char *v_columna,char *campo,long prs_num)
         C.AGF_CODIGO = P.AGF_CODIGO AND
         C.CLL_CODIGO = P.CLL_CODIGO;
 
-      /* if(COUNTHITS==0)
-         Abortar("No hay datos personales.","Error: "); */
       if(s_prs_cuit==-1) v_prs_cuit=0;
       if(s_tipo_doc==-1) v_tipo_doc.arr[0]=v_tipo_doc.len=0;
       if(s_prs_documento==-1) v_prs_documento=0;
