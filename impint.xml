@@ -250,7 +250,19 @@
                             <qry:attribute name="v_eno_texto" value="#ROW:/ROW/@ENO_TEXTO"/>
                         </qry:if>
                     <qry:else/>
-                        
+                        <qry:insert-query name="NotifiCargaTablas"/>
+                        <qry:if left="#ROW:/ROW/@ENO_TIPO_CAMPO" operator="equal" right="F" type="string">
+                            <!-- logica larga  -->
+                        <qry:else/>
+                            
+                        </qry:if>
+                        <qry:if left="{$v_tabla}" operator="equal" right="BANCOS" type="string">
+                            <qry:if left="{$Tiene_Comprobantes_Financiaciones}" operator="not-equal" right="0" type="integer">
+                                <qry:if left="{$Tiene_Otros_Comprobantes}" operator="not-equal" right="0" type="integer">
+                                    <qry:attribute name="mensg_comprobante" value="Cuotas vencidas financ. instalaciones internas unicamen-te podran abonarse en Of.Comerciales Litoral Gas."/>
+                                </qry:if>
+                            </qry:if>
+                        </qry:if>
                     </qry:if>
                 </qry:element>
             </qry:for-each-row>
