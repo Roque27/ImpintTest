@@ -1090,6 +1090,7 @@ char *Notifi(char   *noti,
                         Documentos(largos,&columnas[0][0],campo,srv_cod,cnt_num,trt_num,i,31, nro_ord);
 
                      }else if((strcmp(tabla,"DOCUMENTOS_GAR"))==0){
+						 
                         Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
 
                         Documentos(largos,&columnas[0][0],campo,srv_cod_ori,cnt_num_ori,trt_num_ori,i,31, nro_ord);
@@ -1106,30 +1107,23 @@ char *Notifi(char   *noti,
                   if((strcmp((char*)v_tabla.arr,"PERSONAS"))==0){
                      Personas(largos,(char*)v_columna.arr,campo,prs_num);
                   }else if((strcmp((char*)v_tabla.arr,"PERSONAS_GAR"))==0){
-                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
                      Prs_Num_Ori(srv_cod_ori,cnt_num_ori,&prs_num_ori);
                      Personas(largos,(char*)v_columna.arr,campo,prs_num_ori);
                   }else if((strcmp((char *)v_tabla.arr,"CONTRATOS"))==0){
-                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num,
-                               &ivv_cod,tcl_cod);
+                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num,&ivv_cod,tcl_cod);
                   }else if((strcmp((char *)v_tabla.arr,"CONTRATOS_GAR"))==0){
-                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
-                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod_ori,
-				cnt_num_ori,&ivv_cod,tcl_cod);
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod_ori,cnt_num_ori,&ivv_cod,tcl_cod);
                   }else if((strcmp((char *)v_tabla.arr,"SERVICIOS"))==0){
                      Servicios(largos,(char *)v_columna.arr,campo,srv_cod,&scf_cod,&agf_cod);
                   }else if((strcmp((char *)v_tabla.arr,"SERVICIOS_GAR"))==0){
-                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
-                     Servicios(largos,(char *)v_columna.arr,campo,srv_cod_ori,
-                               &scf_cod,&agf_cod);
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Servicios(largos,(char *)v_columna.arr,campo,srv_cod_ori,&scf_cod,&agf_cod);
                   }else if((strcmp((char *)v_tabla.arr,"LECTURAS"))==0){
                      Lecturas(largos,(char *)v_columna.arr,campo,srv_cod);
                   }else if((strcmp((char *)v_tabla.arr,"ORDENATIVOS"))==0){
-                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
                   }else if((strcmp((char *)v_tabla.arr,"TIPOS_ORDENATIVO"))==0){
                      TiposOrdenativo(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num);
                   }else if((strcmp((char *)v_tabla.arr,"POTENCIAS"))==0){
@@ -1144,16 +1138,14 @@ char *Notifi(char   *noti,
                      Bancos(largos,(char *)v_columna.arr,campo,agf_cod);
                   }else if((strcmp((char *)v_tabla.arr,"TIPOS_IVA"))==0){
                      Tipos_IVA(largos,(char *)v_columna.arr,campo,ivv_cod);
-                  }else if((strcmp((char *)v_tabla.arr,
-                                "TIPOS_NOTIFICACION"))==0){
+                  }else if((strcmp((char *)v_tabla.arr,"TIPOS_NOTIFICACION"))==0){
                      strcat(campo,(char *)v_not_descripcion.arr);
                   }else if((strcmp((char *)v_tabla.arr,"TARIFAS"))==0){
                      Tarifas(largos,(char *)v_columna.arr,campo,tcl_cod);
                   }else if((strcmp((char *)v_tabla.arr,"TOTALES_TRAMITE"))==0){
                      Totales_Tramite(largos,(char *)v_columna.arr,campo,trt_num);
                   }else if((strcmp((char *)v_tabla.arr,"TOTALES_TRAMITE_GAR"))==0){
-                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
-                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,&srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
                      Totales_Tramite(largos,(char *)v_columna.arr,campo,trt_num_ori);
                   }else if((strcmp((char *)v_tabla.arr,"USUARIOS"))==0){
                      Usuarios(largos,(char *)v_columna.arr,campo);

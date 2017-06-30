@@ -220,7 +220,7 @@
                 </qry:if>
                 <qry:element name="notificacionTexto">
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
-                        <qry:if left="ban" operator="equal" right="1" type="integer">
+                        <qry:if left="{$ban}" operator="equal" right="1" type="integer">
                             <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
                                 <!-- Tipo de tabla en memoria Documentos  -->
                                 <qry:set-variable name="document_tbl_type" value="DOC"/>
@@ -246,6 +246,7 @@
                                     <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                 </qry:if>
                             </qry:if>
+                            <qry:set-variable name="ban" value="0"/>
                         <qry:else/>
                             <qry:attribute name="v_eno_texto" value="#ROW:/ROW/@ENO_TEXTO"/>
                         </qry:if>
@@ -253,8 +254,131 @@
                         <qry:insert-query name="NotifiCargaTablas"/>
                         <qry:if left="#ROW:/ROW/@ENO_TIPO_CAMPO" operator="equal" right="F" type="string">
                             <!-- logica larga  -->
+                                <qry:if left="{$ban}" operator="equal" right="1" type="integer">
+                                    <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
+                                        <!-- Tipo de tabla en memoria Documentos  -->
+                                        <qry:set-variable name="document_tbl_type" value="DOC"/>
+                                    
+                                        <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
+                                            <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
+                                        <qry:else/>
+                                            <qry:insert-query name="Documentos" doc-param="#ROW:"/>
+                                        </qry:if>
+                                    <qry:else/>
+                                        <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
+                                            <!-- Tipo de tabla en memoria Documentos  -->
+                                            <qry:set-variable name="document_tbl_type" value="ORI"/>
+                                        
+                                            <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                            <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
+                                                <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
+                                            <qry:else/>
+                                                <qry:insert-query name="Documentos" doc-param="#ROW:"/>
+                                            </qry:if>
+                                            <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                            <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                            <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
+                                        </qry:if>
+                                    </qry:if>
+                                    <qry:set-variable name="ban" value="0"/>
+                                </qry:if>
+
+                                <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
+
+                                <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS" type="string">
+                                    <qry:insert-query name="Personas" doc-param="#ROW:"/>
+                                <qry:else/>
+                                    <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS_GAR" type="string">
+                                        <!-- Quilombo  -->
+                                    <qry:else/>
+                                        <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS" type="string">
+                                            <qry:insert-query name="Contratos" doc-param="#ROW:"/>
+                                        <qry:else/>
+                                            <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS_GAR" type="string">
+                                                <!-- Quilombo  -->
+                                            <qry:else/>
+                                                <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS" type="string">
+                                                    <qry:insert-query name="Servicios" doc-param="#ROW:"/>
+                                                <qry:else/>
+                                                    <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS_GAR" type="string">
+                                                        <!-- Quilombo  -->
+                                                    <qry:else/>
+                                                        <qry:if left="{$v_tabla}" operator="equal" right="LECTURAS" type="string">
+                                                            <qry:insert-query name="Lecturas" doc-param="#ROW:"/>
+                                                        <qry:else/>
+                                                            <qry:if left="{$v_tabla}" operator="equal" right="ORDENATIVOS" type="string">
+                                                                <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                                <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                                                <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                                                <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
+                                                            <qry:else/>
+                                                                <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_ORDENATIVO" type="string">
+                                                                    <qry:insert-query name="TiposOrdenativo" doc-param="#ROW:"/>
+                                                                <qry:else/>
+                                                                    <qry:if left="{$v_tabla}" operator="equal" right="POTENCIAS" type="string">
+                                                                        <qry:insert-query name="Potencias" doc-param="#ROW:"/>
+                                                                    <qry:else/>
+                                                                        <qry:if left="{$v_tabla}" operator="equal" right="STOCK_EQUIPOS" type="string">
+                                                                            <qry:insert-query name="Stock_Equipos" doc-param="#ROW:"/>
+                                                                        <qry:else/>
+                                                                            <qry:if left="{$v_tabla}" operator="equal" right="SUCURSALES" type="string">
+                                                                                <qry:insert-query name="Sucursales" doc-param="#ROW:"/>
+                                                                            <qry:else/>
+                                                                                <qry:if left="{$v_tabla}" operator="equal" right="CARGOS" type="string">
+                                                                                    <qry:insert-query name="Cargos" doc-param="#ROW:"/>
+                                                                                <qry:else/>
+                                                                                    <qry:if left="{$v_tabla}" operator="equal" right="BANCOS" type="string">
+                                                                                        <qry:insert-query name="Bancos" doc-param="#ROW:"/>
+                                                                                    <qry:else/>
+                                                                                        <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_IVA" type="string">
+                                                                                            <qry:insert-query name="Tipos_IVA" doc-param="#ROW:"/>
+                                                                                        <qry:else/>
+                                                                                            <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_NOTIFICACION" type="string">
+                                                                                                <qry:attribute name="tipo_notificacion" value="{#PARAM:/ROW/@NOT_DESCRIPCION}"/>
+                                                                                            <qry:else/>
+                                                                                                <qry:if left="{$v_tabla}" operator="equal" right="TARIFAS" type="string">
+                                                                                                    <qry:insert-query name="Tarifas" doc-param="#ROW:"/>
+                                                                                                <qry:else/>
+                                                                                                    <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE" type="string">
+                                                                                                        <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
+                                                                                                    <qry:else/>
+                                                                                                        <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE_GAR" type="string">
+                                                                                                            <!-- Quilombo  -->
+                                                                                                        <qry:else/>
+                                                                                                            <qry:if left="{$v_tabla}" operator="equal" right="USUARIOS" type="string">
+                                                                                                                <qry:insert-query name="Usuarios" doc-param="#ROW:"/>
+                                                                                                            </qry:if>
+                                                                                                        </qry:if>
+                                                                                                    </qry:if>
+                                                                                                </qry:if>
+                                                                                            </qry:if>
+                                                                                        </qry:if>
+                                                                                    </qry:if>
+                                                                                </qry:if>
+                                                                            </qry:if>
+                                                                        </qry:if>
+                                                                    </qry:if>
+                                                                </qry:if>
+                                                            </qry:if>
+                                                        </qry:if>
+                                                    </qry:if>
+                                                </qry:if>
+                                            </qry:if>
+                                        </qry:if>
+                                    </qry:if>
+                                </qry:if>
+                            <!-- logica larga  -->
                         <qry:else/>
-                            
+                            <qry:if left="{$ban}" operator="equal" right="0" type="integer">
+                                <qry:set-variable name="ban" value="1"/>
+                            </qry:if>
+                            <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
+                                <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
+                            <qry:else/>
+                                <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
+                                    <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
+                                </qry:if>
+                            </qry:if>
                         </qry:if>
                         <qry:if left="{$v_tabla}" operator="equal" right="BANCOS" type="string">
                             <qry:if left="{$Tiene_Comprobantes_Financiaciones}" operator="not-equal" right="0" type="integer">
