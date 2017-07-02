@@ -289,19 +289,33 @@
                                     <qry:insert-query name="Personas" doc-param="#ROW:"/>
                                 <qry:else/>
                                     <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS_GAR" type="string">
-                                        <!-- Quilombo  -->
+                                        <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                        <qry:insert-query name="Prs_Num_Ori" doc-param="#ROW:"/>
+                                        <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                        <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                        <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
+                                        <qry:insert-query name="Personas" doc-param="#ROW:"/>
+                                        <qry:set-variable name="prs_num" value="{$prs_num_temp}"/>
                                     <qry:else/>
                                         <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS" type="string">
                                             <qry:insert-query name="Contratos" doc-param="#ROW:"/>
                                         <qry:else/>
                                             <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS_GAR" type="string">
-                                                <!-- Quilombo  -->
+                                                <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                <qry:insert-query name="Contratos" doc-param="#ROW:"/>
+                                                <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                                <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                                <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                             <qry:else/>
                                                 <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS" type="string">
                                                     <qry:insert-query name="Servicios" doc-param="#ROW:"/>
                                                 <qry:else/>
                                                     <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS_GAR" type="string">
-                                                        <!-- Quilombo  -->
+                                                        <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                        <qry:insert-query name="Servicios" doc-param="#ROW:"/>
+                                                        <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                                        <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                                        <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_tabla}" operator="equal" right="LECTURAS" type="string">
                                                             <qry:insert-query name="Lecturas" doc-param="#ROW:"/>
@@ -343,7 +357,11 @@
                                                                                                         <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE_GAR" type="string">
-                                                                                                            <!-- Quilombo  -->
+                                                                                                            <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                                                                            <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
+                                                                                                            <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
+                                                                                                            <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
+                                                                                                            <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_tabla}" operator="equal" right="USUARIOS" type="string">
                                                                                                                 <qry:insert-query name="Usuarios" doc-param="#ROW:"/>
@@ -2114,6 +2132,9 @@
         </qry:select>
         <qry:out>
             <qry:for-each-row>
+                <qry:set-variable name="prs_num_temp" value="{$prs_num}"/>
+                <qry:set-variable name="prs_num" value="#ROW:/ROW/@PRS_NUMERO"/>
+
                 <qry:element name="prsNumOri">
                     <qry:attribute name="prs_num_ori" value="#ROW:/ROW/@PRS_NUMERO"/>
                 </qry:element>
