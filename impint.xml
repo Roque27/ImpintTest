@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <qry:doc-definition xmlns:qry="lg.lan/qry" name="ejemplo simple">
     <qry:declare>
+        <!-- Parametros de entrada -->
+        <!-- &paramUser -->
+
         <!-- Variables globales -->
+        <qry:variable name="Imputacion_Incobrables" type="integer" value="0"/>
+        <qry:variable name="OrdenDesde" type="integer" value="9999999"/>
+        <qry:variable name="OrdenHasta" type="integer" value="0"/>
+
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
         <qry:variable name="l_o_prs_numero" type="string"/>
@@ -142,6 +149,21 @@
     <qry:query name="Main">
         <qry:select>
             
+        </qry:select>
+        <qry:out>
+            <qry:if left="/INCOBRABLES" operator="equal" right="S" type="string">
+                <qry:set-variable name="Imputacion_Incobrables" value="1"/>
+            <qry:else/>
+                
+            </qry:if>
+        </qry:out>
+    </qry:query>
+    
+    <qry:query name="SeleccionaPersona" > 
+        <qry:select>
+            SELECT usr_numero
+            FROM usuarios
+            WHERE usr_codigo = {$paramUser}
         </qry:select>
         <qry:out>
             
