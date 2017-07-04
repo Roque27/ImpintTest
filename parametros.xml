@@ -1,6 +1,12 @@
 <impint_param>
+    <Incobrables paramIncobrables="S">
     <User paramUser="RCITTADI">
     <Print paramImpr="1">
     <TipoCorreo paramCodTipoCorreo="CO">
     <Correo paramCodCorreo="BR">
+    <Tor_codigo paramTorCod="I1">
+    <Suc paramSuc="12">
+    <Sec paramSec="GESCOB">
+    <Ord_Desde paramOrdDsd="10769681">
+    <Ord_Hasta paramOrdHst="10769681">
 </impint_param>

@@ -251,9 +251,10 @@ main(int argc, char **argv)
   }
 
   /* Le agrego un pid al nombre para hacerlo unico */
+  
   //TODO
   sprintf(l_out_lote, "%s/%s%05d", getenv("ALAMO_LST"), "err", getpid());
-
+  //TODO
   lote=fopen(l_out_lote, "w");
 
   /*
@@ -271,6 +272,7 @@ main(int argc, char **argv)
   end-exec;
   AddNullVarchar(l_est_codigo);
 
+  //TODO
   exec sql INSERT into control_procesos
            (cpr_numero,
             cpr_tipo_proceso,
@@ -668,6 +670,7 @@ TratamientoDelError:
   fclose(lote);
   fclose(out_file);
 
+  //TODO
   if(Escribi!=0)
    {
     bzero(Cmd, sizeof Cmd);
@@ -872,6 +875,7 @@ void GrabaEnReportes()
   l_cpr_numero, Impr, l_cnr_archivo.arr);
   l_cnr_comando.len=strlen(l_cnr_comando.arr);
 
+  //TODO
   system(l_cnr_comando.arr);
 }
 
