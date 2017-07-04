@@ -181,6 +181,7 @@ main(int argc, char **argv)
 
   Connect(userid,DISPCONNECT);
   
+  //TODO
   exec sql alter session set optimizer_features_enable = '8.1.7';
 
   OrdenDesde=9999999;
@@ -250,6 +251,7 @@ main(int argc, char **argv)
   }
 
   /* Le agrego un pid al nombre para hacerlo unico */
+  //TODO
   sprintf(l_out_lote, "%s/%s%05d", getenv("ALAMO_LST"), "err", getpid());
 
   lote=fopen(l_out_lote, "w");
@@ -261,6 +263,7 @@ main(int argc, char **argv)
 
   ClearVarchar(l_est_codigo);
 
+  //TODO
   exec sql execute
      begin
        :l_est_codigo:=fun_estado_inicial('IN');

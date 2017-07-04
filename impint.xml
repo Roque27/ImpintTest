@@ -2,7 +2,8 @@
 <qry:doc-definition xmlns:qry="lg.lan/qry" name="ejemplo simple">
     <qry:declare>
         <!-- Parametros de entrada -->
-        <!-- &paramUser -->
+        <!-- @paramUser -->
+        <!-- @paramImpr -->
 
         <!-- Variables globales -->
         <qry:variable name="Imputacion_Incobrables" type="integer" value="0"/>
@@ -11,7 +12,15 @@
 
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
+        
+        <qry:variable name="l_usr_numero" type="integer"/>
+        <qry:variable name="l_tim_codigo" type="string"/>
+        <qry:variable name="l_crr_genera_planilla" type="string"/>
+        <qry:variable name="l_crr_archivo_lote" type="string"/>
+        <qry:variable name="l_crr_archivo_lote_path" type="string"/>
+        <qry:variable name="l_cpr_numero" type="integer"/>
         <qry:variable name="l_o_prs_numero" type="string"/>
+        
         <qry:variable name="domicilio_fiscal_full" type="string" value=""/>
         <qry:variable name="v_noti" type="string"/>
         <qry:variable name="bar_code" type="string"/>
@@ -151,22 +160,80 @@
             
         </qry:select>
         <qry:out>
-            <qry:if left="/INCOBRABLES" operator="equal" right="S" type="string">
+            <qry:if left="#PARAM:/impint_param/User/INCOBRABLES" operator="equal" right="S" type="string">
                 <qry:set-variable name="Imputacion_Incobrables" value="1"/>
-            <qry:else/>
-                
             </qry:if>
+            <qry:insert-query name="SeleccionaPersona" doc-param="#PARAM:"/>
+            <qry:insert-query name="SeleccionaImpresora" doc-param="#PARAM:"/>
+            <qry:insert-query name="CargaPlantillas" doc-param="#PARAM:"/>
+            <qry:insert-query name="CargaProxNroProceso"/>
+            <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="0" type="string">
+                <qry:set-variable name="l_crr_genera_planilla" value="N"/>
+            </qry:if>
+
+            <!-- INSERT Control de procesos salida-->
+            <qry:element name="INSERT_control_procesos">
+                <qry:attribute name="nombreAtributo01" value="valor01" length="longitud01" align="none|left|right|center" format-number="2|.3|,4"/>
+            </qry:element>
         </qry:out>
     </qry:query>
     
-    <qry:query name="SeleccionaPersona" > 
+    <qry:query name="SeleccionaPersona">
         <qry:select>
             SELECT usr_numero
             FROM usuarios
-            WHERE usr_codigo = {$paramUser}
+            WHERE usr_codigo = {#PARAM:/impint_param/User/@paramUser}
         </qry:select>
         <qry:out>
-            
+            <qry:for-each-row>
+                <qry:set-variable name="l_usr_numero" value="#ROW:/ROW/@usr_numero"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="SeleccionaImpresora">
+        <qry:select>
+            SELECT tim_codigo
+            FROM impresoras
+            WHERE impresoras.prt_codigo = {#PARAM:/impint_param/Print/@paramImpr}
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="l_tim_codigo" value="#ROW:/ROW/@tim_codigo"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="CargaPlantillas">
+        <qry:select>
+            SELECT COALESCE(crr_genera_planilla, '0') AS crr_genera_planilla
+            	,crr_archivo_sql
+            	,crr_archivo_sql_path
+            FROM correos c
+            INNER JOIN usuarios u
+            	ON c.scf_codigo = u.scf_codigo
+            WHERE usr_codigo = {#PARAM:/impint_param/User/@paramUser}
+            	AND crr_tipo = {#PARAM:/impint_param/TipoCorreo/@paramCodTipoCorreo}
+            	AND crr_codigo = {#PARAM:/impint_param/Correo/@paramCodCorreo}
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="l_crr_genera_planilla" value="#ROW:/ROW/@crr_genera_planilla"/>
+                <qry:set-variable name="l_crr_archivo_lote" value="#ROW:/ROW/@crr_archivo_sql"/>
+                <qry:set-variable name="l_crr_archivo_lote_path" value="#ROW:/ROW/@crr_archivo_sql_path"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="CargaProxNroProceso">
+        <qry:select>
+            SELECT cpr_numero.nextval AS cpr_numero
+            FROM sys.dual
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="l_cpr_numero" value="#ROW:/ROW/@cpr_numero"/>
+            </qry:for-each-row>
         </qry:out>
     </qry:query>
 
