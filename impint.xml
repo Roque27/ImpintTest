@@ -36,6 +36,12 @@
 
         <qry:variable name="ban" type="integer"/>
 
+        <!-- Bucle principal -->
+
+        <qry:variable name="prs_num" type="string"/> <!-- OK -->
+        <qry:variable name="prs_razon_social" type="string"/>
+        <qry:variable name="prs_direccion" type="string"/>
+
         <!-- Estructuras llenas -->
 
         <qry:variable name="TBL_documentos" type="data"/>
@@ -98,7 +104,6 @@
         <qry:variable name="v_columna" type="string"/>
 
         <!-- Personas -->
-        <qry:variable name="prs_num" type="string"/>
 
         <!-- Contratos -->
         <qry:variable name="ivv_codigo" type="string"/>
@@ -166,7 +171,7 @@
               ,o.srv_codigo
               ,o.cnt_numero
               ,nvl(o.tor_codigo, '')
-              ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy')
+              ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ord_fecha_generacion
               ,u.scf_codigo
               ,o.sec_codigo_origen
               ,t.tor_grupo
@@ -214,7 +219,11 @@
             </qry:element>
 
             <qry:for-each-row>
-                <qry:element name="Main" >
+                <qry:element name="Main">
+
+                    <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
+
+                </qry:element>
             </qry:for-each-row>
 
             <qry:if left="{$Escribi}" operator="not-equal" right="0" type="integer">
@@ -342,6 +351,35 @@
     </qry:query>
 
     <!-- FUNCIONES -->
+
+    <qry:query name="GeneraArchivo"> 
+        <qry:select dump="0">
+            SELECT LPAD({#PARAM:/ROW/@ord_numero}, 8, '0') AS ORD_NUMERO
+                ,LPAD({#PARAM:/ROW/@scf_codigo}, 2, '0') AS SCF_CODIGO
+                ,LPAD({$l_cpr_numero}, 6, '0') AS CPR_NUMERO
+                ,LPAD(TRUNC({$ImporteDelAviso}*100), 9, '0') AS IMPORTE_AVISO
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},7,4) AS ANIO
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},4,2) AS MES
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},1,2) AS DIA
+            FROM DUAL
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:element name="ArchivoLote">
+                    <qry:attribute name="tipo_de_resgistro" value="1"/>
+                    <qry:attribute name="aviso_simple" value="A"/>
+                    <qry:attribute name="numero_ordenativo" value="{#ROW:/ROW/@ORD_NUMERO}"/>
+                    <qry:attribute name="sucursal" value="{#ROW:/ROW/@SCF_CODIGO}"/>
+                    <qry:attribute name="numero_proceso" value="{#ROW:/ROW/@CPR_NUMERO}"/>
+                    <qry:attribute name="importe_aviso" value="{#ROW:/ROW/@IMPORTE_AVISO}"/>
+                    <qry:attribute name="anio" value="{#ROW:/ROW/@ANIO}"/>
+                    <qry:attribute name="mes" value="{#ROW:/ROW/@MES}"/>
+                    <qry:attribute name="dia" value="{#ROW:/ROW/@DIA}"/>
+                    <qry:attribute name="razon_social" value="{#ROW:/ROW/@DIA}"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
 
     <qry:query name="Notifi"> 
         <qry:select dump="0">
