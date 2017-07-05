@@ -41,6 +41,22 @@
         <qry:variable name="prs_num" type="string"/> <!-- OK -->
         <qry:variable name="prs_razon_social" type="string"/>
         <qry:variable name="prs_direccion" type="string"/>
+        cfc_codigo
+        prs_calle
+        prs_nro
+        prs_piso
+        prs_depto
+        prs_torre
+        prs_c_postal
+        prs_agf_nombre
+        cll_nombre
+        cnt_nro_pago
+        cnt_bis
+        cnt_piso_pago
+        cnt_depto_pago
+        cnt_c_postal_pago
+        cnt_agf_nombre
+        l_cll_nombre_completo
 
         <!-- Estructuras llenas -->
 
