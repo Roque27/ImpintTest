@@ -226,6 +226,9 @@
 
             <!-- INSERT Control de procesos salida-->
             <qry:element name="INSERT">
+                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) 
+                                    VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', {$l_est_codigo}, {$sysdate}); "/>
+
                 <qry:element name="control_procesos">
                     <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                     <qry:attribute name="cpr_tipo_proceso" value="IN"/>
