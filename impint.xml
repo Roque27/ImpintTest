@@ -192,7 +192,7 @@
               ,o.sec_codigo_origen
               ,t.tor_grupo
               ,t.tor_descripcion
-              ,o.prs_numero
+              ,COALESCE(o.prs_numero, 0) AS prs_numero
               ,o.rowid
               ,o.crr_tipo
               o.crr_codigo
@@ -241,6 +241,14 @@
 
             <qry:for-each-row>
                 <qry:element name="Main">
+                    <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
+                    <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
+                    <qry:if left="{#ROW:/ROW/@ord_numero}" operator="less" right="{$OrdenDesde}" type="integer">
+                        <qry:set-variable name="OrdenDesde" value="{#ROW:/ROW/@ord_numero}"/>
+                    </qry:if>
+                    <qry:if left="{#ROW:/ROW/@ord_numero}" operator="greater" right="{$OrdenHasta}" type="integer">
+                        <qry:set-variable name="OrdenHasta" value="{#ROW:/ROW/@ord_numero}"/>
+                    </qry:if>
 
                     <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
@@ -248,13 +256,17 @@
             </qry:for-each-row>
 
             <qry:if left="{$Escribi}" operator="not-equal" right="0" type="integer">
-                
+                <!-- Quilombo -->
             </qry:if>
 
             <qry:insert-query name="SeleccionaProxEstado"/>
 
             <!-- UPDATE Control de procesos salida-->
             <qry:element name="UPDATE">
+                <qry:text value="UPDATE control_procesos 
+                                    SET est_codigo = {$l_prox_est_codigo} 
+                                    WHERE cpr_numero = {$l_cpr_numero}; "/>
+                                    
                 <qry:element name="control_procesos">
                     <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
                     <qry:element name="WHERE">
@@ -264,10 +276,10 @@
             </qry:element>
 
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
-                <!-- GrabaEnReportes();-->
+                <qry:insert-query name="GrabaEnReportes"/>
             <qry:else/>
                 <qry:if left="l_crr_genera_planilla" operator="equal" right="A" type="string">
-                    <!-- GrabaEnReportes();-->
+                    <qry:insert-query name="GrabaEnReportes"/>
                     <!-- Quilombo -->
                 <qry:else/>
                     <!-- Quilombo -->
@@ -442,6 +454,16 @@
                     <qry:attribute name="codigo_incidencia" value="00" length="2" align="left"/>
                 </qry:element>
             </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="GrabaEnReportes" > 
+        <qry:select dump="0">
+            SELECT to_char(sysdate, 'hhmiss') AS TIME
+            FROM sys.dual
+        </qry:select>
+        <qry:out>
+            <!-- Imprime algo -->
         </qry:out>
     </qry:query>
 
