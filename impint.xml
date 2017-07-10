@@ -9,6 +9,9 @@
         <qry:variable name="Imputacion_Incobrables" type="integer" value="0"/>
         <qry:variable name="OrdenDesde" type="integer" value="9999999"/>
         <qry:variable name="OrdenHasta" type="integer" value="0"/>
+        <qry:variable name="sec_codigo" type="integer" value="0"/>
+        <qry:variable name="tor_grupo" type="integer" value="0"/>
+        <qry:variable name="hay_datos_geograficos" type="integer" value="0"/>
 
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
@@ -184,13 +187,13 @@
         <qry:select>
             SELECT o.trt_numero
               ,o.ord_numero
-              ,o.srv_codigo
+              ,o.srv_codigo AS srv_codigo
               ,o.cnt_numero
               ,nvl(o.tor_codigo, '')
               ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ord_fecha_generacion
               ,u.scf_codigo
-              ,o.sec_codigo_origen
-              ,t.tor_grupo
+              ,COALESCE(o.sec_codigo_origen, 0) AS sec_codigo_origen
+              ,COALESCE(t.tor_grupo, 0) AS tor_grupo
               ,t.tor_descripcion
               ,COALESCE(o.prs_numero, 0) AS prs_numero
               ,o.rowid
@@ -240,6 +243,7 @@
             </qry:element>
 
             <qry:for-each-row>
+                <qry:set-variable name="hay_datos_geograficos" value="0"/>
                 <qry:element name="Main">
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
@@ -248,6 +252,29 @@
                     </qry:if>
                     <qry:if left="{#ROW:/ROW/@ord_numero}" operator="greater" right="{$OrdenHasta}" type="integer">
                         <qry:set-variable name="OrdenHasta" value="{#ROW:/ROW/@ord_numero}"/>
+                    </qry:if>
+                    <qry:if left="{$sec_codigo}" operator="equal" right="0" type="integer">
+                        <qry:if left="{#ROW:/ROW/@tor_grupo}" operator="not-equal" right="0" type="integer">
+                            <qry:set-variable name="sec_codigo" value="{#ROW:/ROW/@tor_grupo}"/>
+                        </qry:if>
+                    </qry:if>
+                    <qry:if left="{$tor_grupo}" operator="equal" right="0" type="integer">
+                        <qry:if left="{#ROW:/ROW/@sec_codigo_origen}" operator="not-equal" right="0" type="integer">
+                            <qry:set-variable name="tor_grupo" value="{#ROW:/ROW/@sec_codigo_origen}"/>
+                        </qry:if>
+                    </qry:if>
+                    <qry:if left="{#ROW:/ROW/@srv_codigo}" operator="equal" right="0" type="integer">
+                        <qry:insert-query name="ObtenerDatosSinContrato" doc-param="#ROW/#PARAM"/> <!-- Quilombo -->
+                    <qry:else/>
+                        <qry:insert-query name="ObtenerDatosConContrato" doc-param="#ROW/#PARAM"/> <!-- Quilombo -->
+                    </qry:if>
+                    <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
+                        <qry:insert-query name="ObtenerDatosSiNoHayDatos" doc-param="#ROW/#PARAM"/> <!-- Quilombo -->
+                        <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
+                            <qry:set-variable name="prs_num" value="0"/>
+                        <qry:else/>
+                        
+                        </qry:if>
                     </qry:if>
 
                     <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
@@ -379,6 +406,91 @@
         <qry:out>
             <qry:for-each-row>
                 <qry:set-variable name="l_prox_est_codigo" value="#ROW:/ROW/@PROX_ESTADO"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="ObtenerDatosSinContrato" > 
+        <qry:select  dump="0">
+            SELECT personas.prs_numero
+            	,substr(personas.prs_razon_social, 1, 25)
+            	,nvl(personas.prs_direccion, ' ')
+            	,personas.cfc_codigo
+            	,substr(calles.cll_nombre, 1, 18)
+            	,substr(nvl(personas.prs_nro, '    '), 1, 4)
+            	,substr(nvl(personas.prs_piso, '  '), 1, 2)
+            	,substr(nvl(personas.prs_depto, '   '), 1, 3)
+            	,nvl(personas.prs_torre, ' ')
+            	,nvl(personas.prs_c_postal, ' ')
+            	,nvl(areas_geograficas.agf_nombre, ' ')
+            FROM areas_geograficas 
+            INNER JOIN personas 
+            	ON areas_geograficas.agf_codigo = personas.agf_codigo
+            INNER JOIN calles
+            	ON calles.cll_codigo = personas.cll_codigo AND calles.agf_codigo = personas.agf_codigo
+            WHERE personas.prs_numero = :l_o_prs_numero
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
+
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="ObtenerDatosConContrato" > 
+        <qry:select  dump="0">
+            SELECT personas.prs_numero
+            	,substr(personas.prs_razon_social, 1, 25)
+            	,nvl(personas.prs_direccion, ' ')
+            	,personas.cfc_codigo
+            	,substr(calles.cll_nombre, 1, 18)
+            	,substr(contratos.cnt_nro_pago, 1, 4)
+            	,contratos.cnt_bis
+            	,substr(contratos.cnt_piso_pago, 1, 2)
+            	,substr(contratos.cnt_depto_pago, 1, 3)
+            	,nvl(contratos.cnt_c_postal_pago, ' ')
+            	,nvl(areas_geograficas.agf_nombre, ' ')
+            FROM areas_geograficas
+            INNER JOIN contratos
+            	ON areas_geograficas.agf_codigo = contratos.agf_codigo
+            INNER JOIN personas
+            	ON personas.prs_numero = contratos.prs_numero
+            INNER JOIN calles
+            	ON calles.agf_codigo = contratos.agf_codigo AND calles.cll_codigo = contratos.cll_codigo
+            WHERE contratos.srv_codigo = :l_srv_codigo --'218944'
+            	AND contratos.cnt_numero = :l_cnt_numero --'1'
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
+
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="ObtenerDatosSiNoHayDatos" > 
+        <qry:select>
+            SELECT personas.prs_numero
+            	,substr(personas.prs_razon_social, 1, 25)
+            	,nvl(personas.prs_direccion, ' ')
+            	,personas.cfc_codigo
+            	,substr(nvl(contratos.cnt_direccion_pago, ' '), 1, 27)
+            INTO :l_prs_numero
+            	,:l_prs_razon_social
+            	,:l_prs_direccion
+            	,:l_cfc_codigo
+            	,:l_cll_nombre_completo :s_cll_nombre_completo
+            FROM contratos
+            INNER JOIN personas
+            	ON personas.prs_numero = contratos.prs_numero
+            WHERE contratos.srv_codigo = :l_srv_codigo
+            	AND contratos.cnt_numero = :l_cnt_numero
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+               <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
+
             </qry:for-each-row>
         </qry:out>
     </qry:query>
