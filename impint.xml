@@ -265,18 +265,18 @@
                         </qry:if>
                     </qry:if>
                     <qry:if left="{#ROW:/ROW/@srv_codigo}" operator="equal" right="0" type="integer">
-                        <qry:insert-query name="ObtenerDatosSinContrato" doc-param="#ROW"/>
+                        <qry:insert-query name="ObtenerDatosSinContrato" doc-param="#ROW:"/>
                     <qry:else/>
-                        <qry:insert-query name="ObtenerDatosConContrato" doc-param="#ROW"/>
+                        <qry:insert-query name="ObtenerDatosConContrato" doc-param="#ROW:"/>
                     </qry:if>
                     <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
-                        <qry:insert-query name="ObtenerDatosSiNoHayDatos" doc-param="#ROW"/>
+                        <qry:insert-query name="ObtenerDatosSiNoHayDatos" doc-param="#ROW:"/>
                         <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
                             <qry:set-variable name="prs_num" value="0"/>
                         </qry:if>
                     </qry:if>
 
-                    <qry:insert-query name="ObtenerNotCodigo" doc-param="#ROW"/>
+                    <qry:insert-query name="ObtenerNotCodigo" doc-param="#ROW:"/>
                     <qry:if left="{$not_codigo}" operator="not-equal" right="0" type="string">
                         <qry:set-variable name="ImporteDelAviso" value="0"/>
                         <qry:set-variable name="CantidadDeFacturas" value="0"/>
@@ -287,7 +287,7 @@
                         <qry:if left="{$CantidadDeFacturas}" operator="greater" right="0" type="integer">
                             <qry:set-variable name="Escribi" value="1" operation="+"/>
 
-                            <qry:insert-query name="GeneraArchivo" doc-param="#ROW"/>
+                            <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
                             <qry:if left="{#ROW:/ROW/@tor_grupo}" operator="equal" right="CD" type="string">
                                 <qry:element name="UPDATE">
@@ -339,10 +339,6 @@
                                 </qry:element>
                             </qry:if>
                         </qry:if>
-
-                        
-
-                        <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
                     </qry:if>
                 </qry:element>
             </qry:for-each-row>
@@ -2746,4 +2742,4 @@
         </qry:out>
     </qry:query>
 
-    </qry:doc-definition>   
+    </qry:doc-definition>
