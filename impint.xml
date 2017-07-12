@@ -344,6 +344,9 @@
             </qry:for-each-row>
 
             <qry:if left="{$Escribi}" operator="not-equal" right="0" type="integer">
+                <qry:element name="CMD">
+                    <qry:text value="Imprime %s list=IMPINT id=%s dest=%s desc=\'P%d_IMPINT_%s\'", l_out_lote, l_usr_codigo.arr, l_Impr.arr, l_cpr_numero, l_not_codigo.arr"/>
+                </qry:element>
                 <!-- Quilombo -->
             </qry:if>
 
