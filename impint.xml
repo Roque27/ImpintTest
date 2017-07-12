@@ -281,6 +281,67 @@
                         <qry:set-variable name="ImporteDelAviso" value="0"/>
                         <qry:set-variable name="CantidadDeFacturas" value="0"/>
 
+                        <!-- Proceso Principal -->
+                        <qry:insert-query name="Notifi"/>
+                        <qry:attribute name="CantidadDeFacturas" value="{$CantidadDeFacturas}"/>
+                        <qry:if left="{$CantidadDeFacturas}" operator="greater" right="0" type="integer">
+                            <qry:set-variable name="Escribi" value="1" operation="+"/>
+
+                            <qry:insert-query name="GeneraArchivo" doc-param="#ROW"/>
+
+                            <qry:if left="{#ROW:/ROW/@tor_grupo}" operator="equal" right="CD" type="string">
+                                <qry:element name="UPDATE">
+                                    <qry:text value="UPDATE ordenativos
+                                                        SET ord_situacion = 'I'
+                                                            ,cpr_numero = {$l_cpr_numero}
+                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+
+                                    <qry:element name="ordenativos">
+                                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                                        <qry:element name="WHERE">
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                        </qry:element>
+                                    </qry:element>
+                                </qry:element>
+                            <qry:else/>
+                                <qry:element name="UPDATE">
+                                    <qry:text value="UPDATE ordenativos
+                                                        SET cpr_numero = {$l_cpr_numero}
+                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+
+                                    <qry:element name="ordenativos">
+                                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                                        <qry:element name="WHERE">
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                        </qry:element>
+                                    </qry:element>
+                                </qry:element>
+                            </qry:if>
+
+                        <qry:else/>
+                            <qry:attribute name="Imputacion_Incobrables" value="{$Imputacion_Incobrables}"/>
+                            <qry:if left="{$Imputacion_Incobrables}" operator="not-equal" right="1" type="integer">
+                                <qry:element name="UPDATE">
+                                    <qry:text value="UPDATE ordenativos
+                                                        SET ord_estado = 'A'
+                                                        	,cpr_numero = {$l_cpr_numero}
+                                                        	,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  '
+                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+
+                                    <qry:element name="ordenativos">
+                                        <qry:attribute name="ord_estado" value="A"/>
+                                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                                        <qry:attribute name="ord_datos_anula" value="Anulado Documentos ya pagados - Saldo 0 - No se imprime  "/>
+                                        <qry:element name="WHERE">
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                        </qry:element>
+                                    </qry:element>
+                                </qry:element>
+                            </qry:if>
+                        </qry:if>
+
+                        
+
                         <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
                     </qry:if>
                 </qry:element>

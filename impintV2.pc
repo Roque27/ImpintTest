@@ -112,7 +112,7 @@ int Imputacion_Incobrables;
 double t_doc_saldo=0.0;
 double p_minint=0.0;
 
-main(int argc, char **argv)
+void main(int argc, char **argv)
  {
   FILE *out_file;
   char l_out_file[133];
