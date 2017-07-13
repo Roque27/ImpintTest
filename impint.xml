@@ -345,9 +345,11 @@
 
             <qry:if left="{$Escribi}" operator="not-equal" right="0" type="integer">
                 <qry:element name="CMD">
-                    <qry:text value="Imprime %s list=IMPINT id=%s dest=%s desc=\'P%d_IMPINT_%s\'", l_out_lote, l_usr_codigo.arr, l_Impr.arr, l_cpr_numero, l_not_codigo.arr"/>
+                    <!-- <qry:text value="Imprime {#PARAM:/impint_param/NombreArchivo/@paramFile} list={#PARAM:/impint_param/Reporte/@paramRepCodigo}  id={#PARAM:/impint_param/User/@paramUser} dest={#PARAM:/impint_param/Print/@paramImpr} desc=\'P{$l_cpr_numero}_IMPINT_{$not_codigo}\'"/>-->
                 </qry:element>
-                <!-- Quilombo -->
+                <qry:element name="CMD">
+                    <!-- <qry:text value="rm {#PARAM:/impint_param/NombreArchivo/@paramFile} "/>-->
+                </qry:element>
             </qry:if>
 
             <qry:insert-query name="SeleccionaProxEstado"/>
@@ -371,6 +373,9 @@
             <qry:else/>
                 <qry:if left="l_crr_genera_planilla" operator="equal" right="A" type="string">
                     <qry:insert-query name="GrabaEnReportes"/>
+                    <qry:element name="CMD">
+                        <qry:text value="Imprime %s list=IMPINT id=%s dest=%s desc=\'P%d_IMPINT_%s\'"/>
+                    </qry:element>
                     <!-- Quilombo -->
                 <qry:else/>
                     <!-- Quilombo -->

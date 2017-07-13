@@ -1,4 +1,6 @@
 <impint_param>
+    <NombreArchivo paramFile="">
+    <Reporte paramRepCodigo="">
     <Incobrables paramIncobrables="S">
     <User paramUser="RCITTADI">
     <Print paramImpr="1">
