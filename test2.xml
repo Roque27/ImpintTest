@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="SelectCodigoBarras"/>
+            
+        </qry:out>
+    </qry:main>
+
+    <qry:query name="SelectCodigoBarras"> 
+        <qry:select dump="0">
+            SELECT LPAD({$nro_ord}, 10, '0') AS NRO_ORD
+            FROM DUAL
+        </qry:select>
+        <qry:out>
+            <!-- TODO -->
+            <!-- Como hacer con el tema de la impresion del codigo de barras -->
+            <qry:for-each-row>
+                <qry:set-variable name="nrobarra" value="#ROW:/ROW/@NRO_ORD"/>
+                <qry:element name="codigoBarras" >
+                    <qry:attribute name="string_barras" value="#ROW:/ROW/@NRO_ORD" length="10" align="left"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>

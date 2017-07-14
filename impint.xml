@@ -367,7 +367,7 @@
                     </qry:element>
                 </qry:element>
             </qry:element>
-
+            
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
                 <qry:insert-query name="GrabaEnReportes"/>
             <qry:else/>
