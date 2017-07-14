@@ -6,13 +6,14 @@
         <qry:variable name="v_columna" type="string" value="SCF_CODIGO"/>
         <qry:variable name="largos" type="string" value="20"/>
 
-        <qry:variable name="cnt_num_ori" type="integer" value=""/>
-        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="cnt_num_ori" type="integer" value="0"/>
+        <qry:variable name="srv_cod_ori" type="integer" value="0"/>
         <qry:variable name="prs_num" type="integer" value="50"/>
         <qry:variable name="prs_num_temp" type="integer" value="50"/>
 
         <qry:variable name="nro_ord" type="integer" value="10769681"/>
         <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+        <qry:variable name="nrobarra" type="integer"/>
 
     </qry:declare>
     <qry:main>

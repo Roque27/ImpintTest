@@ -2135,7 +2135,7 @@
                 <qry:else/>
                     <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
                         <qry:insert-query name="QueryDocumentos"/>
-                    <qry:else/>
+                    </qry:if>
                 </qry:if>
             <qry:else/>
                 <qry:if left="$isEmpty_documentos_ori" operator="equal" right="0" type="integer">
@@ -2143,7 +2143,7 @@
                 <qry:else/>
                     <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
                         <qry:insert-query name="QueryDocumentos"/>
-                    <qry:else/>
+                    </qry:if>
                 </qry:if>
             </qry:if>
 
@@ -2366,7 +2366,7 @@
                 <qry:else/>
                     <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                         <qry:insert-query name="QueryDocumentosD2"/>
-                    <qry:else/>
+                    </qry:if>
                 </qry:if>
             <qry:else/>
                 <qry:if left="$isEmpty_documentos_ori" operator="equal" right="0" type="integer">
@@ -2374,7 +2374,7 @@
                 <qry:else/>
                     <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                         <qry:insert-query name="QueryDocumentosD2"/>
-                    <qry:else/>
+                    </qry:if>
                 </qry:if>
             </qry:if>
 
@@ -2567,7 +2567,7 @@
             	,COALESCE(DOC_RECARGO_VENC_3, 0) AS DOC_RECARGO_VENC_3
             	,DOC_ESTADO
             	,decode(doc_situacion, 'X', '(*)', 'C1', '(*)', 'C2', '(*)', 'C3', '(*)', '   ') LLAMADA_SIT_X
-            FROM DOCUMENTOSDOCUMENTOS
+            FROM DOCUMENTOS
             WHERE TRT_NUMERO = {$trt_num}
             	AND NVL(NVL(DOC_SALDO, DOC_IMPORTE), 0) &gt; 0
             	AND doc_situacion &lt;&gt; 'X'
@@ -2587,7 +2587,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Totales_Tramite"> 
         <qry:out>
             <qry:if left="$isEmpty_totales_tramites" operator="equal" right="0" type="integer">
@@ -2595,7 +2595,7 @@
             <qry:else/>
                 <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                     <qry:insert-query name="QueryTotales_Tramite"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
@@ -2634,7 +2634,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Usuarios"> 
         <qry:select dump="0">
             SELECT S.SCF_DESCRIPCION AS SCF_DESCRIPCION
@@ -2656,7 +2656,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Prs_Num_Ori"> 
         <qry:select dump="0">
             SELECT PRS_NUMERO
@@ -2676,6 +2676,7 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="SelectCodigoBarras"> 
         <qry:select dump="0">
             SELECT LPAD({$nro_ord}, 10, '0') AS NRO_ORD
@@ -2693,7 +2694,7 @@
         </qry:out>
     </qry:query>
     
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Buscar_Codigos_Control"> 
         <qry:select dump="0">
             <!-- Cuando es nulo en Pro*C se coloca 0 -->

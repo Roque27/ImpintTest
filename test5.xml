@@ -3,16 +3,24 @@
     <qry:declare>
     	
         <!-- Test Globales -->
-        <qry:variable name="v_columna" type="string" value="SCF_CODIGO"/>
+        <qry:variable name="v_columna" type="string" value="TTR_CANT_DOC"/>
         <qry:variable name="largos" type="string" value="20"/>
 
-        <qry:variable name="cnt_num_ori" type="integer" value=""/>
-        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="isEmpty_totales_tramites" type="integer" value="0"/>
+        <qry:variable name="TBL_totales_tramites" type="data"/>
+
+        <qry:variable name="trt_num" type="integer" value="9740641"/>
+        <qry:variable name="trt_num_temp" type="integer" value="0"/>
+        <qry:variable name="actual_trt_num" type="integer"/>
+        
+        <qry:variable name="cnt_num_ori" type="integer" value="0"/>
+        <qry:variable name="srv_cod_ori" type="integer" value="0"/>
         <qry:variable name="prs_num" type="integer" value="50"/>
         <qry:variable name="prs_num_temp" type="integer" value="50"/>
 
         <qry:variable name="nro_ord" type="integer" value="10769681"/>
         <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+        <qry:variable name="nrobarra" type="integer"/>
 
     </qry:declare>
     <qry:main>
@@ -31,24 +39,24 @@
             <qry:else/>
                 <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                     <qry:insert-query name="QueryTotales_Tramite"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
                 <qry:element name="totalesTramite">
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_CANT_DOC" type="string">
                         <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left" format-number="2"/>
-			        </qry:if>
+			              </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
-			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
-			        </qry:if>
+			    		      <qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
+			              </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DEC" type="string">
                         <qry:if left="#ROW:/ROW/@TTR_SUMA_DEC" operator="not-equal" right="0" type="integer">
                             <qry:attribute name="v_suma_dec" value="#ROW:/ROW/@TTR_SUMA_DEC_MESSG" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
-			        </qry:if>
+                    </qry:if>
                 </qry:element>
             </qry:for-each-row>
         </qry:out>
