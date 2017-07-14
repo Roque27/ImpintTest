@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="Prs_Num_Ori"/>
+            
+        </qry:out>
+    </qry:main>
+
+    <qry:query name="Prs_Num_Ori"> 
+        <qry:select dump="0">
+            SELECT PRS_NUMERO
+            FROM CONTRATOS
+            WHERE CNT_NUMERO = {$cnt_num_ori}
+	            AND SRV_CODIGO = {$srv_cod_ori}
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="prs_num_temp" value="{$prs_num}"/>
+                <qry:set-variable name="prs_num" value="#ROW:/ROW/@PRS_NUMERO"/>
+
+                <qry:element name="prsNumOri">
+                    <qry:attribute name="prs_num_ori" value="#ROW:/ROW/@PRS_NUMERO"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>

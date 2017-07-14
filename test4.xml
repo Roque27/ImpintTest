@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+        <qry:variable name="v_columna" type="string" value="SCF_CODIGO"/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="Usuarios"/>
+            
+        </qry:out>
+    </qry:main>
+
+    <qry:query name="Usuarios"> 
+        <qry:select dump="0">
+            SELECT S.SCF_DESCRIPCION AS SCF_DESCRIPCION
+            FROM SUCURSALES S
+            INNER JOIN USUARIOS U
+              ON U.SCF_CODIGO = S.SCF_CODIGO
+            WHERE U.USR_CODIGO = USER
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:element name="usuarios" >
+                    <qry:if left="{$v_columna}" operator="equal" right="SCF_CODIGO" type="string">
+                        <qry:attribute name="v_scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
+                    <qry:else/>
+                        <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+		            </qry:if>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>
