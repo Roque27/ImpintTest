@@ -9,7 +9,7 @@
 
          <qry:variable name="v_ord_fec" type="string" value="30/01/2017"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!-- -->
 
 
         <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>

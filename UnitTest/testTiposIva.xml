@@ -9,7 +9,7 @@
         <qry:variable name="TBL_tipos_iva" type="data"/>
         <qry:variable name="isEmpty_tipos_iva" type="integer" value="0"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
 
         <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
@@ -40,7 +40,7 @@
             <qry:else/>
                 <qry:if left="$actual_ivv_cod" operator="equal" right="$ivv_cod" type="integer">
                     <qry:insert-query name="QueryTipos_IVA"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_tipos_iva:">

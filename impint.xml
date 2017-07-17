@@ -2055,7 +2055,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Tipos_IVA"> 
         <qry:out>
             <qry:if left="$isEmpty_tipos_iva" operator="equal" right="0" type="integer">
@@ -2063,7 +2063,7 @@
             <qry:else/>
                 <qry:if left="$actual_ivv_cod" operator="equal" right="$ivv_cod" type="integer">
                     <qry:insert-query name="QueryTipos_IVA"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_tipos_iva:">
@@ -2091,7 +2091,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Tarifas"> 
         <qry:out>
             <qry:if left="$isEmpty_tarifas" operator="equal" right="0" type="integer">
@@ -2099,7 +2099,7 @@
             <qry:else/>
                 <qry:if left="$actual_tcl_cod" operator="equal" right="$tcl_cod" type="integer">
                     <qry:insert-query name="QueryTarifas"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_tarifas:">
@@ -2127,6 +2127,7 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Documentos"> 
         <qry:out>
             <qry:if left="$document_tbl_type" operator="equal" right="DOC" type="string">
@@ -2358,6 +2359,7 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="DocumentosD2"> 
         <qry:out>
             <qry:if left="$document_tbl_type" operator="equal" right="DOC" type="string">

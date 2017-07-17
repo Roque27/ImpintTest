@@ -9,7 +9,7 @@
         <qry:variable name="TBL_tarifas" type="data"/>
         <qry:variable name="isEmpty_tarifas" type="integer" value="0"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
 
         <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
@@ -40,7 +40,7 @@
             <qry:else/>
                 <qry:if left="$actual_tcl_cod" operator="equal" right="$tcl_cod" type="integer">
                     <qry:insert-query name="QueryTarifas"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_tarifas:">
