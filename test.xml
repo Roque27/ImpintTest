@@ -38,8 +38,9 @@
     </qry:declare>
     <qry:main>
         <qry:out>
-
-            <qry:insert-query name="DocumentosD2"/>
+            <qry:element name="raiz">
+                <qry:insert-query name="DocumentosD2"/>
+            </qry:element>
             
         </qry:out>
     </qry:main>
