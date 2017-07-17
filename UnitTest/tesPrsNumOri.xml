@@ -5,6 +5,8 @@
         <!-- Test Globales -->
         <qry:variable name="cnt_num_ori" type="integer" value="0"/>
         <qry:variable name="srv_cod_ori" type="integer" value="0"/>
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
         <qry:variable name="prs_num" type="integer" value="50"/>
         <qry:variable name="prs_num_temp" type="integer" value="50"/>
 

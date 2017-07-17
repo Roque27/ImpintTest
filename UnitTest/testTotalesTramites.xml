@@ -15,6 +15,11 @@
         
         <qry:variable name="cnt_num_ori" type="integer" value="0"/>
         <qry:variable name="srv_cod_ori" type="integer" value="0"/>
+        <qry:variable name="v_columna" type="string" value="SCF_CODIGO"/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
         <qry:variable name="prs_num" type="integer" value="50"/>
         <qry:variable name="prs_num_temp" type="integer" value="50"/>
 
@@ -40,6 +45,7 @@
                 <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                     <qry:insert-query name="QueryTotales_Tramite"/>
                 </qry:if>
+                <qry:else/>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
@@ -50,6 +56,10 @@
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
 			    		      <qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
 			              </qry:if>
+			        </qry:if>
+                    <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
+			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
+			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DEC" type="string">
                         <qry:if left="#ROW:/ROW/@TTR_SUMA_DEC" operator="not-equal" right="0" type="integer">
                             <qry:attribute name="v_suma_dec" value="#ROW:/ROW/@TTR_SUMA_DEC_MESSG" length="$largos" align="left"/>
@@ -57,6 +67,7 @@
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
                     </qry:if>
+			        </qry:if>
                 </qry:element>
             </qry:for-each-row>
         </qry:out>
