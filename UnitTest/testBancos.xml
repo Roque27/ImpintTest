@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        <qry:variable name="agf_cod" type="integer" value="12"/>
+        <qry:variable name="actual_agf_cod" type="integer"/>
+        <qry:variable name="isEmpty_bancos" type="integer" value="0"/>
+        <qry:variable name="TBL_bancos" type="data"/>
+
+        <!-- ----------------------------------------------------------------- -->
+
+
+        <qry:variable name="v_columna" type="string" value=""/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="Bancos"/>
+            
+        </qry:out>
+    </qry:main>
+<qry:query name="Bancos"> 
+        <qry:out>
+            <qry:if left="$isEmpty_bancos" operator="equal" right="0" type="integer">
+                <qry:insert-query name="QueryBancos"/>
+            <qry:else/>
+                <qry:if left="$actual_agf_cod" operator="not-equal" right="$agf_cod" type="integer">
+                    <qry:insert-query name="QueryBancos"/>
+                <qry:else/>
+            </qry:if>
+
+            <qry:for-each-row  doc="$TBL_bancos:">
+                <qry:element name="banco">
+                    <qry:attribute name="ha_urc_descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="longitud01" align="none|left|right|center" format-number="2|.3|,4"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+    
+    <qry:query name="QueryBancos" > 
+        <qry:select dump="0">
+            SELECT U.URC_DESCRIPCION_ALT AS URC_DESCRIPCION_ALT
+            FROM UNIDADES_REC_COBRO C
+            INNER JOIN UNIDADES_RECAUDADORAS U 
+              ON U.URC_CODIGO = C.URC_CODIGO
+            WHERE C.UCO_TIPO = 'A'
+              AND C.AGF_CODIGO = {$agf_cod}
+        </qry:select>
+        <qry:out>
+            <qry:set-variable name="actual_agf_cod" value="$agf_cod"/>
+            <qry:set-variable name="TBL_bancos" value="#ROW:"/>
+            <qry:set-variable name="isEmpty_bancos" value="1"/>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>

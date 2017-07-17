@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        
+        <qry:variable name="v_descripcion" type="string"/><!-- No se usa mas -->
+
+         <qry:variable name="v_ord_fec" type="string" value="30/01/2017"/>
+
+        <!-- ----------------------------------------------------------------- -->
+
+
+        <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="CargosCartaDoc"/>
+            
+        </qry:out>
+    </qry:main>
+
+    <qry:query name="CargosCartaDoc"> 
+        <qry:select dump="0">
+            SELECT 'Cargo por ' || 'carta documento o telegrama' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            FROM PRECIOS_PRESTACION
+            WHERE TIT_CLAVE = 'ND2'
+              AND PPR_FECHA_VIGENCIA = (
+                SELECT MAX(PPR_FECHA_VIGENCIA)
+                FROM PRECIOS_PRESTACION
+                WHERE TIT_CLAVE = 'ND2'
+                  AND PPR_FECHA_VIGENCIA &lt;= TO_DATE({$v_ord_fec}, 'DD/MM/YYYY')
+                )
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>        
+                <qry:element name="cargos">
+                    <qry:attribute name="telegrama" value="#ROW:/ROW/@CARGOMSG" length="$largos" align="left"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>

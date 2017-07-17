@@ -3,13 +3,13 @@
     <qry:declare>
     	
         <!-- Test Globales -->
-        <qry:variable name="v_columna" type="string" value="TTR_CANT_DOC"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="v_columna" type="string" value="TTR_SUMA_DEC"/>
+        <qry:variable name="largos" type="string" value="50"/>
 
         <qry:variable name="isEmpty_totales_tramites" type="integer" value="0"/>
         <qry:variable name="TBL_totales_tramites" type="data"/>
 
-        <qry:variable name="trt_num" type="integer" value="9740641"/>
+        <qry:variable name="trt_num" type="integer" value="9625713"/>
         <qry:variable name="trt_num_temp" type="integer" value="0"/>
         <qry:variable name="actual_trt_num" type="integer"/>
         
@@ -36,7 +36,7 @@
         </qry:out>
     </qry:main>
 
-   <!-- COMPLETADO -->
+   <!-- COMPLETADO: Probado -->
     <qry:query name="Totales_Tramite"> 
         <qry:out>
             <qry:if left="$isEmpty_totales_tramites" operator="equal" right="0" type="integer">
@@ -45,20 +45,15 @@
                 <qry:if left="$actual_trt_num" operator="equal" right="$trt_num" type="integer">
                     <qry:insert-query name="QueryTotales_Tramite"/>
                 </qry:if>
-                <qry:else/>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
                 <qry:element name="totalesTramite">
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_CANT_DOC" type="string">
-                        <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left" format-number="2"/>
-			              </qry:if>
-                    <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
-			    		      <qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
-			              </qry:if>
+                        <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
-			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
+			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number=" 2"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DEC" type="string">
                         <qry:if left="#ROW:/ROW/@TTR_SUMA_DEC" operator="not-equal" right="0" type="integer">
@@ -66,7 +61,6 @@
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
-                    </qry:if>
 			        </qry:if>
                 </qry:element>
             </qry:for-each-row>
@@ -76,9 +70,9 @@
     <qry:query name="QueryTotales_Tramite" > 
         <qry:select dump="0">
             SELECT TTR_CANT_DOC AS TTR_CANT_DOC
-                ,TTR_SUMA_DOC AS TTR_SUMA_DOC
+                ,TO_CHAR(TTR_SUMA_DOC, '9999999999990.0000') AS TTR_SUMA_DOC
                 ,TTR_SUMA_DEC AS TTR_SUMA_DEC
-                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || ' (*)\n') AS TTR_SUMA_DEC_MESSG
+                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
             FROM TOTALES_TRAMITE
             WHERE TRT_NUMERO = {$trt_num}
         </qry:select>

@@ -2166,7 +2166,7 @@
                             </qry:if>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO" type="string">
-                                <qry:attribute name="hv_doc_tipo" value="-{#ROW:/ROW/@DOC_TIPO}" length="$largos" align="left"/>
+                                <qry:attribute name="hv_doc_tipo" value="#ROW:/ROW/@DOC_TIPO" length="$largos" align="left"/>
                                 <qry:if left="#ROW:/ROW/@DOC_TIPO" operator="equal" right="FN" type="string">
                                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="1" operation="+"/>
                                 <qry:else/>
@@ -2213,8 +2213,8 @@
                                                         <qry:attribute name="hv_doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO_ORIGEN" type="string">
-                                                            <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="integer">
-                                                                <qry:attribute name="hv_doc_numero_origen" value="-{#ROW:/ROW/@DOC_NUMERO_ORIGEN}" length="$largos" align="left"/>
+                                                            <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="string">
+                                                                <qry:attribute name="hv_doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                             </qry:if>
@@ -2244,14 +2244,14 @@
                                                                             </qry:if>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE" type="string">
-                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number="2"/>
+                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE_BASICO" type="string">
-                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number="2"/>
+                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_SALDO" type="string">
-                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number="2"/>
+                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC" type="string">
                                                                                             <qry:attribute name="hv_doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
@@ -2263,10 +2263,10 @@
                                                                                                     <qry:attribute name="hv_doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_2" type="string">
-                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number="2"/>
+                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_3" type="string">
-                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number="2"/>
+                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ESTADO" type="string">
                                                                                                                 <qry:attribute name="hv_doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
@@ -2313,27 +2313,27 @@
 
     <qry:query name="QueryDocumentos" > 
         <qry:select dump="0">
-            SELECT d.DOC_NUMERO
+            SELECT TO_CHAR(d.DOC_NUMERO) AS DOC_NUMERO
             	,d.DOC_TIPO
             	,to_char(d.DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
             	,COALESCE(d.DOC_PERIODO, 0) AS DOC_PERIODO
             	,COALESCE(d.DOC_ANIO, 0) AS DOC_ANIO
             	,COALESCE(d.DOC_CUOTA, 0) AS DOC_CUOTA
             	,COALESCE(d.DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
-            	,COALESCE(d.DOC_NUMERO_ORIGEN, 0) AS DOC_NUMERO_ORIGEN
+            	,TO_CHAR(COALESCE(d.DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
             	,COALESCE(d.DOC_CONSUMO, 0) AS DOC_CONSUMO
             	,COALESCE(d.ORD_NUMERO, 0) AS ORD_NUMERO
             	,COALESCE(d.URC_CODIGO, 0) AS URC_CODIGO
             	,COALESCE(d.ASI_NUMERO, 0) AS ASI_NUMERO
-            	,d.DOC_IMPORTE
-            	,COALESCE(d.DOC_IMPORTE_BASICO, 0) AS DOC_IMPORTE_BASICO
-            	,nvl(d.DOC_SALDO, d.DOC_IMPORTE) AS DOC_SALDO
+            	,TO_CHAR(d.DOC_IMPORTE, '9999999999990.0000') AS DOC_IMPORTE
+            	,TO_CHAR(COALESCE(d.DOC_IMPORTE_BASICO, 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
+            	,TO_CHAR(nvl(d.DOC_SALDO, d.DOC_IMPORTE), '9999999999990.0000') AS DOC_SALDO
             	,COALESCE(to_char(d.DOC_FECHA_VENC, 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
             	,COALESCE(to_char(d.DOC_FECHA_VENC_1, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
                 ,COALESCE(to_char(d.DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
-                ,COALESCE(d.DOC_RECARGO_VENC_2, 0) AS DOC_RECARGO_VENC_2
+                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
                 ,COALESCE(to_char(d.DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
-                ,COALESCE(d.DOC_RECARGO_VENC_3, 0) AS DOC_RECARGO_VENC_3
+                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
                 ,d.DOC_ESTADO AS DOC_ESTADO
                 ,decode(d.doc_situacion, 'X', '(*)', '   ') LLAMADA_SIT_X
             FROM documentos d
@@ -2397,7 +2397,7 @@
                             </qry:if>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO" type="string">
-                                <qry:attribute name="hv_doc_tipo" value="-{#ROW:/ROW/@DOC_TIPO}" length="$largos" align="left"/>
+                                <qry:attribute name="hv_doc_tipo" value="{#ROW:/ROW/@DOC_TIPO}" length="$largos" align="left"/>
                                 <qry:if left="#ROW:/ROW/@DOC_TIPO" operator="equal" right="FN" type="string">
                                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="1" operation="+"/>
                                 <qry:else/>
@@ -2444,8 +2444,8 @@
                                                         <qry:attribute name="hv_doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO_ORIGEN" type="string">
-                                                            <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="integer">
-                                                                <qry:attribute name="hv_doc_numero_origen" value="-{#ROW:/ROW/@DOC_NUMERO_ORIGEN}" length="$largos" align="left"/>
+                                                            <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="string">
+                                                                <qry:attribute name="hv_doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                             </qry:if>
@@ -2475,14 +2475,14 @@
                                                                             </qry:if>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE" type="string">
-                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number="2"/>
+                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE_BASICO" type="string">
-                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number="2"/>
+                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_SALDO" type="string">
-                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number="2"/>
+                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC" type="string">
                                                                                             <qry:attribute name="hv_doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
@@ -2494,10 +2494,10 @@
                                                                                                     <qry:attribute name="hv_doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_2" type="string">
-                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number="2"/>
+                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_3" type="string">
-                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number="2"/>
+                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ESTADO" type="string">
                                                                                                                 <qry:attribute name="hv_doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
@@ -2544,27 +2544,27 @@
 
     <qry:query name="QueryDocumentosD2" > 
         <qry:select dump="0">
-            SELECT DOC_NUMERO
+            SELECT TO_CHAR(DOC_NUMERO) AS DOC_NUMERO
             	,DOC_TIPO
             	,to_char(DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
             	,COALESCE(DOC_PERIODO, 0) AS DOC_PERIODO
             	,COALESCE(DOC_ANIO, 0) AS DOC_ANIO
             	,COALESCE(DOC_CUOTA, 0) AS DOC_CUOTA
             	,COALESCE(DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
-            	,COALESCE(DOC_NUMERO_ORIGEN, 0) AS DOC_NUMERO_ORIGEN
+            	,TO_CHAR(COALESCE(DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
             	,COALESCE(DOC_CONSUMO, 0) AS DOC_CONSUMO
             	,COALESCE(ORD_NUMERO, 0) AS ORD_NUMERO
             	,COALESCE(URC_CODIGO, 0) AS URC_CODIGO
             	,COALESCE(ASI_NUMERO, 0) AS ASI_NUMERO
-            	,DOC_IMPORTE
-            	,COALESCE(DOC_IMPORTE_BASICO, 0) AS DOC_IMPORTE_BASICO
-            	,nvl(DOC_SALDO, DOC_IMPORTE) AS DOC_SALDO
+            	,TO_CHAR(DOC_IMPORTE, '9999999999990.0000') AS DOC_IMPORTE
+            	,TO_CHAR(COALESCE(DOC_IMPORTE_BASICO, 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
+            	,TO_CHAR(nvl(DOC_SALDO, DOC_IMPORTE), '9999999999990.0000') AS DOC_SALDO
             	,COALESCE(to_char(DOC_FECHA_VENC, 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
             	,COALESCE(to_char(DOC_FECHA_VENC_1, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
             	,COALESCE(to_char(DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
-            	,COALESCE(DOC_RECARGO_VENC_2, 0) AS DOC_RECARGO_VENC_2
+            	,TO_CHAR(COALESCE(DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
             	,COALESCE(to_char(DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
-            	,COALESCE(DOC_RECARGO_VENC_3, 0) AS DOC_RECARGO_VENC_3
+            	,TO_CHAR(COALESCE(DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
             	,DOC_ESTADO
             	,decode(doc_situacion, 'X', '(*)', 'C1', '(*)', 'C2', '(*)', 'C3', '(*)', '   ') LLAMADA_SIT_X
             FROM DOCUMENTOS
@@ -2601,10 +2601,10 @@
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
                 <qry:element name="totalesTramite">
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_CANT_DOC" type="string">
-                        <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left" format-number="2"/>
+                        <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
-			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number="2"/>
+			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number=" 2"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DEC" type="string">
                         <qry:if left="#ROW:/ROW/@TTR_SUMA_DEC" operator="not-equal" right="0" type="integer">
@@ -2621,9 +2621,9 @@
     <qry:query name="QueryTotales_Tramite" > 
         <qry:select dump="0">
             SELECT TTR_CANT_DOC AS TTR_CANT_DOC
-                ,TTR_SUMA_DOC AS TTR_SUMA_DOC
+                ,TO_CHAR(TTR_SUMA_DOC, '9999999999990.0000') AS TTR_SUMA_DOC
                 ,TTR_SUMA_DEC AS TTR_SUMA_DEC
-                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || ' (*)\n') AS TTR_SUMA_DEC_MESSG
+                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
             FROM TOTALES_TRAMITE
             WHERE TRT_NUMERO = {$trt_num}
         </qry:select>

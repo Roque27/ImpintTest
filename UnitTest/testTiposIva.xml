@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        <qry:variable name="ivv_cod" type="integer" value="1"/>
+        <qry:variable name="actual_ivv_cod" type="integer"/>
+        <qry:variable name="TBL_tipos_iva" type="data"/>
+        <qry:variable name="isEmpty_tipos_iva" type="integer" value="0"/>
+
+        <!-- ----------------------------------------------------------------- -->
+
+
+        <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+
+            <qry:insert-query name="Tipos_IVA"/>
+            
+        </qry:out>
+    </qry:main>
+
+    <!-- COMPLETADO -->
+    <qry:query name="Tipos_IVA"> 
+        <qry:out>
+            <qry:if left="$isEmpty_tipos_iva" operator="equal" right="0" type="integer">
+                <qry:insert-query name="QueryTipos_IVA"/>
+            <qry:else/>
+                <qry:if left="$actual_ivv_cod" operator="equal" right="$ivv_cod" type="integer">
+                    <qry:insert-query name="QueryTipos_IVA"/>
+                <qry:else/>
+            </qry:if>
+
+            <qry:for-each-row  doc="$TBL_tipos_iva:">
+                <qry:element name="tipoIVA">
+                    <qry:if left="{$v_columna}" operator="equal" right="TCL_DESCRIPCION" type="string">
+                        <qry:attribute name="v_ivv_descripcion" value="#ROW:/ROW/@IVV_DESCRIPCION" length="$largos" align="left"/>
+                    <qry:else/>
+                        <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+                    </qry:if>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="QueryTipos_IVA" > 
+        <qry:select dump="0">
+            SELECT IVV_DESCRIPCION AS IVV_DESCRIPCION
+            FROM TIPOS_IVA
+            WHERE IVV_CODIGO = {$ivv_cod}
+        </qry:select>
+        <qry:out>
+            <qry:set-variable name="actual_ivv_cod" value="$ivv_cod"/>
+            <qry:set-variable name="TBL_tipos_iva" value="#ROW:"/>
+            <qry:set-variable name="isEmpty_tipos_iva" value="1"/>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>
