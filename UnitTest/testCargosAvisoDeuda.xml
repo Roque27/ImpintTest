@@ -9,11 +9,11 @@
 
          <qry:variable name="v_ord_fec" type="string" value="30/01/2017"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!-- -->
 
 
         <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="largos" type="string" value="100"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -32,9 +32,9 @@
         </qry:out>
     </qry:main>
 
-    <qry:query name=""> 
+    <qry:query name="CargosAvisoDeuda"> 
         <qry:select dump="0">
-            SELECT 'Cargo por ' || 'aviso de deuda             ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            SELECT 'Cargo por ' || 'aviso de deuda             ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' m^225!s IVA' AS CARGOMSG
             FROM PRECIOS_PRESTACION
             WHERE TIT_CLAVE = 'ND1'
               AND PPR_FECHA_VIGENCIA = (

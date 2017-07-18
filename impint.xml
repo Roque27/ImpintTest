@@ -1854,7 +1854,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryStock_Equipos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
             
             <qry:for-each-row  doc="$TBL_stock_equipos:">
@@ -1890,8 +1890,7 @@
         </qry:out>
     </qry:query>
 
-
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Sucursales"> 
         <qry:out>
             <qry:if left="$isEmpty_sucursales" operator="equal" right="0" type="integer">
@@ -1899,7 +1898,7 @@
             <qry:else/>
                 <qry:if left="$actual_scf_cod" operator="not-equal" right="$scf_cod" type="integer">
                     <qry:insert-query name="QuerySucursales"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_sucursales:">
@@ -1932,7 +1931,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Bancos"> 
         <qry:out>
             <qry:if left="$isEmpty_bancos" operator="equal" right="0" type="integer">
@@ -1940,12 +1939,12 @@
             <qry:else/>
                 <qry:if left="$actual_agf_cod" operator="not-equal" right="$agf_cod" type="integer">
                     <qry:insert-query name="QueryBancos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_bancos:">
                 <qry:element name="banco">
-                    <qry:attribute name="ha_urc_descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="longitud01" align="none|left|right|center" format-number="2|.3|,4"/>
+                    <qry:attribute name="ha_urc_descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="$largos" align="left" />
                 </qry:element>
             </qry:for-each-row>
         </qry:out>
@@ -1967,7 +1966,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Cargos"> 
         <qry:select dump="0">
             <!-- Aca no va nada -->
@@ -1994,7 +1993,7 @@
 
     <qry:query name="CargosAvisoDeuda"> 
         <qry:select dump="0">
-            SELECT 'Cargo por ' || 'aviso de deuda             ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            SELECT 'Cargo por ' || 'aviso de deuda             ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' m^225!s IVA' AS CARGOMSG
             FROM PRECIOS_PRESTACION
             WHERE TIT_CLAVE = 'ND1'
               AND PPR_FECHA_VIGENCIA = (
@@ -2015,7 +2014,7 @@
 
     <qry:query name="CargosCartaDoc"> 
         <qry:select dump="0">
-            SELECT 'Cargo por ' || 'carta documento o telegrama' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            SELECT 'Cargo por ' || 'carta documento o telegrama' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' m^225!s IVA' AS CARGOMSG
             FROM PRECIOS_PRESTACION
             WHERE TIT_CLAVE = 'ND2'
               AND PPR_FECHA_VIGENCIA = (
@@ -2036,7 +2035,8 @@
 
     <qry:query name="CargosReconexion"> 
         <qry:select dump="0">
-            SELECT 'Cargo por ' || 'reconexión                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            <!-- SELECT 'Cargo por ' || 'reconexión                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG -->
+            SELECT 'Cargo por ' || 'reconexi^243!n                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' m^225!s IVA' AS CARGOMSG
             FROM PRECIOS_PRESTACION
             WHERE TIT_CLAVE = 'TR1'
               AND PPR_FECHA_VIGENCIA = (
@@ -2625,7 +2625,7 @@
             SELECT TTR_CANT_DOC AS TTR_CANT_DOC
                 ,TO_CHAR(TTR_SUMA_DOC, '9999999999990.0000') AS TTR_SUMA_DOC
                 ,TTR_SUMA_DEC AS TTR_SUMA_DEC
-                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
+                ,('Deuda Cargo Decreto N^176!. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
             FROM TOTALES_TRAMITE
             WHERE TRT_NUMERO = {$trt_num}
         </qry:select>

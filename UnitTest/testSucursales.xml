@@ -9,11 +9,11 @@
         <qry:variable name="isEmpty_sucursales" type="integer" value="0"/>
         <qry:variable name="TBL_sucursales" type="data"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!-- -->
 
 
-        <qry:variable name="v_columna" type="string" value="SCF_DESCRIPCION"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="v_columna" type="string" value="SCF_DIRECCION"/>
+        <qry:variable name="largos" type="string" value="70"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -40,7 +40,7 @@
             <qry:else/>
                 <qry:if left="$actual_scf_cod" operator="not-equal" right="$scf_cod" type="integer">
                     <qry:insert-query name="QuerySucursales"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_sucursales:">

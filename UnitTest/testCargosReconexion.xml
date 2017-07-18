@@ -13,7 +13,7 @@
 
 
         <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="largos" type="string" value="100"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -34,7 +34,8 @@
 
     <qry:query name="CargosReconexion"> 
         <qry:select dump="0">
-            SELECT 'Cargo por ' || 'reconexión                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
+            <!-- SELECT 'Cargo por ' || 'reconexión                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG -->
+            SELECT 'Cargo por ' || 'reconexi^243!n                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' m^225!s IVA' AS CARGOMSG
             FROM PRECIOS_PRESTACION
             WHERE TIT_CLAVE = 'TR1'
               AND PPR_FECHA_VIGENCIA = (

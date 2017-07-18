@@ -9,7 +9,7 @@
         <qry:variable name="isEmpty_lecturas" type="integer" value="0"/>
         <qry:variable name="TBL_lecturas" type="data"/>
     
-        <!-- ----------------------------------------------------------------- -->
+        <!-- -->
 
         <qry:variable name="v_columna" type="string" value="LCT_VALOR_LEIDO"/>
         <qry:variable name="largos" type="string" value="20"/>

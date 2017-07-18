@@ -9,7 +9,7 @@
         <qry:variable name="isEmpty_bancos" type="integer" value="0"/>
         <qry:variable name="TBL_bancos" type="data"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!-- -->
 
 
         <qry:variable name="v_columna" type="string" value=""/>
@@ -26,9 +26,9 @@
     </qry:declare>
     <qry:main>
         <qry:out>
-
-            <qry:insert-query name="Bancos"/>
-            
+            <qry:element name="raiz">
+                <qry:insert-query name="Bancos"/>
+            </qry:element>
         </qry:out>
     </qry:main>
 <qry:query name="Bancos"> 
@@ -38,12 +38,12 @@
             <qry:else/>
                 <qry:if left="$actual_agf_cod" operator="not-equal" right="$agf_cod" type="integer">
                     <qry:insert-query name="QueryBancos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_bancos:">
                 <qry:element name="banco">
-                    <qry:attribute name="ha_urc_descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="longitud01" align="none|left|right|center" format-number="2|.3|,4"/>
+                    <qry:attribute name="ha_urc_descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="$largos" align="left" />
                 </qry:element>
             </qry:for-each-row>
         </qry:out>

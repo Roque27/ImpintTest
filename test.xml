@@ -4,16 +4,15 @@
     	
         <!-- Test Globales -->
 
-        
-        <qry:variable name="v_descripcion" type="string"/><!-- No se usa mas -->
+        <qry:variable name="srv_cod" type="integer" value="218944"/>
+        <qry:variable name="actual_srv_cod" type="integer"/>
+        <qry:variable name="isEmpty_stock_equipos" type="integer" value="0"/>
+        <qry:variable name="TBL_stock_equipos" type="data"/>
 
-         <qry:variable name="v_ord_fec" type="string" value="30/01/2017"/>
+        <!--  -->
 
-        <!-- -->
-
-
-        <qry:variable name="v_columna" type="string" value="TCL_DESCRIPCION"/>
-        <qry:variable name="largos" type="string" value="1000"/>
+        <qry:variable name="v_columna" type="string" value="STE_TIPO"/>
+        <qry:variable name="largos" type="string" value="70"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -27,30 +26,52 @@
     <qry:main>
         <qry:out>
 
-            <qry:insert-query name="CargosReconexion"/>
+            <qry:insert-query name="Stock_Equipos"/>
             
         </qry:out>
     </qry:main>
 
-    <qry:query name="CargosReconexion"> 
-        <qry:select dump="0">
-            <!-- SELECT 'Cargo por ' || 'reconexión                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG -->
-            SELECT 'Cargo por ' || 'reconexi^243!n                 ' || ': $' || TO_CHAR(PPR_PRECIO, '9990.00') || ' más IVA' AS CARGOMSG
-            FROM PRECIOS_PRESTACION
-            WHERE TIT_CLAVE = 'TR1'
-              AND PPR_FECHA_VIGENCIA = (
-                SELECT MAX(PPR_FECHA_VIGENCIA)
-                FROM PRECIOS_PRESTACION
-                WHERE TIT_CLAVE = 'TR1'
-                  AND PPR_FECHA_VIGENCIA &lt;= TO_DATE({$v_ord_fec}, 'DD/MM/YYYY')
-                )
-        </qry:select>
+ <!-- COMPLETADO -->
+    <qry:query name="Stock_Equipos"> 
         <qry:out>
-            <qry:for-each-row>        
-                <qry:element name="cargos">
-                    <qry:attribute name="reconexion" value="#ROW:/ROW/@CARGOMSG" length="$largos" align="left"/>
+            <qry:if left="$isEmpty_stock_equipos" operator="equal" right="0" type="integer">
+                <qry:insert-query name="QueryStock_Equipos"/>
+            <qry:else/>
+                <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
+                    <qry:insert-query name="QueryStock_Equipos"/>
+                </qry:if>
+            </qry:if>
+            
+            <qry:for-each-row  doc="$TBL_stock_equipos:">
+                <qry:element name="stock_equipos">
+                    <qry:if left="{$v_columna}" operator="equal" right="STE_NUMERO" type="string">
+                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number="2"/>
+                    <qry:else/>
+                        <qry:if left="{$v_columna}" operator="equal" right="STE_TIPO" type="string">
+                            <qry:attribute name="v_ste_tipo" value="#ROW:/ROW/@STE_TIPO" length="$largos" align="left"/>
+                        <qry:else/>
+                            <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+                        </qry:if>
+                    </qry:if>
                 </qry:element>
             </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="QueryStock_Equipos" > 
+        <qry:select dump="0">
+            SELECT S.STE_NUMERO AS STE_NUMERO
+            	,S.STE_TIPO AS STE_TIPO
+            FROM STOCK_EQUIPOS S
+            INNER JOIN EQUIPOS E
+            	ON (S.STE_NUMERO = E.STE_NUMERO AND S.STE_TIPO = E.STE_TIPO)
+            WHERE E.SRV_CODIGO = {$srv_cod}
+            	AND E.EQP_ESTADO IS NULL
+        </qry:select>
+        <qry:out>
+            <qry:set-variable name="actual_srv_cod" value="$srv_cod"/>
+            <qry:set-variable name="TBL_stock_equipos" value="#ROW:"/>
+            <qry:set-variable name="isEmpty_stock_equipos" value="1"/>
         </qry:out>
     </qry:query>
 

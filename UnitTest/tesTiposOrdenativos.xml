@@ -4,7 +4,7 @@
     	
         <!-- Test Globales -->
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
         <qry:variable name="v_columna" type="string" value="TOR_DESCRIPCION"/>
         <qry:variable name="largos" type="string" value="20"/>

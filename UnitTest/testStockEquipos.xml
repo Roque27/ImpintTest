@@ -9,10 +9,10 @@
         <qry:variable name="isEmpty_stock_equipos" type="integer" value="0"/>
         <qry:variable name="TBL_stock_equipos" type="data"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
-        <qry:variable name="v_columna" type="string" value="STE_NUMERO"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="v_columna" type="string" value="STE_TIPO"/>
+        <qry:variable name="largos" type="string" value="70"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -39,7 +39,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryStock_Equipos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
             
             <qry:for-each-row  doc="$TBL_stock_equipos:">

@@ -72,7 +72,7 @@
             SELECT TTR_CANT_DOC AS TTR_CANT_DOC
                 ,TO_CHAR(TTR_SUMA_DOC, '9999999999990.0000') AS TTR_SUMA_DOC
                 ,TTR_SUMA_DEC AS TTR_SUMA_DEC
-                ,('Deuda Cargo Decreto Nº. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
+                ,('Deuda Cargo Decreto N^176!. 2067/08: ' || TO_CHAR(TTR_SUMA_DEC, '9999999999999D99') || '(*)\n') AS TTR_SUMA_DEC_MESSG
             FROM TOTALES_TRAMITE
             WHERE TRT_NUMERO = {$trt_num}
         </qry:select>
