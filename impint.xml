@@ -1428,6 +1428,7 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Servicios" > 
         <qry:out>
             <qry:if left="$isEmpty_servicios" operator="equal" right="0" type="integer">
@@ -1435,7 +1436,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryServicios"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
             
             <qry:for-each-row  doc="$TBL_servicios:">
@@ -1496,6 +1497,7 @@
                                                     <qry:if left="#ROW:/ROW/@SRV_DEPTO" operator="not-equal" right="0" type="string">
                                                         <qry:attribute name="v_srv_depto" value="#ROW:/ROW/@SRV_DEPTO"/>
                                                     </qry:if>
+                                                    <qry:attribute name="test" value="ULALA"/>
                                                     <qry:if left="#ROW:/ROW/@SRV_C_POSTAL" operator="not-equal" right="0" type="string">
                                                         <qry:attribute name="v_srv_c_postal" value="#ROW:/ROW/@SRV_C_POSTAL"/>
                                                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>

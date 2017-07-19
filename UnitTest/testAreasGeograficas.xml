@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        <qry:variable name="srv_cod" type="integer" value="218944"/>
+        <qry:variable name="actual_srv_cod" type="integer"/>
+        <qry:variable name="isEmpty_lecturas" type="integer" value="0"/>
+        <qry:variable name="TBL_lecturas" type="data"/>
+    
+        <!-- -->
+
+        <qry:variable name="v_columna" type="string" value="LCT_VALOR_LEIDO"/>
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="50"/>
+        <qry:variable name="prs_num_temp" type="integer" value="50"/>
+
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+            
+            <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:" />
+            
+        </qry:out>
+    </qry:main>
+
+    <!-- COMPLETADO -->
+    <qry:query name="BuscaAreaGeografica">
+        <qry:select dump="0">
+            SELECT COALESCE(AGF_NOMBRE, '0') AS AGF_NOMBRE
+            FROM AREAS_GEOGRAFICAS
+            WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = {#PARAM:/ROW/@AGF_CODIGO}
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="s_srv_agf_nombre" value="#ROW:/ROW/@AGF_NOMBRE"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>
