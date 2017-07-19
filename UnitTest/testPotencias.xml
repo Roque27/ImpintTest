@@ -4,15 +4,17 @@
     	
         <!-- Test Globales -->
 
+        <qry:variable name="cnt_num" type="integer" value="1"/>
+
         <qry:variable name="srv_cod" type="integer" value="218944"/>
         <qry:variable name="actual_srv_cod" type="integer"/>
         <qry:variable name="isEmpty_potencias" type="integer" value="0"/>
         <qry:variable name="TBL_potencias" type="data"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
         <qry:variable name="v_columna" type="string" value="POT_VALOR"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="largos" type="string" value="70"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -25,9 +27,9 @@
     </qry:declare>
     <qry:main>
         <qry:out>
-
-            <qry:insert-query name="Potencias"/>
-            
+            <qry:element name="raiz">
+                <qry:insert-query name="Potencias"/>
+            </qry:element>
         </qry:out>
     </qry:main>
 
@@ -39,13 +41,13 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryPotencias"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_potencias:">
                 <qry:element name="potencia">
                     <qry:if left="{$v_columna}" operator="equal" right="POT_VALOR" type="string">
-                        <qry:attribute name="v_pot_valor" value="#ROW:/ROW/@POT_VALOR" length="$largos" align="left" format-number="2"/>
+                        <qry:attribute name="v_pot_valor" value="#ROW:/ROW/@POT_VALOR" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                     </qry:if>
@@ -56,7 +58,7 @@
 
     <qry:query name="QueryPotencias" > 
         <qry:select dump="0">
-            SELECT POT_VALOR AS POT_VALOR
+            SELECT TO_CHAR(POT_VALOR, '9999999999990.0000') AS POT_VALOR
             FROM POTENCIAS
             WHERE SRV_CODIGO = {$srv_cod}
 	            AND CNT_NUMERO = {$cnt_num}

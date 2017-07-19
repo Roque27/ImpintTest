@@ -4,6 +4,10 @@
     	
         <!-- Test Globales -->
 
+        <qry:variable name="actual_nro_ord" type="integer"/>
+        <qry:variable name="cnt_num" type="integer" value="1"/>
+        <qry:variable name="trt_num" type="integer" value="2801281"/>
+
         <qry:variable name="srv_cod" type="integer" value="218944"/>
         <qry:variable name="actual_srv_cod" type="integer"/>
         <qry:variable name="isEmpty_ordenativos" type="integer" value="0"/>
@@ -13,10 +17,10 @@
         <qry:variable name="cnt_num_temp" type="integer"/>
         <qry:variable name="trt_num_temp" type="integer"/>
 
-        <!-- ----------------------------------------------------------------- -->
+        <!--  -->
 
-        <qry:variable name="v_columna" type="string" value="ORD_FECHA_GENERACION"/>
-        <qry:variable name="largos" type="string" value="20"/>
+        <qry:variable name="v_columna" type="string" value="SRV_CODIGO"/>
+        <qry:variable name="largos" type="string" value="70"/>
 
         <qry:variable name="cnt_num_ori" type="integer" value=""/>
         <qry:variable name="srv_cod_ori" type="integer" value=""/>
@@ -29,9 +33,9 @@
     </qry:declare>
     <qry:main>
         <qry:out>
-
-            <qry:insert-query name="Ordenativos"/>
-            
+            <qry:element name="raiz">
+                <qry:insert-query name="Ordenativos"/>
+            </qry:element>
         </qry:out>
     </qry:main>
 
@@ -43,7 +47,7 @@
             <qry:else/>
                 <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
                     <qry:insert-query name="QueryOrdenativos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_ordenativos:">

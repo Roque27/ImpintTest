@@ -1652,7 +1652,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Lecturas">
         <qry:out>
             <qry:if left="$isEmpty_lecturas" operator="equal" right="0" type="integer">
@@ -1660,7 +1660,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryLecturas"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_lecturas:">
@@ -1681,7 +1681,7 @@
 
     <qry:query name="QueryLecturas" > 
         <qry:select dump="0">
-            SELECT LCT_VALOR_LEIDO AS LCT_VALOR_LEIDO
+            SELECT TO_CHAR(LCT_VALOR_LEIDO,'9999999999990.0000') AS LCT_VALOR_LEIDO
             FROM LECTURAS
             WHERE LCT_CODIGO IN (
             		SELECT max(LCT_CODIGO)
@@ -1696,7 +1696,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Ordenativos"> 
         <qry:out>
             <qry:if left="$isEmpty_ordenativos" operator="equal" right="0" type="integer">
@@ -1704,7 +1704,7 @@
             <qry:else/>
                 <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
                     <qry:insert-query name="QueryOrdenativos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_ordenativos:">
@@ -1786,7 +1786,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="TiposOrdenativo"> 
         <qry:out>
             <qry:element name="tipoOrdenativo">
@@ -1799,7 +1799,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Potencias"> 
         <qry:out>
             <qry:if left="$isEmpty_potencias" operator="equal" right="0" type="integer">
@@ -1807,13 +1807,13 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryPotencias"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_potencias:">
                 <qry:element name="potencia">
                     <qry:if left="{$v_columna}" operator="equal" right="POT_VALOR" type="string">
-                        <qry:attribute name="v_pot_valor" value="#ROW:/ROW/@POT_VALOR" length="$largos" align="left" format-number="2"/>
+                        <qry:attribute name="v_pot_valor" value="#ROW:/ROW/@POT_VALOR" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                     </qry:if>
@@ -1824,7 +1824,7 @@
 
     <qry:query name="QueryPotencias" > 
         <qry:select dump="0">
-            SELECT POT_VALOR AS POT_VALOR
+            SELECT TO_CHAR(POT_VALOR, '9999999999990.0000') AS POT_VALOR
             FROM POTENCIAS
             WHERE SRV_CODIGO = {$srv_cod}
 	            AND CNT_NUMERO = {$cnt_num}
@@ -1846,7 +1846,7 @@
         </qry:out>
     </qry:query>
 
-    <!-- COMPLETADO -->
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Stock_Equipos"> 
         <qry:out>
             <qry:if left="$isEmpty_stock_equipos" operator="equal" right="0" type="integer">
@@ -1860,7 +1860,7 @@
             <qry:for-each-row  doc="$TBL_stock_equipos:">
                 <qry:element name="stock_equipos">
                     <qry:if left="{$v_columna}" operator="equal" right="STE_NUMERO" type="string">
-                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number="2"/>
+                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="STE_TIPO" type="string">
                             <qry:attribute name="v_ste_tipo" value="#ROW:/ROW/@STE_TIPO" length="$largos" align="left"/>
@@ -1875,7 +1875,7 @@
 
     <qry:query name="QueryStock_Equipos" > 
         <qry:select dump="0">
-            SELECT S.STE_NUMERO AS STE_NUMERO
+            SELECT TO_CHAR(S.STE_NUMERO, '9999999999990.0000') AS STE_NUMERO
             	,S.STE_TIPO AS STE_TIPO
             FROM STOCK_EQUIPOS S
             INNER JOIN EQUIPOS E

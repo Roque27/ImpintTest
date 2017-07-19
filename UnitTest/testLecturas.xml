@@ -31,7 +31,7 @@
         </qry:out>
     </qry:main>
 
-    !-- COMPLETADO -->
+    <!-- COMPLETADO -->
     <qry:query name="Lecturas">
         <qry:out>
             <qry:if left="$isEmpty_lecturas" operator="equal" right="0" type="integer">
@@ -39,7 +39,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryLecturas"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_lecturas:">
@@ -60,7 +60,7 @@
 
     <qry:query name="QueryLecturas" > 
         <qry:select dump="0">
-            SELECT LCT_VALOR_LEIDO AS LCT_VALOR_LEIDO
+            SELECT TO_CHAR(LCT_VALOR_LEIDO,'9999999999990.0000') AS LCT_VALOR_LEIDO
             FROM LECTURAS
             WHERE LCT_CODIGO IN (
             		SELECT max(LCT_CODIGO)

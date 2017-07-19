@@ -45,7 +45,7 @@
             <qry:for-each-row  doc="$TBL_stock_equipos:">
                 <qry:element name="stock_equipos">
                     <qry:if left="{$v_columna}" operator="equal" right="STE_NUMERO" type="string">
-                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number="2"/>
+                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="STE_TIPO" type="string">
                             <qry:attribute name="v_ste_tipo" value="#ROW:/ROW/@STE_TIPO" length="$largos" align="left"/>
@@ -60,7 +60,7 @@
 
     <qry:query name="QueryStock_Equipos" > 
         <qry:select dump="0">
-            SELECT S.STE_NUMERO AS STE_NUMERO
+            SELECT TO_CHAR(S.STE_NUMERO, '9999999999990.0000') AS STE_NUMERO
             	,S.STE_TIPO AS STE_TIPO
             FROM STOCK_EQUIPOS S
             INNER JOIN EQUIPOS E
