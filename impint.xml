@@ -154,7 +154,7 @@
 
         <!-- Documentos -->
         <qry:variable name="t_doc_saldo" type="integer" value="0"/>
-        <qry:variable name="num_rows_doc" type="integer" value="20"/>
+        <qry:variable name="num_rows_doc" type="integer" value="20"/>  <!-- El valor ya esta hardcodeado -->
         <qry:variable name="nro_linea" type="integer" value="0"/>
         <qry:variable name="Tiene_Comprobantes_Financiaciones" type="integer" value="0"/>
         <qry:variable name="Tiene_Otros_Comprobantes" type="integer" value="0"/>
@@ -732,8 +732,8 @@
               ,ENO.ENO_TEXTO
               ,ENO.ENO_VAR_NOMBRE
               ,ENO.ENO_VAR_TIPO
-              ,COALESCE(ENO.ENO_VAR_LONGITUD, '0') AS ENO_VAR_LONGITUD
-              ,COALESCE(ENO.ENO_COL#, '0') AS ENO_COL#
+              ,COALESCE(ENO.ENO_VAR_LONGITUD, 0) AS ENO_VAR_LONGITUD
+              ,COALESCE(ENO.ENO_COL#, 0) AS ENO_COL#
               ,ENO.ENO_TIPO_CAMPO
             FROM ESTRUCTURA_NOTIFICACION ENO
             INNER JOIN SERVICIOS SRV
