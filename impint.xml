@@ -109,7 +109,7 @@
         <!-- Notifi -->
         
         <qry:variable name="v_columna" type="string"/>
-        <qry:variable name="largos" type="integer"/>
+        <qry:variable name="largos" type="integer" value="0"/>
         <qry:variable name="campo" type="string"/>
         <qry:variable name="l_tor_descripcion" type="string"/>
         <qry:variable name="document_tbl_type" type="string"/>
@@ -244,6 +244,7 @@
             </qry:element>
 
             <qry:for-each-row>
+                <qry:set-variable name="l_tor_descripcion" value="#ROW:/ROW/@TOR_DESCRIPCION"/>
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
                 <qry:element name="Main">
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
@@ -752,7 +753,7 @@
         <qry:out>
             <qry:for-each-row>
                 <qry:if left="{$v_tabla}" operator="not-equal" right="DOCUMENTOS" type="string">
-                    <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
+                    <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/> <!-- Largo del texto para la columna  -->
                 </qry:if>
                 <qry:element name="notificacionTexto">
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
