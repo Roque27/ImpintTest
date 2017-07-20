@@ -188,15 +188,15 @@
         <qry:select>
             SELECT o.trt_numero
               ,o.ord_numero
-              ,o.srv_codigo AS srv_codigo
+              ,o.srv_codigo AS SRV_CODIGO
               ,o.cnt_numero
               ,nvl(o.tor_codigo, '')
-              ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ord_fecha_generacion
+              ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ORD_FECHA_GENERACION
               ,u.scf_codigo
-              ,COALESCE(o.sec_codigo_origen, 0) AS sec_codigo_origen
-              ,COALESCE(t.tor_grupo, 0) AS tor_grupo
+              ,COALESCE(o.sec_codigo_origen, 0) AS SEC_CODIGO_ORIGEN
+              ,COALESCE(t.tor_grupo, 0) AS TOR_GRUPO
               ,t.tor_descripcion
-              ,COALESCE(o.prs_numero, 0) AS prs_numero
+              ,COALESCE(o.prs_numero, 0) AS PRS_NUMERO
               ,o.rowid
               ,o.crr_tipo
               o.crr_codigo
@@ -204,19 +204,19 @@
             INNER JOIN tipos_ordenativo t
                   ON o.tor_codigo = t.tor_codigo
             CROSS JOIN usuarios u
-            WHERE t.tor_codigo = {#PARAM:/impint_param/Tor_codigo/@paramTorCod}
-              AND u.usr_codigo = {#PARAM:/impint_param/User/@paramUser}
-              AND o.scf_codigo_origen = {#PARAM:/impint_param/Suc/@paramSuc}
-              AND o.sec_codigo_origen = {#PARAM:/impint_param/Sec/@paramSec}
-              AND o.ord_numero BETWEEN {#PARAM:/impint_param/Ord_Desde/@paramOrdDsd} AND {#PARAM:/impint_param/Ord_Hasta/@paramOrdHst}
-              AND o.crr_tipo = {#PARAM:/impint_param/TipoCorreo/@paramCodTipoCorreo}
-              AND o.crr_codigo = {#PARAM:/impint_param/Correo/@paramCodCorreo}
+            WHERE t.tor_codigo = {#PARAM:/IMPINT_PARAM/TOR_CODIGO/@PARAMTORCOD}
+              AND u.usr_codigo = {#PARAM:/IMPINT_PARAM/USER/@PARAMUSER}
+              AND o.scf_codigo_origen = {#PARAM:/IMPINT_PARAM/SUC/@PARAMSUC}
+              AND o.sec_codigo_origen = {#PARAM:/IMPINT_PARAM/SEC/@PARAMSEC}
+              AND o.ord_numero BETWEEN {#PARAM:/IMPINT_PARAM/ORD_DESDE/@PARAMORDDSD} AND {#PARAM:/IMPINT_PARAM/ORD_HASTA/@PARAMORDHST}
+              AND o.crr_tipo = {#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO}
+              AND o.crr_codigo = {#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO}
               AND o.ord_situacion = 'P'
               AND o.ord_estado = 'D'
             ORDER BY o.ord_numero
         </qry:select>
         <qry:out>
-            <qry:if left="#PARAM:/impint_param/Incobrables/@paramIncobrables" operator="equal" right="S" type="string">
+            <qry:if left="#PARAM:/IMPINT_PARAM/INCOBRABLES/@PARAMINCOBRABLES" operator="equal" right="S" type="string">
                 <qry:set-variable name="Imputacion_Incobrables" value="1"/>
             </qry:if>
             <qry:insert-query name="SeleccionaPersona" doc-param="#PARAM:"/>
@@ -248,23 +248,25 @@
                 <qry:element name="Main">
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
-                    <qry:if left="{#ROW:/ROW/@ord_numero}" operator="less" right="{$OrdenDesde}" type="integer">
-                        <qry:set-variable name="OrdenDesde" value="{#ROW:/ROW/@ord_numero}"/>
+                    <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="less" right="{$OrdenDesde}" type="integer">
+                        <qry:set-variable name="OrdenDesde" value="{#ROW:/ROW/@ORD_NUMERO}"/>
                     </qry:if>
-                    <qry:if left="{#ROW:/ROW/@ord_numero}" operator="greater" right="{$OrdenHasta}" type="integer">
-                        <qry:set-variable name="OrdenHasta" value="{#ROW:/ROW/@ord_numero}"/>
+                    <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="greater" right="{$OrdenHasta}" type="integer">
+                        <qry:set-variable name="OrdenHasta" value="{#ROW:/ROW/@ORD_NUMERO}"/>
                     </qry:if>
+
                     <qry:if left="{$sec_codigo}" operator="equal" right="0" type="integer">
-                        <qry:if left="{#ROW:/ROW/@tor_grupo}" operator="not-equal" right="0" type="integer">
-                            <qry:set-variable name="sec_codigo" value="{#ROW:/ROW/@tor_grupo}"/>
+                        <qry:if left="{#ROW:/ROW/@SEC_CODIGO_ORIGEN}" operator="not-equal" right="0" type="integer">
+                            <qry:set-variable name="sec_codigo" value="{#ROW:/ROW/@SEC_CODIGO_ORIGEN}"/>
                         </qry:if>
                     </qry:if>
                     <qry:if left="{$tor_grupo}" operator="equal" right="0" type="integer">
-                        <qry:if left="{#ROW:/ROW/@sec_codigo_origen}" operator="not-equal" right="0" type="integer">
-                            <qry:set-variable name="tor_grupo" value="{#ROW:/ROW/@sec_codigo_origen}"/>
+                        <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="not-equal" right="0" type="integer">
+                            <qry:set-variable name="tor_grupo" value="{#ROW:/ROW/@TOR_GRUPO}"/>
                         </qry:if>
                     </qry:if>
-                    <qry:if left="{#ROW:/ROW/@srv_codigo}" operator="equal" right="0" type="integer">
+
+                    <qry:if left="{#ROW:/ROW/@SRV_CODIGO}" operator="equal" right="0" type="integer">
                         <qry:insert-query name="ObtenerDatosSinContrato" doc-param="#ROW:"/>
                     <qry:else/>
                         <qry:insert-query name="ObtenerDatosConContrato" doc-param="#ROW:"/>
@@ -289,17 +291,17 @@
 
                             <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
-                            <qry:if left="{#ROW:/ROW/@tor_grupo}" operator="equal" right="CD" type="string">
+                            <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="equal" right="CD" type="string">
                                 <qry:element name="UPDATE">
                                     <qry:text value="UPDATE ordenativos
                                                         SET ord_situacion = 'I'
                                                             ,cpr_numero = {$l_cpr_numero}
-                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+                                                        WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
 
                                     <qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
-                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
                                     </qry:element>
                                 </qry:element>
@@ -307,12 +309,12 @@
                                 <qry:element name="UPDATE">
                                     <qry:text value="UPDATE ordenativos
                                                         SET cpr_numero = {$l_cpr_numero}
-                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+                                                        WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
 
                                     <qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
-                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
                                     </qry:element>
                                 </qry:element>
@@ -326,14 +328,14 @@
                                                         SET ord_estado = 'A'
                                                         	,cpr_numero = {$l_cpr_numero}
                                                         	,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  '
-                                                        WHERE rowid = {#ROW:/ROW/@rowid}; "/>
+                                                        WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
 
                                     <qry:element name="ordenativos">
                                         <qry:attribute name="ord_estado" value="A"/>
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:attribute name="ord_datos_anula" value="Anulado Documentos ya pagados - Saldo 0 - No se imprime  "/>
                                         <qry:element name="WHERE">
-                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@rowid}"/>
+                                            <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
                                     </qry:element>
                                 </qry:element>
@@ -400,11 +402,11 @@
         <qry:select>
             SELECT usr_numero
             FROM usuarios
-            WHERE usr_codigo = {#PARAM:/impint_param/User/@paramUser}
+            WHERE usr_codigo = {#PARAM:/IMPINT_PARAM/USER/@PARAMUSER}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
-                <qry:set-variable name="l_usr_numero" value="#ROW:/ROW/@usr_numero"/>
+                <qry:set-variable name="l_usr_numero" value="#ROW:/ROW/@USR_NUMERO"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -413,44 +415,44 @@
         <qry:select>
             SELECT tim_codigo
             FROM impresoras
-            WHERE impresoras.prt_codigo = {#PARAM:/impint_param/Print/@paramImpr}
+            WHERE impresoras.prt_codigo = {#PARAM:/IMPINT_PARAM/PRINT/@PARAMIMPR}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
-                <qry:set-variable name="l_tim_codigo" value="#ROW:/ROW/@tim_codigo"/>
+                <qry:set-variable name="l_tim_codigo" value="#ROW:/ROW/@TIM_CODIGO"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
 
     <qry:query name="CargaPlantillas">
         <qry:select>
-            SELECT COALESCE(crr_genera_planilla, '0') AS crr_genera_planilla
+            SELECT COALESCE(crr_genera_planilla, '0') AS CRR_GENERA_PLANILLA
             	,crr_archivo_sql
             	,crr_archivo_sql_path
             FROM correos c
             INNER JOIN usuarios u
             	ON c.scf_codigo = u.scf_codigo
-            WHERE usr_codigo = {#PARAM:/impint_param/User/@paramUser}
-            	AND crr_tipo = {#PARAM:/impint_param/TipoCorreo/@paramCodTipoCorreo}
-            	AND crr_codigo = {#PARAM:/impint_param/Correo/@paramCodCorreo}
+            WHERE usr_codigo = {#PARAM:/IMPINT_PARAM/USER/@PARAMUSER}
+            	AND crr_tipo = {#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO}
+            	AND crr_codigo = {#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
-                <qry:set-variable name="l_crr_genera_planilla" value="#ROW:/ROW/@crr_genera_planilla"/>
-                <qry:set-variable name="l_crr_archivo_lote" value="#ROW:/ROW/@crr_archivo_sql"/>
-                <qry:set-variable name="l_crr_archivo_lote_path" value="#ROW:/ROW/@crr_archivo_sql_path"/>
+                <qry:set-variable name="l_crr_genera_planilla" value="#ROW:/ROW/@CRR_GENERA_PLANILLA"/>
+                <qry:set-variable name="l_crr_archivo_lote" value="#ROW:/ROW/@CRR_ARCHIVO_SQL"/>
+                <qry:set-variable name="l_crr_archivo_lote_path" value="#ROW:/ROW/@CRR_ARCHIVO_SQL_PATH"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
 
     <qry:query name="CargaProxNroProceso">
         <qry:select>
-            SELECT cpr_numero.nextval AS cpr_numero
+            SELECT cpr_numero.nextval AS CPR_NUMERO
             FROM sys.dual
         </qry:select>
         <qry:out>
             <qry:for-each-row>
-                <qry:set-variable name="l_cpr_numero" value="#ROW:/ROW/@cpr_numero"/>
+                <qry:set-variable name="l_cpr_numero" value="#ROW:/ROW/@CPR_NUMERO"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -482,38 +484,38 @@
     <qry:query name="ObtenerDatosSinContrato" > 
         <qry:select  dump="0">
             SELECT personas.prs_numero
-            	,substr(personas.prs_razon_social, 1, 25) AS prs_razon_social
-            	,nvl(personas.prs_direccion, ' ') AS prs_direccion
+            	,substr(personas.prs_razon_social, 1, 25) AS PRS_RAZON_SOCIAL
+            	,nvl(personas.prs_direccion, ' ') AS PRS_DIRECCION
             	,personas.cfc_codigo
-            	,COALESCE(substr(calles.cll_nombre, 1, 18), '0') AS cll_nombre
-            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS prs_nro
-            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS prs_piso
-            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS prs_depto
-            	,nvl(personas.prs_torre, ' ') AS prs_torre
-            	,nvl(personas.prs_c_postal, ' ') AS prs_c_postal
-            	,nvl(areas_geograficas.agf_nombre, ' ') AS agf_nombre
+            	,COALESCE(substr(calles.cll_nombre, 1, 18), '0') AS CLL_NOMBRE
+            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS PRS_NRO
+            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS PRS_PISO
+            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS PRS_DEPTO
+            	,nvl(personas.prs_torre, ' ') AS PRS_TORRE
+            	,nvl(personas.prs_c_postal, ' ') AS PRS_C_POSTAL
+            	,nvl(areas_geograficas.agf_nombre, ' ') AS AGF_NOMBRE
             FROM areas_geograficas 
             INNER JOIN personas 
             	ON areas_geograficas.agf_codigo = personas.agf_codigo
             INNER JOIN calles
             	ON calles.cll_codigo = personas.cll_codigo AND calles.agf_codigo = personas.agf_codigo
-            WHERE personas.prs_numero = {#PARAM:/ROW/@prs_numero}
+            WHERE personas.prs_numero = {#PARAM:/ROW/@PRS_NUMERO}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
                 <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
 
-                <qry:set-variable name="prs_num" value="{#ROW:/ROW/@prs_numero}"/>
-                <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@prs_razon_social}"/>
-                <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@prs_direccion}"/>
-                <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@cfc_codigo}"/>
-                <qry:set-variable name="prs_calle" value="{#ROW:/ROW/@cll_nombre}"/>
-                <qry:set-variable name="prs_nro" value="{#ROW:/ROW/@prs_nro}"/>
-                <qry:set-variable name="prs_piso" value="{#ROW:/ROW/@prs_piso}"/>
-                <qry:set-variable name="prs_depto" value="{#ROW:/ROW/@prs_depto}"/>
-                <qry:set-variable name="prs_torre" value="{#ROW:/ROW/@prs_torre}"/>
-                <qry:set-variable name="prs_c_postal" value="{#ROW:/ROW/@prs_c_postal}"/>
-                <qry:set-variable name="prs_agf_nombre" value="{#ROW:/ROW/@agf_nombre}"/>
+                <qry:set-variable name="prs_num" value="{#ROW:/ROW/@PRS_NUMERO}"/>
+                <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@PRS_RAZON_SOCIAL}"/>
+                <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@PRS_DIRECCION}"/>
+                <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@CFC_CODIGO}"/>
+                <qry:set-variable name="prs_calle" value="{#ROW:/ROW/@CLL_NOMBRE}"/>
+                <qry:set-variable name="prs_nro" value="{#ROW:/ROW/@PRS_NRO}"/>
+                <qry:set-variable name="prs_piso" value="{#ROW:/ROW/@PRS_PISO}"/>
+                <qry:set-variable name="prs_depto" value="{#ROW:/ROW/@PRS_DEPTO}"/>
+                <qry:set-variable name="prs_torre" value="{#ROW:/ROW/@PRS_TORRE}"/>
+                <qry:set-variable name="prs_c_postal" value="{#ROW:/ROW/@PRS_C_POSTAL}"/>
+                <qry:set-variable name="prs_agf_nombre" value="{#ROW:/ROW/@AGF_NOMBRE}"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -521,16 +523,16 @@
     <qry:query name="ObtenerDatosConContrato" > 
         <qry:select  dump="0">
             SELECT personas.prs_numero
-            	,substr(personas.prs_razon_social, 1, 25) AS prs_razon_social
-            	,nvl(personas.prs_direccion, ' ') AS prs_direccion
+            	,substr(personas.prs_razon_social, 1, 25) AS PRS_RAZON_SOCIAL
+            	,nvl(personas.prs_direccion, ' ') AS PRS_DIRECCION
             	,personas.cfc_codigo
-            	,COALESCE(substr(calles.cll_nombre, 1, 18), '0') AS cll_nombre
-            	,COALESCE(substr(contratos.cnt_nro_pago, 1, 4), '0') AS cnt_nro_pago
+            	,COALESCE(substr(calles.cll_nombre, 1, 18), '0') AS CLL_NOMBRE
+            	,COALESCE(substr(contratos.cnt_nro_pago, 1, 4), '0') AS CNT_NRO_PAGO
             	,COALESCE(contratos.cnt_bis, '0') AS cnt_bis
-            	,COALESCE(substr(contratos.cnt_piso_pago, 1, 2), '0') AS cnt_piso_pago
-            	,COALESCE(substr(contratos.cnt_depto_pago, 1, 3), '0') AS cnt_depto_pago
-            	,COALESCE(nvl(contratos.cnt_c_postal_pago, ' '), '0') AS cnt_c_postal_pago
-            	,nvl(areas_geograficas.agf_nombre, ' ') AS agf_nombre
+            	,COALESCE(substr(contratos.cnt_piso_pago, 1, 2), '0') AS CNT_PISO_PAGO
+            	,COALESCE(substr(contratos.cnt_depto_pago, 1, 3), '0') AS CNT_DEPTO_PAGO
+            	,COALESCE(nvl(contratos.cnt_c_postal_pago, ' '), '0') AS CNT_C_POSTAL_PAGO
+            	,nvl(areas_geograficas.agf_nombre, ' ') AS AGF_NOMBRE
             FROM areas_geograficas
             INNER JOIN contratos
             	ON areas_geograficas.agf_codigo = contratos.agf_codigo
@@ -538,24 +540,24 @@
             	ON personas.prs_numero = contratos.prs_numero
             INNER JOIN calles
             	ON calles.agf_codigo = contratos.agf_codigo AND calles.cll_codigo = contratos.cll_codigo
-            WHERE contratos.srv_codigo = {#PARAM:/ROW/@srv_codigo}
-            	AND contratos.cnt_numero = {#PARAM:/ROW/@cnt_numero}
+            WHERE contratos.srv_codigo = {#PARAM:/ROW/@SRV_CODIGO}
+            	AND contratos.cnt_numero = {#PARAM:/ROW/@CNT_NUMERO}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
                 <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
 
-                <qry:set-variable name="prs_num" value="{#ROW:/ROW/@prs_numero}"/>
-                <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@prs_razon_social}"/>
-                <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@prs_direccion}"/>
-                <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@cfc_codigo}"/>
-                <qry:set-variable name="cll_nombre" value="{#ROW:/ROW/@cll_nombre}"/>
-                <qry:set-variable name="cnt_nro_pago" value="{#ROW:/ROW/@cnt_nro_pago}"/>
-                <qry:set-variable name="cnt_bis" value="{#ROW:/ROW/@cnt_bis}"/>
-                <qry:set-variable name="cnt_piso_pago" value="{#ROW:/ROW/@cnt_piso_pago}"/>
-                <qry:set-variable name="cnt_depto_pago" value="{#ROW:/ROW/@cnt_depto_pago}"/>
-                <qry:set-variable name="cnt_c_postal_pago" value="{#ROW:/ROW/@cnt_c_postal_pago}"/>
-                <qry:set-variable name="cnt_agf_nombre" value="{#ROW:/ROW/@agf_nombre}"/>
+                <qry:set-variable name="prs_num" value="{#ROW:/ROW/@PRS_NUMERO}"/>
+                <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@PRS_RAZON_SOCIAL}"/>
+                <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@PRS_DIRECCION}"/>
+                <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@CFC_CODIGO}"/>
+                <qry:set-variable name="cll_nombre" value="{#ROW:/ROW/@CLL_NOMBRE}"/>
+                <qry:set-variable name="cnt_nro_pago" value="{#ROW:/ROW/@CNT_NRO_PAGO}"/>
+                <qry:set-variable name="cnt_bis" value="{#ROW:/ROW/@CNT_BIS}"/>
+                <qry:set-variable name="cnt_piso_pago" value="{#ROW:/ROW/@CNT_PISO_PAGO}"/>
+                <qry:set-variable name="cnt_depto_pago" value="{#ROW:/ROW/@CNT_DEPTO_PAGO}"/>
+                <qry:set-variable name="cnt_c_postal_pago" value="{#ROW:/ROW/@CNT_C_POSTAL_PAGO}"/>
+                <qry:set-variable name="cnt_agf_nombre" value="{#ROW:/ROW/@AGF_NOMBRE}"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -563,10 +565,10 @@
     <qry:query name="ObtenerDatosSiNoHayDatos" > 
         <qry:select>
             SELECT personas.prs_numero
-            	,substr(personas.prs_razon_social, 1, 25) AS prs_razon_social
-            	,nvl(personas.prs_direccion, ' ') AS prs_direccion
+            	,substr(personas.prs_razon_social, 1, 25) AS PRS_RAZON_SOCIAL
+            	,nvl(personas.prs_direccion, ' ') AS PRS_DIRECCION
             	,personas.cfc_codigo
-            	,COALESCE(substr(nvl(regexp_replace(contratos.cnt_direccion_pago, '[[:space:]]+', chr(32)), ' '), 1, 27), '0') AS cnt_direccion_pago
+            	,COALESCE(substr(nvl(regexp_replace(contratos.cnt_direccion_pago, '[[:space:]]+', chr(32)), ' '), 1, 27), '0') AS CNT_DIRECCION_PAGO
             FROM contratos
             INNER JOIN personas
             	ON personas.prs_numero = contratos.prs_numero
@@ -577,25 +579,25 @@
             <qry:for-each-row>
                <qry:set-variable name="hay_datos_geograficos" value="1" operation="+"/>
 
-               <qry:set-variable name="prs_num" value="{#ROW:/ROW/@prs_numero}"/>
-               <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@prs_razon_social}"/>
-               <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@prs_direccion}"/>
-               <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@cfc_codigo}"/>
-               <qry:set-variable name="cll_nombre_completo" value="{#ROW:/ROW/@cnt_direccion_pago}"/>
+               <qry:set-variable name="prs_num" value="{#ROW:/ROW/@PRS_NUMERO}"/>
+               <qry:set-variable name="prs_razon_social" value="{#ROW:/ROW/@PRS_RAZON_SOCIAL}"/>
+               <qry:set-variable name="prs_direccion" value="{#ROW:/ROW/@PRS_DIRECCION}"/>
+               <qry:set-variable name="cfc_codigo" value="{#ROW:/ROW/@CFC_CODIGO}"/>
+               <qry:set-variable name="cll_nombre_completo" value="{#ROW:/ROW/@CNT_DIRECCION_PAGO}"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
 
     <qry:query name="ObtenerNotCodigo"> 
         <qry:select dump="0">
-            SELECT COALESCE(not_codigo, '0') AS not_codigo
+            SELECT COALESCE(not_codigo, '0') AS NOT_CODIGO
             FROM combinaciones_habilitadas_noti
-            WHERE tor_codigo = {#PARAM:/ROW/@srv_codigo}
+            WHERE tor_codigo = {#PARAM:/ROW/@SRV_CODIGO}
             	AND cfc_codigo = {$cfc_codigo}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
-                <qry:set-variable name="not_codigo" value="{#ROW:/ROW/@not_codigo}"/>
+                <qry:set-variable name="not_codigo" value="{#ROW:/ROW/@NOT_CODIGO}"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -960,21 +962,22 @@
         </qry:out>
     </qry:query>
 
-    <qry:query name="Personas" > 
+    <!-- COMPLETADO: Probado -->
+    <qry:query name="Personas"> 
         <qry:out>
             <qry:if left="$isEmpty_personas" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryPersonas"/>
             <qry:else/>
                 <qry:if left="$actual_prs_numero" operator="not-equal" right="$prs_num" type="integer">
                     <qry:insert-query name="QueryPersonas"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:for-each-row  doc="$TBL_personas:">
                 <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                 <qry:element name="persona">
                     <qry:if left="{$v_columna}" operator="equal" right="PRS_NUMERO" type="string">
-                        <qry:if left="#ROW:/ROW/@PRS_NUMERO" operator="greater" right="0" type="integer">
+                        <qry:if left="#ROW:/ROW/@PRS_NUMERO" operator="greater" right="0" type="string">
                             <qry:attribute name="v_prs_numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
@@ -984,7 +987,7 @@
                             <qry:attribute name="v_prs_numero" value="#ROW:/ROW/@PRS_RAZON_SOCIAL" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="PRS_CUIT" type="string">
-                                <qry:if left="#ROW:/ROW/@PRS_CUIT" operator="greater" right="0" type="integer">
+                                <qry:if left="#ROW:/ROW/@PRS_CUIT" operator="greater" right="0" type="string">
                                     <qry:attribute name="v_prs_cuit" value="#ROW:/ROW/@PRS_CUIT" length="$largos" align="left"/>
                                 <qry:else/>
                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
@@ -1096,9 +1099,9 @@
 
     <qry:query name="QueryPersonas" > 
         <qry:select dump="0">
-            SELECT P.PRS_NUMERO 
+            SELECT TO_CHAR(P.PRS_NUMERO) AS PRS_NUMERO
               ,P.PRS_RAZON_SOCIAL 
-              ,COALESCE(NVL(P.PRS_CUIT, 0), 0) AS PRS_CUIT
+              ,TO_CHAR(COALESCE(NVL(P.PRS_CUIT, 0), 0)) AS PRS_CUIT
               ,COALESCE(NVL(P.PRS_TIPO_DOC, ''), '0') AS PRS_TIPO_DOC
               ,COALESCE(NVL(P.PRS_DOCUMENTO, 0), 0) AS PRS_DOCUMENTO
               ,COALESCE(NVL(P.PRS_NRO, 0), '0') AS PRS_NRO
@@ -1124,6 +1127,7 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="Contratos"> 
         <qry:out>
             <qry:if left="$isEmpty_contratos" operator="equal" right="0" type="integer">
@@ -1131,7 +1135,7 @@
             <qry:else/>
                 <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryContratos"/>
-                <qry:else/>
+                </qry:if>
             </qry:if>
 
             <qry:if left="isEmpty_contratos" operator="equal" right="0" type="integer">
@@ -1389,18 +1393,19 @@
         </qry:out>
     </qry:query>
 
+    <!-- COMPLETADO: Probado -->
     <qry:query name="BuscarDomicilioPostal">
         <qry:select dump="0">
             SELECT personas.prs_numero AS prs_numero
-            	,substr(personas.prs_razon_social, 1, 25) AS prs_razon_social
-            	,nvl(personas.prs_direccion, ' ') AS prs_direccion
-            	,personas.cfc_codigo AS cfc_codigo
-            	,substr(calles.cll_nombre, 1, 18) AS cll_nombre
-            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS prs_nro
-            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS prs_piso
-            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS prs_depto
-            	,nvl(personas.prs_torre, ' ') AS prs_torre
-            	,nvl(personas.prs_c_postal, ' ') AS prs_c_postal
+            	,substr(personas.prs_razon_social, 1, 25) AS PRS_RAZON_SOCIAL
+            	,nvl(personas.prs_direccion, ' ') AS PRS_DIRECCION
+            	,personas.cfc_codigo AS CFC_CODIGO
+            	,substr(calles.cll_nombre, 1, 18) AS CLL_NOMBRE
+            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS PRS_NRO
+            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS PRS_PISO
+            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS PRS_DEPTO
+            	,nvl(personas.prs_torre, ' ') AS PRS_TORRE
+            	,nvl(personas.prs_c_postal, ' ') AS PRS_C_POSTAL
             	,personas.agf_codigo AS AGF_CODIGO
             FROM personas
             INNER JOIN calles
@@ -1411,16 +1416,16 @@
             <qry:for-each-row>
                 <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                 <qry:element name="direccionDePago">
-                    <qry:attribute name="ll_prs_calle" value="-{#ROW:/ROW/@cll_nombre}" length="12" align="left"/>
-                    <qry:attribute name="ll_prs_nro" value="-{#ROW:/ROW/@prs_nro}" length="4" align="left"/>
-                    <qry:attribute name="ll_prs_piso" value="-{#ROW:/ROW/@prs_piso}" length="2" align="left"/>
-                    <qry:attribute name="ll_prs_depto" value="-{#ROW:/ROW/@prs_depto}" length="3" align="left"/>
-                    <qry:attribute name="ll_prs_torre" value="-{#ROW:/ROW/@prs_torre}" length="3" align="left"/>
-                    <qry:if left="#ROW:/ROW/@prs_c_postal" operator="not-equal" right="0" type="string">
-                        <qry:attribute name="ll_prs_c_postal" value=" {#ROW:/ROW/@prs_c_postal}"/>
+                    <qry:attribute name="ll_prs_calle" value="#ROW:/ROW/@CLL_NOMBRE" length="12" align="left"/>
+                    <qry:attribute name="ll_prs_nro" value="#ROW:/ROW/@PRS_NRO" length="4" align="left"/>
+                    <qry:attribute name="ll_prs_piso" value="#ROW:/ROW/@PRS_PISO" length="2" align="left"/>
+                    <qry:attribute name="ll_prs_depto" value="#ROW:/ROW/@PRS_DEPTO" length="3" align="left"/>
+                    <qry:attribute name="ll_prs_torre" value="#ROW:/ROW/@PRS_TORRE" length="3" align="left"/>
+                    <qry:if left="#ROW:/ROW/@PRS_C_POSTAL" operator="not-equal" right="0" type="string">
+                        <qry:attribute name="ll_prs_c_postal" value=" {#ROW:/ROW/@PRS_C_POSTAL}"/>
                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                         <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                            <qry:attribute name="s_srv_agf_nombre" value="$s_srv_agf_nombre"/>
+                            <qry:attribute name="s_srv_agf_nombre" value="{$s_srv_agf_nombre}"/>
                         </qry:if>
                     </qry:if>
                 </qry:element>

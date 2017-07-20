@@ -1,14 +1,14 @@
-<impint_param>
-    <NombreArchivo paramFile="">
-    <Reporte paramRepCodigo="">
-    <Incobrables paramIncobrables="S">
-    <User paramUser="RCITTADI">
-    <Print paramImpr="1">
-    <TipoCorreo paramCodTipoCorreo="CO">
-    <Correo paramCodCorreo="BR">
-    <Tor_codigo paramTorCod="I1">
-    <Suc paramSuc="12">
-    <Sec paramSec="GESCOB">
-    <Ord_Desde paramOrdDsd="10769681">
-    <Ord_Hasta paramOrdHst="10769681">
-</impint_param>
+<IMPINT_PARAM>
+    <NOMBREARCHIVO PARAMFILE="">
+    <REPORTE PARAMREPCODIGO="">
+    <INCOBRABLES PARAMINCOBRABLES="S">
+    <USER PARAMUSER="RCITTADI">
+    <PRINT PARAMIMPR="1">
+    <TIPOCORREO PARAMCODTIPOCORREO="CO">
+    <CORREO PARAMCODCORREO="BR">
+    <TOR_CODIGO PARAMTORCOD="I1">
+    <SUC PARAMSUC="12">
+    <SEC PARAMSEC="GESCOB">
+    <ORD_DESDE PARAMORDDSD="10769681">
+    <ORD_HASTA PARAMORDHST="10769681">
+</IMPINT_PARAM>

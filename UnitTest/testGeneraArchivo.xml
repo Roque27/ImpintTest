@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<qry:doc-definition xmlns:qry="lg.lan/qry">
+    <qry:declare>
+    	
+        <!-- Test Globales -->
+
+        <qry:variable name="isEmpty_personas" type="integer" value="0"/>
+        <qry:variable name="TBL_personas" type="data"/>
+        <qry:variable name="s_srv_agf_nombre" type="string" value="0"/>
+        <qry:variable name="actual_prs_numero" type="integer"/>
+
+        <qry:variable name="isEmpty_contratos" type="integer" value="0"/>
+        <qry:variable name="TBL_contratos" type="data"/>
+
+        <qry:variable name="ivv_codigo" type="string"/>
+        <qry:variable name="tcl_cod" type="string"/>
+    
+        <!-- -->
+        <qry:variable name="srv_cod" type="integer" value="218944"/>
+        <qry:variable name="actual_srv_cod" type="integer"/>
+
+        <qry:variable name="cnt_num" type="integer" value="1"/>
+        <qry:variable name="cnt_num_temp" type="integer"/>
+        
+        <qry:variable name="largos" type="string" value="20"/>
+
+        <qry:variable name="cnt_num_ori" type="integer" value=""/>
+        <qry:variable name="srv_cod_ori" type="integer" value=""/>
+        <qry:variable name="prs_num" type="integer" value="218944"/>
+        <qry:variable name="prs_num_temp" type="integer" value="0"/>
+    
+        <qry:variable name="nro_ord" type="integer" value="10769681"/>
+        <qry:variable name="v_tim_codigo" type="string" value="LASER"/>
+
+        <qry:variable name="v_columna" type="string" value="PRS_C_POSTAL"/>
+
+    </qry:declare>
+    <qry:main>
+        <qry:out>
+            <qry:element name="raiz">
+              <qry:insert-query name="GeneraArchivo" />
+            </qry:element>
+        </qry:out>
+    </qry:main>
+
+    <qry:query name="GeneraArchivo"> 
+        <qry:select dump="0">
+            SELECT LPAD({#PARAM:/ROW/@ord_numero}, 8, '0') AS ORD_NUMERO
+                ,LPAD({#PARAM:/ROW/@scf_codigo}, 2, '0') AS SCF_CODIGO
+                ,LPAD({$l_cpr_numero}, 6, '0') AS CPR_NUMERO
+                ,LPAD(TRUNC({$ImporteDelAviso}*100), 9, '0') AS IMPORTE_AVISO
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},7,4) AS ANIO
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},4,2) AS MES
+                ,SUBSTR({#PARAM:/ROW/@ord_fecha_generacion},1,2) AS DIA
+                ,{$prs_razon_social} AS RAZON_SOCIAL
+                ,{$prs_calle} AS CALLE
+                ,{$prs_nro} AS NRO
+                ,{$prs_piso} AS PISO
+                ,{$prs_depto} AS DEPTO
+                ,{$cll_nombre_completo} AS NOMBRE_COMPLETO
+                ,{$cll_nombre} AS NOMBRE_CALLE
+                ,{$cnt_nro_pago} AS NRO_PAGO
+                ,{$cnt_piso_pago} AS PISO_PAGO
+                ,{$cnt_depto_pago} AS DEPTO_PAGO
+                ,{#PARAM:/ROW/@crr_tipo} AS TIPO_CORREO
+                ,{#PARAM:/ROW/@crr_codigo} AS CORREO
+                ,LPAD({$CantidadDeFacturas}, 5, '0') AS CANT_FACTURAS
+                ,{$prs_c_postal} AS CODIGO_POSTAL
+                ,{$prs_agf_nombre} AS LOCALIDAD
+                ,{$cnt_c_postal_pago} AS CODIGO_POSTAL_PAGO
+                ,{$cnt_agf_nombre} AS LOCALIDAD_PAGO
+            FROM DUAL
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:element name="ArchivoLote">
+                    <qry:attribute name="tipo_de_resgistro" value="1"/>
+                    <qry:attribute name="aviso_simple" value="A"/>
+                    <qry:attribute name="numero_ordenativo" value="{#ROW:/ROW/@ORD_NUMERO}"/>
+                    <qry:attribute name="sucursal" value="{#ROW:/ROW/@SCF_CODIGO}"/>
+                    <qry:attribute name="numero_proceso" value="{#ROW:/ROW/@CPR_NUMERO}"/>
+                    <qry:attribute name="importe_aviso" value="{#ROW:/ROW/@IMPORTE_AVISO}"/>
+                    <qry:attribute name="anio" value="{#ROW:/ROW/@ANIO}"/>
+                    <qry:attribute name="mes" value="{#ROW:/ROW/@MES}"/>
+                    <qry:attribute name="dia" value="{#ROW:/ROW/@DIA}"/>
+                    <qry:attribute name="razon_social" value="{#ROW:/ROW/@RAZON_SOCIAL}" length="25" align="left"/>
+                    <qry:if left="{$prs_calle}" operator="not-equal" right="0" type="string">
+                        <qry:attribute name="calle" value="{#ROW:/ROW/@CALLE}" length="18" align="left"/>
+                        <qry:attribute name="nro_puerta" value="{#ROW:/ROW/@NRO}" length="4" align="left"/>
+                        <qry:attribute name="piso" value="{#ROW:/ROW/@PISO}" length="2" align="left"/>
+                        <qry:attribute name="codigo_postal" value="{#ROW:/ROW/@CODIGO_POSTAL}" length="7" align="left"/>
+                        <qry:attribute name="localidad" value="{#ROW:/ROW/@LOCALIDAD}" length="30" align="left"/>
+                    <qry:else/>
+                        <qry:if left="{$cll_nombre}" operator="equal" right="0" type="string">
+                            <qry:attribute name="nombre_completo" value="{#ROW:/ROW/@NOMBRE_COMPLETO}" length="27" align="left"/>
+                        <qry:else/>
+                            <qry:attribute name="calle_pago" value="{#ROW:/ROW/@NOMBRE_CALLE}" length="18" align="left"/>
+                            <qry:attribute name="nro_puerta_pago" value="{#ROW:/ROW/@NRO_PAGO}" length="4" align="left"/>
+                            <qry:attribute name="piso_pago" value="{#ROW:/ROW/@PISO_PAGO}" length="2" align="left"/>
+                            <qry:attribute name="departamento_pago" value="{#ROW:/ROW/@DEPTO_PAGO}" length="3" align="left"/>
+                        </qry:if>
+                        <qry:attribute name="codigo_postal_pago" value="{#ROW:/ROW/@CODIGO_POSTAL_PAGO}" length="7" align="left"/>
+                        <qry:attribute name="localidad_pago" value="{#ROW:/ROW/@LOCALIDAD_PAGO}" length="30" align="left"/>
+                    </qry:if>
+                    <qry:attribute name="tipo_correo" value="{#ROW:/ROW/@TIPO_CORREO}" length="2" align="left"/>
+                    <qry:attribute name="codigo_correo" value="{#ROW:/ROW/@CORREO}" length="8" align="left"/>
+                    <qry:attribute name="vacio" value=" " length="8" align="left"/>
+                    <qry:attribute name="vacio" value=" " length="8" align="left"/>
+                    <qry:attribute name="cantidad_facturas" value="{#ROW:/ROW/@CANT_FACTURAS}"/>
+                    <qry:attribute name="titulo_aviso" value=" " length="30" align="left"/>
+                    <qry:attribute name="codigo_zona" value=" " length="3" align="left"/>
+                    <qry:attribute name="codigo_incidencia" value="00" length="2" align="left"/>
+                </qry:element>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+</qry:doc-definition>

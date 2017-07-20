@@ -37,15 +37,15 @@
     <qry:query name="BuscarDomicilioPostal">
         <qry:select dump="0">
             SELECT personas.prs_numero AS prs_numero
-            	,substr(personas.prs_razon_social, 1, 25) AS prs_razon_social
-            	,nvl(personas.prs_direccion, ' ') AS prs_direccion
-            	,personas.cfc_codigo AS cfc_codigo
-            	,substr(calles.cll_nombre, 1, 18) AS cll_nombre
-            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS prs_nro
-            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS prs_piso
-            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS prs_depto
-            	,nvl(personas.prs_torre, ' ') AS prs_torre
-            	,nvl(personas.prs_c_postal, ' ') AS prs_c_postal
+            	,substr(personas.prs_razon_social, 1, 25) AS PRS_RAZON_SOCIAL
+            	,nvl(personas.prs_direccion, ' ') AS PRS_DIRECCION
+            	,personas.cfc_codigo AS CFC_CODIGO
+            	,substr(calles.cll_nombre, 1, 18) AS CLL_NOMBRE
+            	,substr(nvl(personas.prs_nro, '    '), 1, 4) AS PRS_NRO
+            	,substr(nvl(personas.prs_piso, '  '), 1, 2) AS PRS_PISO
+            	,substr(nvl(personas.prs_depto, '   '), 1, 3) AS PRS_DEPTO
+            	,nvl(personas.prs_torre, ' ') AS PRS_TORRE
+            	,nvl(personas.prs_c_postal, ' ') AS PRS_C_POSTAL
             	,personas.agf_codigo AS AGF_CODIGO
             FROM personas
             INNER JOIN calles
@@ -56,16 +56,16 @@
             <qry:for-each-row>
                 <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                 <qry:element name="direccionDePago">
-                    <qry:attribute name="ll_prs_calle" value="#ROW:/ROW/@cll_nombre" length="12" align="left"/>
-                    <qry:attribute name="ll_prs_nro" value="#ROW:/ROW/@prs_nro" length="4" align="left"/>
-                    <qry:attribute name="ll_prs_piso" value="#ROW:/ROW/@prs_piso" length="2" align="left"/>
-                    <qry:attribute name="ll_prs_depto" value="#ROW:/ROW/@prs_depto" length="3" align="left"/>
-                    <qry:attribute name="ll_prs_torre" value="#ROW:/ROW/@prs_torre" length="3" align="left"/>
-                    <qry:if left="#ROW:/ROW/@prs_c_postal" operator="not-equal" right="0" type="string">
-                        <qry:attribute name="ll_prs_c_postal" value=" {#ROW:/ROW/@prs_c_postal}"/>
+                    <qry:attribute name="ll_prs_calle" value="#ROW:/ROW/@CLL_NOMBRE" length="12" align="left"/>
+                    <qry:attribute name="ll_prs_nro" value="#ROW:/ROW/@PRS_NRO" length="4" align="left"/>
+                    <qry:attribute name="ll_prs_piso" value="#ROW:/ROW/@PRS_PISO" length="2" align="left"/>
+                    <qry:attribute name="ll_prs_depto" value="#ROW:/ROW/@PRS_DEPTO" length="3" align="left"/>
+                    <qry:attribute name="ll_prs_torre" value="#ROW:/ROW/@PRS_TORRE" length="3" align="left"/>
+                    <qry:if left="#ROW:/ROW/@PRS_C_POSTAL" operator="not-equal" right="0" type="string">
+                        <qry:attribute name="ll_prs_c_postal" value=" {#ROW:/ROW/@PRS_C_POSTAL}"/>
                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                         <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                            <qry:attribute name="s_srv_agf_nombre" value="$s_srv_agf_nombre"/>
+                            <qry:attribute name="s_srv_agf_nombre" value="{$s_srv_agf_nombre}"/>
                         </qry:if>
                     </qry:if>
                 </qry:element>
