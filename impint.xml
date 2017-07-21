@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <qry:doc-definition xmlns:qry="lg.lan/qry" name="ejemplo simple">
     <qry:declare>
-        <!-- Parametros de entrada -->
-        <!-- @paramUser -->
-        <!-- @paramImpr -->
 
         <!-- Variables globales -->
         <qry:variable name="Imputacion_Incobrables" type="integer" value="0"/>
@@ -194,7 +191,7 @@
               ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ORD_FECHA_GENERACION
               ,u.scf_codigo
               ,COALESCE(o.sec_codigo_origen, 0) AS SEC_CODIGO_ORIGEN
-              ,COALESCE(t.tor_grupo, 0) AS TOR_GRUPO
+              ,COALESCE(t.tor_grupo, '0') AS TOR_GRUPO
               ,t.tor_descripcion
               ,COALESCE(o.prs_numero, 0) AS PRS_NUMERO
               ,o.rowid
@@ -699,7 +696,7 @@
                 <qry:set-variable name="ban" value="0"/>
                 <qry:set-variable name="v_tabla" value=""/>
                 <qry:element name="notificacion">
-                    <qry:attribute name="cabecera" value="&l0O&l0S"/> <!-- "%c&l0O%c&l0S", 27, 27 -->
+                    <!-- <qry:attribute name="cabecera" value="&l0O&l0S"/>--> <!-- "%c&l0O%c&l0S", 27, 27 -->
                     <qry:if left="$not_codigo" operator="equal" right="I1" type="string">
                         <qry:insert-query name="SelectCodigoBarras" doc-param="#ROW:"/>
                     <qry:else/>
@@ -713,9 +710,9 @@
                     </qry:if>
 
                     <qry:if left="$not_codigo" operator="equal" right="I7" type="string">
-                        <qry:attribute name="font" value="(19U(s0p12h9v0s0b0T&a0L"/> <!-- "\n%c(19U%c(s0p12h9v0s0b0T%c&a0L\n\n", 27, 27, 27 -->
+                        <!--<qry:attribute name="font" value="(19U(s0p12h9v0s0b0T&a0L"/>--> <!-- "\n%c(19U%c(s0p12h9v0s0b0T%c&a0L\n\n", 27, 27, 27 -->
                     <qry:else/>
-                        <qry:attribute name="font" value="(19U(s0p12h9v0s0b0T&a15L"/> <!-- "\n%c(19U%c(s0p12h9v0s0b0T%c&a15L\n\n", 27, 27, 27 -->
+                        <!--<qry:attribute name="font" value="(19U(s0p12h9v0s0b0T&a15L"/>--> <!-- "\n%c(19U%c(s0p12h9v0s0b0T%c&a15L\n\n", 27, 27, 27 -->
                     </qry:if>
                     <!-- Inicio iteracion cursor Texto -->
                     <qry:insert-query name="NotifiTexto" doc-param="#ROW:"/>
