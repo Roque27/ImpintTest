@@ -187,7 +187,7 @@
               ,o.ord_numero
               ,o.srv_codigo AS SRV_CODIGO
               ,o.cnt_numero
-              ,nvl(o.tor_codigo, '')
+              ,nvl(o.tor_codigo, '') AS TOR_CODIGO
               ,to_char(o.ord_fecha_generacion, 'dd/mm/yyyy') AS ORD_FECHA_GENERACION
               ,u.scf_codigo
               ,COALESCE(o.sec_codigo_origen, 0) AS SEC_CODIGO_ORIGEN
@@ -590,7 +590,7 @@
         <qry:select dump="0">
             SELECT COALESCE(not_codigo, '0') AS NOT_CODIGO
             FROM combinaciones_habilitadas_noti
-            WHERE tor_codigo = {#PARAM:/ROW/@SRV_CODIGO}
+            WHERE tor_codigo = {#PARAM:/ROW/@TOR_CODIGO}
             	AND cfc_codigo = {$cfc_codigo}
         </qry:select>
         <qry:out>
