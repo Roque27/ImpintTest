@@ -40,7 +40,7 @@ EOF
 #cat ${Salida} | ./XMLD
 echo ""
 
-for key in `Xalan -in ${Salida} -xsl get_command_list.xsl`
+for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
 do
 	command=`echo ${key} | cut -d"|" -f1`
 	id=`echo ${key} | cut -d"|" -f2`
