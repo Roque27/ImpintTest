@@ -164,8 +164,6 @@
         <!-- Usuarios -->
         
         <!-- Prs_Num_Ori -->
-        <qry:variable name="cnt_num_ori" type="integer"/>
-        <qry:variable name="srv_cod_ori" type="integer"/>
 
         <!-- SelectCodigoBarras -->
         
@@ -249,15 +247,17 @@
             <qry:insert-query name="SeleccionaFechaActual"/>
             <qry:insert-query name="SeleccionaEstadoInicial"/>
             <!-- INSERT Control de procesos salida-->
-            <qry:element name="INSERT">
-                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', {$l_est_codigo}, {$sysdate}); "/>
-                <qry:element name="control_procesos">
-                    <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
-                    <qry:attribute name="cpr_tipo_proceso" value="IN"/>
-                    <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
-                    <qry:attribute name="prc_codigo" value="IN"/>
-                    <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
-                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
+            <qry:element name="Main">
+                <qry:element name="SqlCommand" type="INSERT" id="1">
+                    <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
+                    <!--<qry:element name="control_procesos">
+                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                        <qry:attribute name="cpr_tipo_proceso" value="IN"/>
+                        <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
+                        <qry:attribute name="prc_codigo" value="IN"/>
+                        <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
+                        <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
+                    </qry:element>-->
                 </qry:element>
             </qry:element>
             
@@ -318,40 +318,40 @@
                             <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
                             <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="equal" right="CD" type="string">
-                                <qry:element name="UPDATE">
+                                <qry:element name="SqlCommand" type="UPDATE" id="2">
                                     <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
-                                    <qry:element name="ordenativos">
+                                    <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
                                             <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
-                                    </qry:element>
+                                    </qry:element>-->
                                 </qry:element>
                             <qry:else/>
-                                <qry:element name="UPDATE">
+                                <qry:element name="SqlCommand" type="UPDATE" id="3">
                                     <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
-                                    <qry:element name="ordenativos">
+                                    <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
                                             <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
-                                    </qry:element>
+                                    </qry:element>-->
                                 </qry:element>
                             </qry:if>
 
                         <qry:else/>
                             <qry:attribute name="Imputacion_Incobrables" value="{$Imputacion_Incobrables}"/>
                             <qry:if left="{$Imputacion_Incobrables}" operator="not-equal" right="1" type="integer">
-                                <qry:element name="UPDATE">
+                                <qry:element name="SqlCommand" type="UPDATE" id="3">
                                     <qry:text value="UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = {$l_cpr_numero} ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
-                                    <qry:element name="ordenativos">
+                                    <!--<qry:element name="ordenativos">
                                         <qry:attribute name="ord_estado" value="A"/>
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:attribute name="ord_datos_anula" value="Anulado Documentos ya pagados - Saldo 0 - No se imprime  "/>
                                         <qry:element name="WHERE">
                                             <qry:attribute name="rowid" value="{#ROW:/ROW/@ROWID}"/>
                                         </qry:element>
-                                    </qry:element>
+                                    </qry:element>-->
                                 </qry:element>
                             </qry:if>
                         </qry:if>
@@ -371,15 +371,18 @@
             <qry:insert-query name="SeleccionaProxEstado"/>
 
             <!-- UPDATE Control de procesos salida-->
-            <qry:element name="UPDATE">
-                <qry:text value="UPDATE control_procesos SET est_codigo = {$l_prox_est_codigo} WHERE cpr_numero = {$l_cpr_numero}; "/>     
-                <qry:element name="control_procesos">
-                    <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
-                    <qry:element name="WHERE">
-                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
-                    </qry:element>
+            <qry:element name="Main">
+                <qry:element name="SqlCommand" type="UPDATE" id="4">
+                    <qry:text value="UPDATE control_procesos SET est_codigo = '{$l_prox_est_codigo}' WHERE cpr_numero = {$l_cpr_numero}; "/>     
+                    <!--<qry:element name="control_procesos">
+                        <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
+                        <qry:element name="WHERE">
+                            <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                        </qry:element>
+                    </qry:element>-->
                 </qry:element>
             </qry:element>
+            
             
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
                 <qry:insert-query name="GrabaEnReportes"/>
@@ -706,7 +709,7 @@
             <qry:for-each-row>
                 <qry:set-variable name="ban" value="0"/>
                 <qry:set-variable name="v_tabla" value=" "/>
-                <qry:element name="notificacion">
+                
                     <!-- No deja usar los caracteres raros -->
                     <qry:if left="{$not_codigo}" operator="equal" right="I1" type="string">
                         <qry:insert-query name="SelectCodigoBarras" doc-param="#ROW:"/>
@@ -728,8 +731,8 @@
                     <!-- Inicio iteracion cursor Texto -->
                     <qry:insert-query name="NotifiTexto" doc-param="#ROW:"/>
                     <!-- Fin iteracion cursor Texto -->
-                    <qry:attribute name="pie" value="Pie de pagina"/>
-                </qry:element>
+                    
+                
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -767,7 +770,7 @@
                 <qry:if left="{$v_tabla}" operator="not-equal" right="DOCUMENTOS" type="string">
                     <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/> <!-- Largo del texto para la columna  -->
                 </qry:if>
-                <qry:element name="notificacionTexto">
+                <qry:element name="notificacion">
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
                         <qry:print output="stdout" value="Bucle-T-Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>
                         <qry:if left="{$ban}" operator="equal" right="1" type="integer">
@@ -795,22 +798,22 @@
                                         <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                     </qry:if>
 
-                                    <qry:print output="stdout" value="          TEST - srv_cod: {$srv_cod}"/>
-                                    <qry:print output="stdout" value="          TEST - cnt_num: {$cnt_num}"/>
-                                    <qry:print output="stdout" value="          TEST - trt_num: {$trt_num}"/>
+                                    <qry:print output="stdout" value="              TESToriAntes - srv_cod: {$srv_cod}"/>
+                                    <qry:print output="stdout" value="              TESToriAntes - cnt_num: {$cnt_num}"/>
+                                    <qry:print output="stdout" value="              TESToriAntes - trt_num: {$trt_num}"/>
 
                                     <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                     <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                     <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
 
-                                    <qry:print output="stdout" value="          TEST - srv_cod: {$srv_cod}"/>
-                                    <qry:print output="stdout" value="          TEST - cnt_num: {$cnt_num}"/>
-                                    <qry:print output="stdout" value="          TEST - trt_num: {$trt_num}"/>
+                                    <qry:print output="stdout" value="              TESToriDespues - srv_cod: {$srv_cod}"/>
+                                    <qry:print output="stdout" value="              TESToriDespues - cnt_num: {$cnt_num}"/>
+                                    <qry:print output="stdout" value="              TESToriDespues - trt_num: {$trt_num}"/>
                                 </qry:if>
                             </qry:if>
                             <qry:set-variable name="ban" value="0"/>
                         <qry:else/>
-                            <qry:attribute name="v_eno_texto" value="#ROW:/ROW/@ENO_TEXTO"/>
+                            <qry:attribute name="eno_texto" value="#ROW:/ROW/@ENO_TEXTO"/>
                         </qry:if>
                     <qry:else/>
                         <qry:insert-query name="NotifiCargaTablas"/>
@@ -823,8 +826,10 @@
                                         <qry:set-variable name="document_tbl_type" value="DOC"/>
                                     
                                         <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
+                                            <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
                                             <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                         <qry:else/>
+                                            <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
                                             <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                         </qry:if>
                                     <qry:else/>
@@ -834,8 +839,10 @@
                                         
                                             <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
                                             <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
+                                                <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
                                                 <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                             <qry:else/>
+                                                <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
                                                 <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                             </qry:if>
                                             <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
@@ -853,20 +860,25 @@
                                     <qry:insert-query name="Personas" doc-param="#ROW:"/>
                                 <qry:else/>
                                     <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS_GAR" type="string">
+                                        <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
                                         <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                        <qry:print output="stdout" value="      Prs_Num_Ori - cnt_num: {$cnt_num} / srv_cod: {$srv_cod}"/>
                                         <qry:insert-query name="Prs_Num_Ori" doc-param="#ROW:"/>
                                         <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                         <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                         <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
+                                        <qry:print output="stdout" value="      Personas - prs_num: {$prs_num}"/>
                                         <qry:insert-query name="Personas" doc-param="#ROW:"/>
                                         <qry:set-variable name="prs_num" value="{$prs_num_temp}"/>
                                     <qry:else/>
                                         <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS" type="string">
                                             <qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>
-                                            <!--<qry:insert-query name="Contratos" doc-param="#ROW:"/>-->
+                                            <qry:insert-query name="Contratos" doc-param="#ROW:"/>
                                         <qry:else/>
                                             <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS_GAR" type="string">
+                                                <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
                                                 <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                <qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>
                                                 <qry:insert-query name="Contratos" doc-param="#ROW:"/>
                                                 <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                 <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
@@ -874,10 +886,12 @@
                                             <qry:else/>
                                                 <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS" type="string">
                                                     <qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>
-                                                    <!--<qry:insert-query name="Servicios" doc-param="#ROW:"/>-->
+                                                    <qry:insert-query name="Servicios" doc-param="#ROW:"/>
                                                 <qry:else/>
                                                     <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS_GAR" type="string">
+                                                        <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
                                                         <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                        <qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>
                                                         <qry:insert-query name="Servicios" doc-param="#ROW:"/>
                                                         <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                         <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
@@ -922,6 +936,7 @@
                                                                                             <qry:insert-query name="Tipos_IVA" doc-param="#ROW:"/>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_NOTIFICACION" type="string">
+                                                                                                <qry:print output="stdout" value="      Tipos Notificacion - tipo_notificacion: {#PARAM:/ROW/@NOT_DESCRIPCION}"/>
                                                                                                 <qry:attribute name="tipo_notificacion" value="{#PARAM:/ROW/@NOT_DESCRIPCION}"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_tabla}" operator="equal" right="TARIFAS" type="string">
@@ -930,10 +945,12 @@
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE" type="string">
                                                                                                         <qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>
-                                                                                                        <!--<qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>-->
+                                                                                                        <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE_GAR" type="string">
+                                                                                                            <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
                                                                                                             <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
+                                                                                                            <qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>
                                                                                                             <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
                                                                                                             <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                                                                             <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
@@ -1019,70 +1036,70 @@
                 <qry:element name="persona">
                     <qry:if left="{$v_columna}" operator="equal" right="PRS_NUMERO" type="string">
                         <qry:if left="#ROW:/ROW/@PRS_NUMERO" operator="greater" right="0" type="string">
-                            <qry:attribute name="v_prs_numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
+                            <qry:attribute name="prs_numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="PRS_RAZON_SOCIAL" type="string">
-                            <qry:attribute name="v_prs_numero" value="#ROW:/ROW/@PRS_RAZON_SOCIAL" length="$largos" align="left"/>
+                            <qry:attribute name="prs_numero" value="#ROW:/ROW/@PRS_RAZON_SOCIAL" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="PRS_CUIT" type="string">
                                 <qry:if left="#ROW:/ROW/@PRS_CUIT" operator="greater" right="0" type="string">
-                                    <qry:attribute name="v_prs_cuit" value="#ROW:/ROW/@PRS_CUIT" length="$largos" align="left"/>
+                                    <qry:attribute name="prs_cuit" value="#ROW:/ROW/@PRS_CUIT" length="$largos" align="left"/>
                                 <qry:else/>
                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                 </qry:if>
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="PRS_TIPO_DOC" type="string">
-                                    <qry:attribute name="v_tipo_doc" value="#ROW:/ROW/@PRS_TIPO_DOC" length="$largos" align="left"/>
+                                    <qry:attribute name="tipo_doc" value="#ROW:/ROW/@PRS_TIPO_DOC" length="$largos" align="left"/>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="PRS_DOCUMENTO" type="string">
                                         <qry:if left="#ROW:/ROW/@PRS_DOCUMENTO" operator="greater" right="0" type="integer">
-                                            <qry:attribute name="v_prs_documento" value="#ROW:/ROW/@PRS_DOCUMENTO" length="$largos" align="left"/>
+                                            <qry:attribute name="prs_documento" value="#ROW:/ROW/@PRS_DOCUMENTO" length="$largos" align="left"/>
                                         <qry:else/>
                                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                         </qry:if>
                                     <qry:else/>
                                         <qry:if left="{$v_columna}" operator="equal" right="PRS_NRO" type="string">
-                                            <qry:attribute name="v_prs_nro" value="#ROW:/ROW/@PRS_NRO" length="$largos" align="left"/>
+                                            <qry:attribute name="prs_nro" value="#ROW:/ROW/@PRS_NRO" length="$largos" align="left"/>
                                         <qry:else/>
                                             <qry:if left="{$v_columna}" operator="equal" right="PRS_DEPTO" type="string">
-                                                <qry:attribute name="v_prs_depto" value="#ROW:/ROW/@PRS_DEPTO" length="$largos" align="left"/>
+                                                <qry:attribute name="prs_depto" value="#ROW:/ROW/@PRS_DEPTO" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="AGF_CODIGO" type="string">
                                                     <qry:if left="#ROW:/ROW/@AGF_CODIGO" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="v_agf_codigo" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
+                                                        <qry:attribute name="agf_codigo" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                     </qry:if>
                                                 <qry:else/>
                                                     <qry:if left="{$v_columna}" operator="equal" right="CLL_NOMBRE" type="string">
-                                                        <qry:attribute name="v_prs_direccion" value="#ROW:/ROW/@PRS_DIRECCION" length="$largos" align="left"/>
+                                                        <qry:attribute name="prs_direccion" value="#ROW:/ROW/@PRS_DIRECCION" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="PRS_C_POSTAL" type="string">
                                                             <qry:if left="#ROW:/ROW/@PRS_C_POSTAL" operator="not-equal" right="0" type="string">
-                                                                <qry:attribute name="v_prs_c_postal" value="#ROW:/ROW/@PRS_C_POSTAL" length="$largos" align="left"/>
+                                                                <qry:attribute name="prs_c_postal" value="#ROW:/ROW/@PRS_C_POSTAL" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                             </qry:if>
                                                         <qry:else/>
                                                             <qry:if left="{$v_columna}" operator="equal" right="PRS_TELEFONOS" type="string">
-                                                                <qry:attribute name="v_prs_telefonos" value="#ROW:/ROW/@PRS_TELEFONOS" length="$largos" align="left"/>
+                                                                <qry:attribute name="prs_telefonos" value="#ROW:/ROW/@PRS_TELEFONOS" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:if left="{$v_columna}" operator="equal" right="PRS_FAX" type="string">
-                                                                    <qry:attribute name="v_prs_fax" value="#ROW:/ROW/@PRS_FAX" length="$largos" align="left"/>
+                                                                    <qry:attribute name="prs_fax" value="#ROW:/ROW/@PRS_FAX" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_columna}" operator="equal" right="PRS_ESTADO" type="string">
-                                                                        <qry:attribute name="v_prs_estado" value="#ROW:/ROW/@PRS_ESTADO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="prs_estado" value="#ROW:/ROW/@PRS_ESTADO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_columna}" operator="equal" right="PRS_PISO" type="string">
-                                                                            <qry:attribute name="v_prs_piso" value="#ROW:/ROW/@PRS_PISO" length="$largos" align="left"/>
+                                                                            <qry:attribute name="prs_piso" value="#ROW:/ROW/@PRS_PISO" length="$largos" align="left"/>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="PRS_LOCALIDAD" type="string">
                                                                                 <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                 <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                    <qry:attribute name="v_agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                    <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
                                                                                 </qry:if>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="PRS_DIRECCION" type="string">
@@ -1091,26 +1108,26 @@
                                                                                         <!-- logica complicada direccion -->
                                                                                             <qry:if left="#ROW:/ROW/@PRS_BIS" operator="not-equal" right="0" type="string">
                                                                                                 <qry:if left="#ROW:/ROW/@PRS_BIS" operator="not-equal" right="N" type="string">
-                                                                                                    <qry:attribute name="v_prs_bis" value="#ROW:/ROW/@PRS_BIS"/>
+                                                                                                    <qry:attribute name="prs_bis" value="#ROW:/ROW/@PRS_BIS"/>
                                                                                                 </qry:if>
                                                                                             </qry:if>
                                                                                             <qry:if left="#ROW:/ROW/@PRS_NRO" operator="not-equal" right="0" type="string">
-                                                                                                <qry:attribute name="v_prs_nro" value="#ROW:/ROW/@PRS_NRO"/>
+                                                                                                <qry:attribute name="prs_nro" value="#ROW:/ROW/@PRS_NRO"/>
                                                                                             </qry:if>
                                                                                             <qry:if left="#ROW:/ROW/@PRS_TORRE" operator="not-equal" right="0" type="string">
-                                                                                                <qry:attribute name="v_prs_torre" value="#ROW:/ROW/@PRS_TORRE"/>
+                                                                                                <qry:attribute name="prs_torre" value="#ROW:/ROW/@PRS_TORRE"/>
                                                                                             </qry:if>
                                                                                             <qry:if left="#ROW:/ROW/@PRS_PISO" operator="not-equal" right="0" type="string">
-                                                                                                <qry:attribute name="v_prs_piso" value="#ROW:/ROW/@PRS_PISO"/>
+                                                                                                <qry:attribute name="prs_piso" value="#ROW:/ROW/@PRS_PISO"/>
                                                                                             </qry:if>
                                                                                             <qry:if left="#ROW:/ROW/@PRS_DEPTO" operator="not-equal" right="0" type="string">
-                                                                                                <qry:attribute name="v_prs_depto" value="#ROW:/ROW/@PRS_DEPTO"/>
+                                                                                                <qry:attribute name="prs_depto" value="#ROW:/ROW/@PRS_DEPTO"/>
                                                                                             </qry:if>
                                                                                             <qry:if left="#ROW:/ROW/@PRS_C_POSTAL" operator="not-equal" right="0" type="string">
-                                                                                                <qry:attribute name="v_prs_c_postal" value="#ROW:/ROW/@PRS_C_POSTAL"/>
+                                                                                                <qry:attribute name="prs_c_postal" value="#ROW:/ROW/@PRS_C_POSTAL"/>
                                                                                                 <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                                 <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                                    <qry:attribute name="v_agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                                    <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
                                                                                                 </qry:if>
                                                                                             </qry:if>
                                                                                         <!-- logica complicada direccion -->
@@ -1203,48 +1220,48 @@
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="PRS_NUMERO" type="string"> 
                                 <qry:if left="#ROW:/ROW/@PRS_NUMERO" operator="greater" right="0" type="integer">
-                                    <qry:attribute name="v_prs_numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
+                                    <qry:attribute name="prs_numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
                                 <qry:else/>
                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                 </qry:if>
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="PRS_NUMERO_APODERADO" type="string"> 
                                     <qry:if left="#ROW:/ROW/@PRS_NUMERO_APODERADO" operator="greater" right="0" type="integer">
-                                        <qry:attribute name="v_prs_numero_apoderado" value="#ROW:/ROW/@PRS_NUMERO_APODERADO" length="$largos" align="left"/>
+                                        <qry:attribute name="prs_numero_apoderado" value="#ROW:/ROW/@PRS_NUMERO_APODERADO" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                     </qry:if>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="TCL_CODIGO" type="string"> 
-                                        <qry:attribute name="v_tcl_codigo" value="#ROW:/ROW/@TCL_CODIGO" length="$largos" align="left"/>
+                                        <qry:attribute name="tcl_codigo" value="#ROW:/ROW/@TCL_CODIGO" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:if left="{$v_columna}" operator="equal" right="CLA_CODIGO" type="string"> 
-                                            <qry:attribute name="v_cla_codigo" value="#ROW:/ROW/@CLA_CODIGO" length="$largos" align="left"/>
+                                            <qry:attribute name="cla_codigo" value="#ROW:/ROW/@CLA_CODIGO" length="$largos" align="left"/>
                                         <qry:else/>
                                             <qry:if left="{$v_columna}" operator="equal" right="TEN_CODIGO" type="string"> 
-                                                <qry:attribute name="v_ten_codigo" value="#ROW:/ROW/@TEN_CODIGO" length="$largos" align="left"/>
+                                                <qry:attribute name="ten_codigo" value="#ROW:/ROW/@TEN_CODIGO" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="CAT_CODIGO" type="string"> 
-                                                    <qry:attribute name="v_cat_codigo" value="#ROW:/ROW/@CAT_CODIGO" length="$largos" align="left"/>
+                                                    <qry:attribute name="cat_codigo" value="#ROW:/ROW/@CAT_CODIGO" length="$largos" align="left"/>
                                                 <qry:else/>
                                                     <qry:if left="{$v_columna}" operator="equal" right="OBT_PROPIETARIO" type="string"> 
-                                                        <qry:attribute name="v_cnt_propietario" value="#ROW:/ROW/@OBT_PROPIETARIO" length="$largos" align="left"/>
+                                                        <qry:attribute name="cnt_propietario" value="#ROW:/ROW/@OBT_PROPIETARIO" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="CNT_FECHA_INICIO" type="string">
-                                                            <qry:attribute name="v_cnt_fecha_inicio" value="#ROW:/ROW/@CNT_FECHA_INICIO" length="$largos" align="left"/>
+                                                            <qry:attribute name="cnt_fecha_inicio" value="#ROW:/ROW/@CNT_FECHA_INICIO" length="$largos" align="left"/>
                                                         <qry:else/>
                                                             <qry:if left="{$v_columna}" operator="equal" right="IVV_CODIGO" type="string"> 
                                                                 <qry:if left="#ROW:/ROW/@IVV_CODIGO" operator="greater" right="0" type="integer">
-                                                                    <qry:attribute name="v_ivv_codigo" value="#ROW:/ROW/@IVV_CODIGO" length="$largos" align="left"/>
+                                                                    <qry:attribute name="ivv_codigo" value="#ROW:/ROW/@IVV_CODIGO" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                 </qry:if>
                                                             <qry:else/>
                                                                 <qry:if left="{$v_columna}" operator="equal" right="CNT_FECHA_FIN" type="string">
-                                                                    <qry:attribute name="v_cnt_fecha_fin" value="#ROW:/ROW/@CNT_FECHA_FIN" length="$largos" align="left"/>
+                                                                    <qry:attribute name="cnt_fecha_fin" value="#ROW:/ROW/@CNT_FECHA_FIN" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_columna}" operator="equal" right="CNT_TIPO" type="string">
-                                                                        <qry:attribute name="v_cnt_tipo" value="#ROW:/ROW/@CNT_TIPO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="cnt_tipo" value="#ROW:/ROW/@CNT_TIPO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_columna}" operator="equal" right="CNT_DIRECCION_PAGO" type="string"> 
                                                                             <!-- logica complicada  -->
@@ -1253,33 +1270,33 @@
                                                                                     <qry:insert-query name="BuscarDomicilioPostal" doc-param="#ROW:"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="#ROW:/ROW/@CNT_DIRECCION_PAGO" operator="not-equal" right="0" type="string">
-                                                                                        <qry:attribute name="v_cnt_direccion_pago" value="#ROW:/ROW/@CNT_DIRECCION_PAGO"/>
+                                                                                        <qry:attribute name="cnt_direccion_pago" value="#ROW:/ROW/@CNT_DIRECCION_PAGO"/>
                                                                                     <qry:else/>
-                                                                                        <qry:attribute name="v_cll_nombre" value="#ROW:/ROW/@CLL_NOMBRE"/>
+                                                                                        <qry:attribute name="cll_nombre" value="#ROW:/ROW/@CLL_NOMBRE"/>
                                                                                         
                                                                                         <qry:if left="#ROW:/ROW/@CNT_BIS" operator="not-equal" right="0" type="string">
                                                                                             <qry:if left="#ROW:/ROW/@CNT_BIS" operator="not-equal" right="N" type="string">
-                                                                                                <qry:attribute name="v_cnt_bis" value="#ROW:/ROW/@CNT_BIS"/>
+                                                                                                <qry:attribute name="cnt_bis" value="#ROW:/ROW/@CNT_BIS"/>
                                                                                             </qry:if>
                                                                                         </qry:if>
                                                                                         <qry:if left="#ROW:/ROW/@CNT_NRO_PAGO" operator="not-equal" right="0" type="string">
-                                                                                            <qry:attribute name="v_cnt_nro_pago" value="#ROW:/ROW/@CNT_NRO_PAGO"/>
+                                                                                            <qry:attribute name="cnt_nro_pago" value="#ROW:/ROW/@CNT_NRO_PAGO"/>
                                                                                         </qry:if>
                                                                                         <qry:if left="#ROW:/ROW/@CNT_TORRE_PAGO" operator="not-equal" right="0" type="string">
-                                                                                            <qry:attribute name="v_cnt_torre_pago" value="#ROW:/ROW/@CNT_TORRE_PAGO"/>
+                                                                                            <qry:attribute name="cnt_torre_pago" value="#ROW:/ROW/@CNT_TORRE_PAGO"/>
                                                                                         </qry:if>
                                                                                         <qry:if left="#ROW:/ROW/@CNT_PISO_PAGO" operator="not-equal" right="0" type="string">
-                                                                                            <qry:attribute name="v_cnt_piso_pago" value="#ROW:/ROW/@CNT_PISO_PAGO"/>
+                                                                                            <qry:attribute name="cnt_piso_pago" value="#ROW:/ROW/@CNT_PISO_PAGO"/>
                                                                                         </qry:if>
                                                                                         <qry:if left="#ROW:/ROW/@CNT_DEPTO_PAGO" operator="not-equal" right="0" type="string">
-                                                                                            <qry:attribute name="v_cnt_depto_pago" value="#ROW:/ROW/@CNT_DEPTO_PAGO"/>
+                                                                                            <qry:attribute name="cnt_depto_pago" value="#ROW:/ROW/@CNT_DEPTO_PAGO"/>
                                                                                         </qry:if>
                                                                                         <qry:if left="#ROW:/ROW/@CNT_C_POSTAL_PAGO" operator="not-equal" right="0" type="string">
-                                                                                            <qry:attribute name="v_cnt_c_postal_pago" value="#ROW:/ROW/@CNT_C_POSTAL_PAGO"/>
+                                                                                            <qry:attribute name="cnt_c_postal_pago" value="#ROW:/ROW/@CNT_C_POSTAL_PAGO"/>
                                                                                             <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                                                                                             <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                             <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                                <qry:attribute name="s_srv_agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                                <qry:attribute name="srv_agf_nombre" value="$s_srv_agf_nombre"/>
                                                                                             </qry:if>
                                                                                         </qry:if>
 
@@ -1289,69 +1306,69 @@
                                                                             <!-- logica complicada  -->
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="CNT_NRO_PAGO" type="string">
-                                                                                <qry:attribute name="v_cnt_nro_pago" value="#ROW:/ROW/@CNT_NRO_PAGO" length="$largos" align="left"/>
+                                                                                <qry:attribute name="cnt_nro_pago" value="#ROW:/ROW/@CNT_NRO_PAGO" length="$largos" align="left"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="CNT_PISO_PAGO" type="string">
-                                                                                    <qry:attribute name="v_cnt_piso_pago" value="#ROW:/ROW/@CNT_PISO_PAGO" length="$largos" align="left"/>
+                                                                                    <qry:attribute name="cnt_piso_pago" value="#ROW:/ROW/@CNT_PISO_PAGO" length="$largos" align="left"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="CNT_DEPTO_PAGO" type="string">
-                                                                                        <qry:attribute name="v_cnt_depto_pago" value="#ROW:/ROW/@CNT_DEPTO_PAGO" length="$largos" align="left"/>
+                                                                                        <qry:attribute name="cnt_depto_pago" value="#ROW:/ROW/@CNT_DEPTO_PAGO" length="$largos" align="left"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="CNT_C_POSTAL_PAGO" type="string">
                                                                                             <qry:if left="#ROW:/ROW/@CNT_C_POSTAL_PAGO" operator="not-equal" right="0" type="integer">
-                                                                                                <qry:attribute name="v_cnt_c_postal_pago" value="#ROW:/ROW/@CNT_C_POSTAL_PAGO" length="$largos" align="left"/>
+                                                                                                <qry:attribute name="cnt_c_postal_pago" value="#ROW:/ROW/@CNT_C_POSTAL_PAGO" length="$largos" align="left"/>
                                                                                             <qry:else/>
                                                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                             </qry:if>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_columna}" operator="equal" right="MIN_CODIGO" type="string">
-                                                                                                <qry:attribute name="v_min_codigo" value="#ROW:/ROW/@MIN_CODIGO" length="$largos" align="left"/>
+                                                                                                <qry:attribute name="min_codigo" value="#ROW:/ROW/@MIN_CODIGO" length="$largos" align="left"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="CNT_ANIO" type="string">
                                                                                                     <qry:if left="#ROW:/ROW/@CNT_ANIO" operator="not-equal" right="0" type="integer">
-                                                                                                        <qry:attribute name="v_cnt_anio" value="#ROW:/ROW/@CNT_ANIO" length="$largos" align="left"/>
+                                                                                                        <qry:attribute name="cnt_anio" value="#ROW:/ROW/@CNT_ANIO" length="$largos" align="left"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                     </qry:if>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="CNT_PERIODO" type="string">
                                                                                                         <qry:if left="#ROW:/ROW/@CNT_PERIODO" operator="not-equal" right="0" type="integer">
-                                                                                                            <qry:attribute name="v_cnt_periodo" value="#ROW:/ROW/@CNT_PERIODO" length="$largos" align="left"/>
+                                                                                                            <qry:attribute name="cnt_periodo" value="#ROW:/ROW/@CNT_PERIODO" length="$largos" align="left"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                         </qry:if>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="CNT_LEGAJO" type="string">
-                                                                                                            <qry:attribute name="v_cnt_legajo" value="#ROW:/ROW/@CNT_LEGAJO" length="$largos" align="left"/>
+                                                                                                            <qry:attribute name="cnt_legajo" value="#ROW:/ROW/@CNT_LEGAJO" length="$largos" align="left"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="CNT_CIIU" type="string">
                                                                                                                 <qry:if left="#ROW:/ROW/@CNT_CIIU" operator="not-equal" right="0" type="integer">
-                                                                                                                    <qry:attribute name="v_cnt_ciiu" value="#ROW:/ROW/@CNT_CIIU" length="$largos" align="left"/>
+                                                                                                                    <qry:attribute name="cnt_ciiu" value="#ROW:/ROW/@CNT_CIIU" length="$largos" align="left"/>
                                                                                                                 <qry:else/>
                                                                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                                 </qry:if>
                                                                                                             <qry:else/>
                                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="URC_CODIGO" type="string">
                                                                                                                     <qry:if left="#ROW:/ROW/@URC_CODIGO" operator="not-equal" right="0" type="integer">
-                                                                                                                        <qry:attribute name="v_urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
+                                                                                                                        <qry:attribute name="urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
                                                                                                                     <qry:else/>
                                                                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                                     </qry:if>
                                                                                                                 <qry:else/>
                                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="MPA_TIPO_MEDIO_PAGO" type="string">
-                                                                                                                        <qry:attribute name="v_mpa_tipo_medio_pago" value="#ROW:/ROW/@MPA_TIPO_MEDIO_PAGO" length="$largos" align="left"/>
+                                                                                                                        <qry:attribute name="mpa_tipo_medio_pago" value="#ROW:/ROW/@MPA_TIPO_MEDIO_PAGO" length="$largos" align="left"/>
                                                                                                                     <qry:else/>
                                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="CNT_NUMERO_CUENTA" type="string">
-                                                                                                                            <qry:attribute name="v_cnt_numero_cuenta" value="#ROW:/ROW/@CNT_NUMERO_CUENTA" length="$largos" align="left"/>
+                                                                                                                            <qry:attribute name="cnt_numero_cuenta" value="#ROW:/ROW/@CNT_NUMERO_CUENTA" length="$largos" align="left"/>
                                                                                                                         <qry:else/>
                                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="CNT_OBSERVACIONES" type="string">
-                                                                                                                                <qry:attribute name="v_cnt_observaciones" value="#ROW:/ROW/@CNT_OBSERVACIONES" length="$largos" align="left"/>
+                                                                                                                                <qry:attribute name="cnt_observaciones" value="#ROW:/ROW/@CNT_OBSERVACIONES" length="$largos" align="left"/>
                                                                                                                             <qry:else/>
                                                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="OIM_TIPO" type="string">
-                                                                                                                                    <qry:attribute name="v_oim_tipo" value="#ROW:/ROW/@OIM_TIPO" length="$largos" align="left"/>
+                                                                                                                                    <qry:attribute name="oim_tipo" value="#ROW:/ROW/@OIM_TIPO" length="$largos" align="left"/>
                                                                                                                                 <qry:else/>
                                                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="CNT_ESTADO" type="string">
-                                                                                                                                        <qry:attribute name="v_cnt_estado" value="#ROW:/ROW/@CNT_ESTADO" length="$largos" align="left"/>
+                                                                                                                                        <qry:attribute name="cnt_estado" value="#ROW:/ROW/@CNT_ESTADO" length="$largos" align="left"/>
                                                                                                                                     <qry:else/>
                                                                                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                                                     </qry:if>
@@ -1465,8 +1482,8 @@
                     <qry:if left="#ROW:/ROW/@PRS_C_POSTAL" operator="not-equal" right="0" type="string">
                         <qry:attribute name="ll_prs_c_postal" value=" {#ROW:/ROW/@PRS_C_POSTAL}"/>
                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
-                        <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                            <qry:attribute name="s_srv_agf_nombre" value="{$s_srv_agf_nombre}"/>
+                        <qry:if left="{$srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
+                            <qry:attribute name="srv_agf_nombre" value="{$s_srv_agf_nombre}"/>
                         </qry:if>
                     </qry:if>
                 </qry:element>
@@ -1497,24 +1514,24 @@
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="SCF_CODIGO" type="string"> 
                             <qry:if left="#ROW:/ROW/@SCF_CODIGO" operator="greater" right="0" type="integer">
-                                <qry:attribute name="v_scf_codigo" value="#ROW:/ROW/@SCF_CODIGO" length="$largos" align="left"/>
+                                <qry:attribute name="scf_codigo" value="#ROW:/ROW/@SCF_CODIGO" length="$largos" align="left"/>
                             <qry:else/>
                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                             </qry:if>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="AGE_CODIGO" type="string"> 
-                                <qry:attribute name="v_age_codigo" value="#ROW:/ROW/@AGE_CODIGO" length="$largos" align="left"/>
+                                <qry:attribute name="age_codigo" value="#ROW:/ROW/@AGE_CODIGO" length="$largos" align="left"/>
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="RTA_CODIGO" type="string"> 
                                     <qry:if left="#ROW:/ROW/@RTA_CODIGO" operator="greater" right="0" type="integer">
-                                        <qry:attribute name="v_rta_codigo" value="#ROW:/ROW/@RTA_CODIGO" length="$largos" align="left"/>
+                                        <qry:attribute name="rta_codigo" value="#ROW:/ROW/@RTA_CODIGO" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                     </qry:if>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="SRV_ORDEN_LECTURA" type="string"> 
                                         <qry:if left="#ROW:/ROW/@SRV_ORDEN_LECTURA" operator="greater" right="0" type="integer">
-                                            <qry:attribute name="v_srv_orden_lectura" value="#ROW:/ROW/@SRV_ORDEN_LECTURA" length="$largos" align="left"/>
+                                            <qry:attribute name="srv_orden_lectura" value="#ROW:/ROW/@SRV_ORDEN_LECTURA" length="$largos" align="left"/>
                                         <qry:else/>
                                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                         </qry:if>
@@ -1528,26 +1545,26 @@
                                                     <qry:attribute name="v_cll_nombre" value="#ROW:/ROW/@CLL_NOMBRE"/>
                                                     <qry:if left="#ROW:/ROW/@SRV_BIS" operator="not-equal" right="0" type="string">
                                                         <qry:if left="#ROW:/ROW/@SRV_BIS" operator="not-equal" right="N" type="string">
-                                                            <qry:attribute name="v_srv_bis" value="#ROW:/ROW/@SRV_BIS"/>
+                                                            <qry:attribute name="srv_bis" value="#ROW:/ROW/@SRV_BIS"/>
                                                         </qry:if>
                                                     </qry:if>
                                                     <qry:if left="#ROW:/ROW/@SRV_NRO" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="v_srv_nro" value="#ROW:/ROW/@SRV_NRO"/>
+                                                        <qry:attribute name="srv_nro" value="#ROW:/ROW/@SRV_NRO"/>
                                                     </qry:if>
                                                     <qry:if left="#ROW:/ROW/@SRV_TORRE" operator="not-equal" right="0" type="string">
-                                                        <qry:attribute name="v_srv_torre" value="#ROW:/ROW/@SRV_TORRE"/>
+                                                        <qry:attribute name="srv_torre" value="#ROW:/ROW/@SRV_TORRE"/>
                                                     </qry:if>
                                                     <qry:if left="#ROW:/ROW/@SRV_PISO" operator="not-equal" right="0" type="string">
-                                                        <qry:attribute name="v_srv_piso" value="#ROW:/ROW/@SRV_PISO"/>
+                                                        <qry:attribute name="srv_piso" value="#ROW:/ROW/@SRV_PISO"/>
                                                     </qry:if>
                                                     <qry:if left="#ROW:/ROW/@SRV_DEPTO" operator="not-equal" right="0" type="string">
-                                                        <qry:attribute name="v_srv_depto" value="#ROW:/ROW/@SRV_DEPTO"/>
+                                                        <qry:attribute name="srv_depto" value="#ROW:/ROW/@SRV_DEPTO"/>
                                                     </qry:if>
                                                     <qry:if left="#ROW:/ROW/@SRV_C_POSTAL" operator="not-equal" right="0" type="string">
-                                                        <qry:attribute name="v_srv_c_postal" value="#ROW:/ROW/@SRV_C_POSTAL"/>
+                                                        <qry:attribute name="srv_c_postal" value="#ROW:/ROW/@SRV_C_POSTAL"/>
                                                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                         <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                            <qry:attribute name="s_srv_agf_nombre" value="$s_srv_agf_nombre"/>
+                                                            <qry:attribute name="srv_agf_nombre" value="$s_srv_agf_nombre"/>
                                                         </qry:if>
                                                     </qry:if>
                                                     <!-- logica complicada direccion-->
@@ -1555,72 +1572,72 @@
                                             </qry:element>
                                         <qry:else/>
                                             <qry:if left="{$v_columna}" operator="equal" right="SRV_CALLE" type="string"> 
-                                                <qry:attribute name="v_srv_calle" value="#ROW:/ROW/@SRV_CALLE" length="$largos" align="left"/>
+                                                <qry:attribute name="srv_calle" value="#ROW:/ROW/@SRV_CALLE" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="SRV_NRO" type="string"> 
                                                     <qry:if left="#ROW:/ROW/@SRV_NRO" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="v_srv_nro" value="#ROW:/ROW/@SRV_NRO" length="$largos" align="left"/>
+                                                        <qry:attribute name="srv_nro" value="#ROW:/ROW/@SRV_NRO" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                     </qry:if>
                                                 <qry:else/>
                                                     <qry:if left="{$v_columna}" operator="equal" right="SRV_PISO" type="string"> 
-                                                        <qry:attribute name="v_srv_piso" value="#ROW:/ROW/@SRV_PISO" length="$largos" align="left"/>
+                                                        <qry:attribute name="srv_piso" value="#ROW:/ROW/@SRV_PISO" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="SRV_DEPTO" type="string"> 
-                                                            <qry:attribute name="v_srv_depto" value="#ROW:/ROW/@SRV_DEPTO" length="$largos" align="left"/>
+                                                            <qry:attribute name="srv_depto" value="#ROW:/ROW/@SRV_DEPTO" length="$largos" align="left"/>
                                                         <qry:else/>
                                                             <qry:if left="{$v_columna}" operator="equal" right="SRV_C_POSTAL" type="string"> 
                                                                 <qry:if left="#ROW:/ROW/@SRV_C_POSTAL" operator="greater" right="0" type="integer">
-                                                                    <qry:attribute name="v_srv_c_postal" value="#ROW:/ROW/@SRV_C_POSTAL" length="$largos" align="left"/>
+                                                                    <qry:attribute name="srv_c_postal" value="#ROW:/ROW/@SRV_C_POSTAL" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                 </qry:if>
                                                             <qry:else/>
                                                                 <qry:if left="{$v_columna}" operator="equal" right="AGF_CODIGO" type="string"> 
                                                                     <qry:if left="#ROW:/ROW/@AGF_CODIGO" operator="greater" right="0" type="integer">
-                                                                        <qry:attribute name="v_agf_codigo" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="agf_codigo" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                     </qry:if>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_columna}" operator="equal" right="SRV_FECHA_INSTAL" type="string"> 
-                                                                        <qry:attribute name="v_srv_fecha_instal" value="#ROW:/ROW/@SRV_FECHA_INSTAL" length="$largos" align="left"/>
+                                                                        <qry:attribute name="srv_fecha_instal" value="#ROW:/ROW/@SRV_FECHA_INSTAL" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_columna}" operator="equal" right="SRV_FECHA_BAJA" type="string"> 
-                                                                            <qry:attribute name="v_srv_fecha_baja" value="#ROW:/ROW/@SRV_FECHA_BAJA" length="$largos" align="left"/>
+                                                                            <qry:attribute name="srv_fecha_baja" value="#ROW:/ROW/@SRV_FECHA_BAJA" length="$largos" align="left"/>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="SRV_MOTIVO_BAJA" type="string"> 
-                                                                                <qry:attribute name="v_srv_motivo_baja" value="#ROW:/ROW/@SRV_MOTIVO_BAJA" length="$largos" align="left"/>
+                                                                                <qry:attribute name="srv_motivo_baja" value="#ROW:/ROW/@SRV_MOTIVO_BAJA" length="$largos" align="left"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="SRV_SUMINISTRO_ORIGINAL" type="string"> 
                                                                                     <qry:if left="#ROW:/ROW/@SRV_SUMINISTRO_ORIGINAL" operator="greater" right="0" type="integer">
-                                                                                        <qry:attribute name="v_srv_suministro_original" value="#ROW:/ROW/@SRV_SUMINISTRO_ORIGINAL" length="$largos" align="left"/>
+                                                                                        <qry:attribute name="srv_suministro_original" value="#ROW:/ROW/@SRV_SUMINISTRO_ORIGINAL" length="$largos" align="left"/>
                                                                                     <qry:else/>
                                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                     </qry:if>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="EDI_NUMERO" type="string"> 
                                                                                         <qry:if left="#ROW:/ROW/@EDI_NUMERO" operator="greater" right="0" type="integer">
-                                                                                            <qry:attribute name="v_edi_numero" value="#ROW:/ROW/@EDI_NUMERO" length="$largos" align="left"/>
+                                                                                            <qry:attribute name="edi_numero" value="#ROW:/ROW/@EDI_NUMERO" length="$largos" align="left"/>
                                                                                         <qry:else/>
                                                                                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                         </qry:if>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="SRV_ZONA_CAT" type="string"> 
-                                                                                            <qry:attribute name="v_srv_zona_cat" value="#ROW:/ROW/@SRV_ZONA_CAT" length="$largos" align="left"/>
+                                                                                            <qry:attribute name="srv_zona_cat" value="#ROW:/ROW/@SRV_ZONA_CAT" length="$largos" align="left"/>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_columna}" operator="equal" right="SRV_MANZANA_CAT" type="string"> 
-                                                                                                <qry:attribute name="v_srv_manzana_cat" value="#ROW:/ROW/@SRV_MANZANA_CAT" length="$largos" align="left"/>
+                                                                                                <qry:attribute name="srv_manzana_cat" value="#ROW:/ROW/@SRV_MANZANA_CAT" length="$largos" align="left"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="SRV_LOTE_CAT" type="string"> 
-                                                                                                    <qry:attribute name="v_srv_lote_cat" value="#ROW:/ROW/@SRV_LOTE_CAT" length="$largos" align="left"/>
+                                                                                                    <qry:attribute name="srv_lote_cat" value="#ROW:/ROW/@SRV_LOTE_CAT" length="$largos" align="left"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="SRV_ESTADO" type="string"> 
-                                                                                                        <qry:attribute name="v_srv_estado" value="#ROW:/ROW/@SRV_ESTADO" length="$largos" align="left"/>
+                                                                                                        <qry:attribute name="srv_estado" value="#ROW:/ROW/@SRV_ESTADO" length="$largos" align="left"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="SRV_OBSERVACIONES" type="string"> 
-                                                                                                            <qry:attribute name="v_srv_observaciones" value="#ROW:/ROW/@SRV_OBSERVACIONES" length="$largos" align="left"/>
+                                                                                                            <qry:attribute name="srv_observaciones" value="#ROW:/ROW/@SRV_OBSERVACIONES" length="$largos" align="left"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                         </qry:if>
@@ -1714,9 +1731,9 @@
                 <qry:element name="lectura">
                     <qry:if left="{$v_columna}" operator="equal" right="LCT_VALOR_LEIDO" type="string"> 
                         <qry:if left="#ROW:/ROW/@LCT_VALOR_LEIDO" operator="greater" right="0" type="double">
-                            <qry:attribute name="v_lct_valor_leido" value="#ROW:/ROW/@LCT_VALOR_LEIDO" length="$largos" align="left" format-number=".3"/>
+                            <qry:attribute name="lct_valor_leido" value="#ROW:/ROW/@LCT_VALOR_LEIDO" length="$largos" align="left" format-number=".3"/>
                         <qry:else/>
-                            <qry:attribute name="v_lct_valor_leido" value="" length="$largos" align="left"/>
+                            <qry:attribute name="lct_valor_leido" value="" length="$largos" align="left"/>
                         </qry:if>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
@@ -1784,20 +1801,20 @@
                         </qry:if>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="ORD_FECHA_GENERACION" type="string">
-                            <qry:attribute name="v_ord_fecha_generacion" value="{#ROW:/ROW/@ORD_FECHA_GENERACION}" length="$largos" align="left"/>
+                            <qry:attribute name="ord_fecha_generacion" value="{#ROW:/ROW/@ORD_FECHA_GENERACION}" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="ORD_FECHA_GEN_HABIL_ANT" type="string">
-                                <qry:attribute name="v_ord_fecha_gen_habil_ant" value="{#ROW:/ROW/@ORD_FECHA_GEN_HABIL_ANT}" length="$largos" align="left"/>
+                                <qry:attribute name="ord_fecha_gen_habil_ant" value="{#ROW:/ROW/@ORD_FECHA_GEN_HABIL_ANT}" length="$largos" align="left"/>
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="ORD_FECHA_VENCIMIENTO" type="string">
-                                    <qry:attribute name="v_ord_fecha_vencimiento" value="{#ROW:/ROW/@ORD_FECHA_VENCIMIENTO}" length="$largos" align="left"/>
+                                    <qry:attribute name="ord_fecha_vencimiento" value="{#ROW:/ROW/@ORD_FECHA_VENCIMIENTO}" length="$largos" align="left"/>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="ORD_DATOS_ADICIONALES" type="string">
-                                        <qry:attribute name="v_ord_datos_adicionales" value="{#ROW:/ROW/@ORD_DATOS_ADICIONALES}" length="$largos" align="left"/>
+                                        <qry:attribute name="ord_datos_adicionales" value="{#ROW:/ROW/@ORD_DATOS_ADICIONALES}" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
                                             <qry:if left="#ROW:/ROW/@SRV_CODIGO" operator="greater" right="0" type="integer">
-                                                <qry:attribute name="v_srv_codigo" value="{#ROW:/ROW/@SRV_CODIGO}" length="$largos" align="left"/>
+                                                <qry:attribute name="srv_codigo" value="{#ROW:/ROW/@SRV_CODIGO}" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                             </qry:if>
@@ -1839,7 +1856,7 @@
         <qry:out>
             <qry:element name="tipoOrdenativo">
                 <qry:if left="{$v_columna}" operator="equal" right="TOR_DESCRIPCION" type="string">    
-                    <qry:attribute name="l_tor_descripcion" value="$l_tor_descripcion"/>
+                    <qry:attribute name="tor_descripcion" value="$l_tor_descripcion"/>
                 <qry:else/>
                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                 </qry:if>
@@ -1861,7 +1878,7 @@
             <qry:for-each-row  doc="$TBL_potencias:">
                 <qry:element name="potencia">
                     <qry:if left="{$v_columna}" operator="equal" right="POT_VALOR" type="string">
-                        <qry:attribute name="v_pot_valor" value="{#ROW:/ROW/@POT_VALOR}" length="$largos" align="left" format-number=" 2"/>
+                        <qry:attribute name="pot_valor" value="{#ROW:/ROW/@POT_VALOR}" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                     </qry:if>
@@ -1908,10 +1925,10 @@
             <qry:for-each-row  doc="$TBL_stock_equipos:">
                 <qry:element name="stock_equipos">
                     <qry:if left="{$v_columna}" operator="equal" right="STE_NUMERO" type="string">
-                        <qry:attribute name="v_ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number=" 2"/>
+                        <qry:attribute name="ste_numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number=" 2"/>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="STE_TIPO" type="string">
-                            <qry:attribute name="v_ste_tipo" value="#ROW:/ROW/@STE_TIPO" length="$largos" align="left"/>
+                            <qry:attribute name="ste_tipo" value="#ROW:/ROW/@STE_TIPO" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
@@ -1952,10 +1969,10 @@
             <qry:for-each-row  doc="$TBL_sucursales:">
                 <qry:element name="sucursal">
                     <qry:if left="{$v_columna}" operator="equal" right="SCF_DESCRIPCION" type="string">
-                        <qry:attribute name="v_scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
+                        <qry:attribute name="scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
                     <qry:else/>
                         <qry:if left="{$v_columna}" operator="equal" right="SCF_DIRECCION" type="string">
-                            <qry:attribute name="v_scf_direccion" value="#ROW:/ROW/@SCF_DIRECCION" length="$largos" align="left"/>
+                            <qry:attribute name="scf_direccion" value="#ROW:/ROW/@SCF_DIRECCION" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
@@ -2120,7 +2137,7 @@
             <qry:for-each-row  doc="$TBL_tipos_iva:">
                 <qry:element name="tipoIVA">
                     <qry:if left="{$v_columna}" operator="equal" right="TCL_DESCRIPCION" type="string">
-                        <qry:attribute name="v_ivv_descripcion" value="#ROW:/ROW/@IVV_DESCRIPCION" length="$largos" align="left"/>
+                        <qry:attribute name="ivv_descripcion" value="#ROW:/ROW/@IVV_DESCRIPCION" length="$largos" align="left"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                     </qry:if>
@@ -2156,7 +2173,7 @@
             <qry:for-each-row  doc="$TBL_tarifas:">
                 <qry:element name="tarifa">
                     <qry:if left="{$v_columna}" operator="equal" right="TCL_DESCRIPCION" type="string">
-                        <qry:attribute name="v_tcl_descripcion" value="#ROW:/ROW/@TCL_DESCRIPCION" length="$largos" align="left"/>
+                        <qry:attribute name="tcl_descripcion" value="#ROW:/ROW/@TCL_DESCRIPCION" length="$largos" align="left"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                     </qry:if>
@@ -2218,7 +2235,7 @@
                             </qry:if>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO" type="string">
-                                <qry:attribute name="hv_doc_tipo" value="#ROW:/ROW/@DOC_TIPO" length="$largos" align="left"/>
+                                <qry:attribute name="doc_tipo" value="#ROW:/ROW/@DOC_TIPO" length="$largos" align="left"/>
                                 <qry:if left="#ROW:/ROW/@DOC_TIPO" operator="equal" right="FN" type="string">
                                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="1" operation="+"/>
                                 <qry:else/>
@@ -2231,100 +2248,100 @@
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO" type="string">
                                     <qry:if left="#ROW:/ROW/@DOC_NUMERO" operator="greater" right="0" type="integer">
-                                        <qry:attribute name="hv_doc_numero" value="#ROW:/ROW/@DOC_NUMERO" length="$largos" align="left"/>
+                                        <qry:attribute name="doc_numero" value="#ROW:/ROW/@DOC_NUMERO" length="$largos" align="left"/>
                                         <qry:set-variable name="CantidadDeFacturas" value="1" operation="+"/>
                                     <qry:else/>
                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                     </qry:if>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_EMISION" type="string">
-                                        <qry:attribute name="hv_doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION" length="$largos" align="left"/>
+                                        <qry:attribute name="doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_PERIODO" type="string">
                                             <qry:if left="#ROW:/ROW/@DOC_PERIODO" operator="greater" right="0" type="integer">
-                                                <qry:attribute name="hv_doc_periodo" value="{#ROW:/ROW/@DOC_PERIODO}/{#ROW:/ROW/@DOC_ANIO}" length="$largos" align="left"/>
+                                                <qry:attribute name="doc_periodo" value="{#ROW:/ROW/@DOC_PERIODO}/{#ROW:/ROW/@DOC_ANIO}" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                             </qry:if>
                                         <qry:else/>
                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ANIO" type="string">
                                                 <qry:if left="#ROW:/ROW/@DOC_ANIO" operator="greater" right="0" type="integer">
-                                                    <qry:attribute name="hv_doc_anio" value="#ROW:/ROW/@DOC_ANIO" length="$largos" align="left"/>
+                                                    <qry:attribute name="doc_anio" value="#ROW:/ROW/@DOC_ANIO" length="$largos" align="left"/>
                                                 <qry:else/>
                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                 </qry:if>
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_CUOTA" type="string">
                                                     <qry:if left="#ROW:/ROW/@DOC_CUOTA" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="hv_doc_cuota" value="#ROW:/ROW/@DOC_CUOTA" length="$largos" align="left"/>
+                                                        <qry:attribute name="doc_cuota" value="#ROW:/ROW/@DOC_CUOTA" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                     </qry:if>
                                                 <qry:else/>
                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO_ORIGEN" type="string">
-                                                        <qry:attribute name="hv_doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
+                                                        <qry:attribute name="doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO_ORIGEN" type="string">
                                                             <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="string">
-                                                                <qry:attribute name="hv_doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
+                                                                <qry:attribute name="doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                             </qry:if>
                                                         <qry:else/>
                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_CONSUMO" type="string">
                                                                 <qry:if left="#ROW:/ROW/@DOC_CONSUMO" operator="greater" right="0" type="integer">
-                                                                    <qry:attribute name="hv_doc_consumo" value="#ROW:/ROW/@DOC_CONSUMO" length="$largos" align="left"/>
+                                                                    <qry:attribute name="doc_consumo" value="#ROW:/ROW/@DOC_CONSUMO" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                 </qry:if>
                                                             <qry:else/>
                                                                 <qry:if left="{$v_columna}" operator="equal" right="ORD_NUMERO" type="string">
                                                                     <qry:if left="#ROW:/ROW/@ORD_NUMERO" operator="greater" right="0" type="integer">
-                                                                        <qry:attribute name="hv_ord_numero" value="#ROW:/ROW/@ORD_NUMERO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="ord_numero" value="#ROW:/ROW/@ORD_NUMERO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                     </qry:if>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_columna}" operator="equal" right="URC_CODIGO" type="string">
-                                                                        <qry:attribute name="hv_urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_columna}" operator="equal" right="ASI_NUMERO" type="string">
                                                                             <qry:if left="#ROW:/ROW/@ASI_NUMERO" operator="greater" right="0" type="integer">
-                                                                                <qry:attribute name="hv_asi_numero" value="#ROW:/ROW/@ASI_NUMERO" length="$largos" align="left"/>
+                                                                                <qry:attribute name="asi_numero" value="#ROW:/ROW/@ASI_NUMERO" length="$largos" align="left"/>
                                                                             <qry:else/>
                                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                             </qry:if>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE" type="string">
-                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
+                                                                                <qry:attribute name="doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE_BASICO" type="string">
-                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
+                                                                                    <qry:attribute name="doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_SALDO" type="string">
-                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
+                                                                                        <qry:attribute name="doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC" type="string">
-                                                                                            <qry:attribute name="hv_doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
+                                                                                            <qry:attribute name="doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC_1" type="string">
-                                                                                                <qry:attribute name="hv_doc_fecha_venc_1" value="#ROW:/ROW/@DOC_FECHA_VENC_1" length="$largos" align="left"/>
+                                                                                                <qry:attribute name="doc_fecha_venc_1" value="#ROW:/ROW/@DOC_FECHA_VENC_1" length="$largos" align="left"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC_2" type="string">
-                                                                                                    <qry:attribute name="hv_doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
+                                                                                                    <qry:attribute name="doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_2" type="string">
-                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
+                                                                                                        <qry:attribute name="doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_3" type="string">
-                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
+                                                                                                            <qry:attribute name="doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ESTADO" type="string">
-                                                                                                                <qry:attribute name="hv_doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
+                                                                                                                <qry:attribute name="doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
                                                                                                             <qry:else/>
                                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="LLAMADA_SIT_X" type="string">
-                                                                                                                    <qry:attribute name="hv_llamada_sit_x" value="#ROW:/ROW/@LLAMADA_SIT_X" length="$largos" align="left"/>
+                                                                                                                    <qry:attribute name="llamada_sit_x" value="#ROW:/ROW/@LLAMADA_SIT_X" length="$largos" align="left"/>
                                                                                                                 <qry:else/>
                                                                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                                 </qry:if>
@@ -2450,7 +2467,7 @@
                             </qry:if>
                         <qry:else/>
                             <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO" type="string">
-                                <qry:attribute name="hv_doc_tipo" value="{#ROW:/ROW/@DOC_TIPO}" length="$largos" align="left"/>
+                                <qry:attribute name="doc_tipo" value="{#ROW:/ROW/@DOC_TIPO}" length="$largos" align="left"/>
                                 <qry:if left="#ROW:/ROW/@DOC_TIPO" operator="equal" right="FN" type="string">
                                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="1" operation="+"/>
                                 <qry:else/>
@@ -2463,100 +2480,100 @@
                             <qry:else/>
                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO" type="string">
                                     <qry:if left="#ROW:/ROW/@DOC_NUMERO" operator="greater" right="0" type="integer">
-                                        <qry:attribute name="hv_doc_numero" value="#ROW:/ROW/@DOC_NUMERO" length="$largos" align="left"/>
+                                        <qry:attribute name="doc_numero" value="#ROW:/ROW/@DOC_NUMERO" length="$largos" align="left"/>
                                         <qry:set-variable name="CantidadDeFacturas" value="1" operation="+"/>
                                     <qry:else/>
                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                     </qry:if>
                                 <qry:else/>
                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_EMISION" type="string">
-                                        <qry:attribute name="hv_doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION" length="$largos" align="left"/>
+                                        <qry:attribute name="doc_fecha_emision" value="#ROW:/ROW/@DOC_FECHA_EMISION" length="$largos" align="left"/>
                                     <qry:else/>
                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_PERIODO" type="string">
                                             <qry:if left="#ROW:/ROW/@DOC_PERIODO" operator="greater" right="0" type="integer">
-                                                <qry:attribute name="hv_doc_periodo" value="{#ROW:/ROW/@DOC_PERIODO}/{#ROW:/ROW/@DOC_ANIO}" length="$largos" align="left"/>
+                                                <qry:attribute name="doc_periodo" value="{#ROW:/ROW/@DOC_PERIODO}/{#ROW:/ROW/@DOC_ANIO}" length="$largos" align="left"/>
                                             <qry:else/>
                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                             </qry:if>
                                         <qry:else/>
                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ANIO" type="string">
                                                 <qry:if left="#ROW:/ROW/@DOC_ANIO" operator="greater" right="0" type="integer">
-                                                    <qry:attribute name="hv_doc_anio" value="#ROW:/ROW/@DOC_ANIO" length="$largos" align="left"/>
+                                                    <qry:attribute name="doc_anio" value="#ROW:/ROW/@DOC_ANIO" length="$largos" align="left"/>
                                                 <qry:else/>
                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                 </qry:if>
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_CUOTA" type="string">
                                                     <qry:if left="#ROW:/ROW/@DOC_CUOTA" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="hv_doc_cuota" value="#ROW:/ROW/@DOC_CUOTA" length="$largos" align="left"/>
+                                                        <qry:attribute name="doc_cuota" value="#ROW:/ROW/@DOC_CUOTA" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                     </qry:if>
                                                 <qry:else/>
                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_TIPO_ORIGEN" type="string">
-                                                        <qry:attribute name="hv_doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
+                                                        <qry:attribute name="doc_tipo_origen" value="#ROW:/ROW/@DOC_TIPO_ORIGEN" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_NUMERO_ORIGEN" type="string">
                                                             <qry:if left="#ROW:/ROW/@DOC_NUMERO_ORIGEN" operator="greater" right="0" type="string">
-                                                                <qry:attribute name="hv_doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
+                                                                <qry:attribute name="doc_numero_origen" value="#ROW:/ROW/@DOC_NUMERO_ORIGEN" length="$largos" align="left"/>
                                                             <qry:else/>
                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                             </qry:if>
                                                         <qry:else/>
                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_CONSUMO" type="string">
                                                                 <qry:if left="#ROW:/ROW/@DOC_CONSUMO" operator="greater" right="0" type="integer">
-                                                                    <qry:attribute name="hv_doc_consumo" value="#ROW:/ROW/@DOC_CONSUMO" length="$largos" align="left"/>
+                                                                    <qry:attribute name="doc_consumo" value="#ROW:/ROW/@DOC_CONSUMO" length="$largos" align="left"/>
                                                                 <qry:else/>
                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                 </qry:if>
                                                             <qry:else/>
                                                                 <qry:if left="{$v_columna}" operator="equal" right="ORD_NUMERO" type="string">
                                                                     <qry:if left="#ROW:/ROW/@ORD_NUMERO" operator="greater" right="0" type="integer">
-                                                                        <qry:attribute name="hv_ord_numero" value="#ROW:/ROW/@ORD_NUMERO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="ord_numero" value="#ROW:/ROW/@ORD_NUMERO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                     </qry:if>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_columna}" operator="equal" right="URC_CODIGO" type="string">
-                                                                        <qry:attribute name="hv_urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
+                                                                        <qry:attribute name="urc_codigo" value="#ROW:/ROW/@URC_CODIGO" length="$largos" align="left"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_columna}" operator="equal" right="ASI_NUMERO" type="string">
                                                                             <qry:if left="#ROW:/ROW/@ASI_NUMERO" operator="greater" right="0" type="integer">
-                                                                                <qry:attribute name="hv_asi_numero" value="#ROW:/ROW/@ASI_NUMERO" length="$largos" align="left"/>
+                                                                                <qry:attribute name="asi_numero" value="#ROW:/ROW/@ASI_NUMERO" length="$largos" align="left"/>
                                                                             <qry:else/>
                                                                                 <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                             </qry:if>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE" type="string">
-                                                                                <qry:attribute name="hv_doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
+                                                                                <qry:attribute name="doc_importe" value="#ROW:/ROW/@DOC_IMPORTE" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_IMPORTE_BASICO" type="string">
-                                                                                    <qry:attribute name="hv_doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
+                                                                                    <qry:attribute name="doc_importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" length="$largos" align="left" format-number=" 2"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_SALDO" type="string">
-                                                                                        <qry:attribute name="hv_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
+                                                                                        <qry:attribute name="doc_saldo" value="#ROW:/ROW/@DOC_SALDO" length="$largos" align="left" format-number=" 2"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC" type="string">
-                                                                                            <qry:attribute name="hv_doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
+                                                                                            <qry:attribute name="doc_fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="$largos" align="left"/>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC_1" type="string">
-                                                                                                <qry:attribute name="hv_doc_fecha_venc_1" value="#ROW:/ROW/@DOC_FECHA_VENC_1" length="$largos" align="left"/>
+                                                                                                <qry:attribute name="doc_fecha_venc_1" value="#ROW:/ROW/@DOC_FECHA_VENC_1" length="$largos" align="left"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="DOC_FECHA_VENC_2" type="string">
-                                                                                                    <qry:attribute name="hv_doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
+                                                                                                    <qry:attribute name="doc_fecha_venc_2" value="#ROW:/ROW/@DOC_FECHA_VENC_2" length="$largos" align="left"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_2" type="string">
-                                                                                                        <qry:attribute name="hv_doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
+                                                                                                        <qry:attribute name="doc_recargo_venc_2" value="#ROW:/ROW/@DOC_RECARGO_VENC_2" length="$largos" align="left" format-number=" 2"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_columna}" operator="equal" right="DOC_RECARGO_VENC_3" type="string">
-                                                                                                            <qry:attribute name="hv_doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
+                                                                                                            <qry:attribute name="doc_recargo_venc_3" value="#ROW:/ROW/@DOC_RECARGO_VENC_3" length="$largos" align="left" format-number=" 2"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_columna}" operator="equal" right="DOC_ESTADO" type="string">
-                                                                                                                <qry:attribute name="hv_doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
+                                                                                                                <qry:attribute name="doc_estado" value="#ROW:/ROW/@DOC_ESTADO" length="$largos" align="left"/>
                                                                                                             <qry:else/>
                                                                                                                 <qry:if left="{$v_columna}" operator="equal" right="LLAMADA_SIT_X" type="string">
-                                                                                                                    <qry:attribute name="hv_llamada_sit_x" value="#ROW:/ROW/@LLAMADA_SIT_X" length="$largos" align="left"/>
+                                                                                                                    <qry:attribute name="llamada_sit_x" value="#ROW:/ROW/@LLAMADA_SIT_X" length="$largos" align="left"/>
                                                                                                                 <qry:else/>
                                                                                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                                                                                 </qry:if>
@@ -2654,14 +2671,14 @@
             <qry:for-each-row  doc="$TBL_totales_tramites:">    
                 <qry:element name="totalesTramite">
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_CANT_DOC" type="string">
-                        <qry:attribute name="v_cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left"/>
+                        <qry:attribute name="cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DOC" type="string">
-			    		<qry:attribute name="v_suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number=" 2"/>
+			    		<qry:attribute name="suma_doc" value="#ROW:/ROW/@TTR_SUMA_DOC" length="$largos" align="left" format-number=" 2"/>
 			        </qry:if>
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_SUMA_DEC" type="string">
                         <qry:if left="#ROW:/ROW/@TTR_SUMA_DEC" operator="not-equal" right="0" type="integer">
-                            <qry:attribute name="v_suma_dec" value="#ROW:/ROW/@TTR_SUMA_DEC_MESSG" length="$largos" align="left"/>
+                            <qry:attribute name="suma_dec" value="#ROW:/ROW/@TTR_SUMA_DEC_MESSG" length="$largos" align="left"/>
                         <qry:else/>
                             <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                         </qry:if>
@@ -2700,7 +2717,7 @@
             <qry:for-each-row>
                 <qry:element name="usuarios" >
                     <qry:if left="{$v_columna}" operator="equal" right="SCF_CODIGO" type="string">
-                        <qry:attribute name="v_scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
+                        <qry:attribute name="scf_descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
                     <qry:else/>
                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
 		            </qry:if>
@@ -2714,8 +2731,8 @@
         <qry:select dump="0">
             SELECT PRS_NUMERO
             FROM CONTRATOS
-            WHERE CNT_NUMERO = {$cnt_num_ori}
-	            AND SRV_CODIGO = {$srv_cod_ori}
+            WHERE CNT_NUMERO = {$cnt_num}
+	            AND SRV_CODIGO = {$srv_cod}
         </qry:select>
         <qry:out>
             <qry:for-each-row>
