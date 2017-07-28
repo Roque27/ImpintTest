@@ -2,21 +2,36 @@
 
 . /home/app_sicp_exe/vars/vars_sic.include
 
-Archivo=impint_doc
+# FICHEROS USADOS EN EL PROCESO
+Fichero=impint_doc
 Login=lgas/taxi@sict2
-Parametro=${Archivo}.param.xml
-Ejecutable=${Archivo}.xml
-Salida=${Archivo}.out.xml
-QueryInsert=${Archivo}.insert.xml
-QueryUpdate=${Archivo}.update.xml
-QueryExecute=${Archivo}.execute.xml
+Parametro=${Fichero}.param.xml
+Ejecutable=${Fichero}.xml
+Salida=${Fichero}.out.xml
+QueryInsert=${Fichero}.insert.xml
+QueryUpdate=${Fichero}.update.xml
+QueryExecute=${Fichero}.execute.xml
 
 > ${Salida}
 > ${QueryInsert}
 > ${QueryUpdate}
 > ${QueryExecute}
 
-cat > ${Archivo}.param.xml <<EOF
+# ARGUMENTOS DEL PROCESO
+Archivo=
+Reporte=
+Incobrables=
+Usuario=
+Impresora=
+TipoCorreo=
+Correo=
+TorCodigo=
+Suc=
+Sec=
+OrdDesde=
+OrdHasta=
+
+cat > ${Fichero}.param.xml <<EOF
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <IMPINT_PARAM>
     <NOMBREARCHIVO PARAMFILE="ALEATORIO_19688046"/>
@@ -44,24 +59,27 @@ for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
 do
 	command=`echo ${key} | cut -d"|" -f1`
 	id=`echo ${key} | cut -d"|" -f2`
-	# echo ${command}
-	# echo ${id}
+	#echo ${command}
+	#echo ${id}
 	case ${command} in
 		INSERT)
-			echo "================= INSERT QUERY ================="
-			Xalan -param id "'${id}'" -in ${Salida} -xsl get_command.xsl -out ${QueryInsert}
-			cat ${QueryInsert} #>> ${QueryExecute}
+			echo "================= INSERT QUERY ==================================================="
+			xalan -param id "'${id}'" -in ${Salida} -xsl get_command.xsl -out ${QueryInsert}
+			cat ${QueryInsert} >> ${QueryExecute}
+			echo ""
 			;;
 		UPDATE)
-			echo "================= UPDATE QUERY ================="
-			Xalan -param id "'${id}'" -in ${Salida} -xsl get_command.xsl -out ${QueryUpdate}
-			cat ${QueryUpdate} #>> ${QueryExecute}			
+			echo "================= UPDATE QUERY ==================================================="
+			xalan -param id "'${id}'" -in ${Salida} -xsl get_command.xsl -out ${QueryUpdate}
+			cat ${QueryUpdate} >> ${QueryExecute}
+			echo ""		
 			;;
-        #EXECUTESQL)
-		#	echo "================= EXECUTESQL ================="
-		#	echo quit >> ${QueryExecute}
-		#	echo exit | sqlplus -s lgas/taxi@sict2 @${QueryExecute}
-		#	;;
+    EXECUTESQL)
+			echo "================= EXECUTESQL ====================================================="
+			echo quit >> ${QueryExecute}
+			cat ${QueryExecute}
+			#echo exit | sqlplus -s lgas/taxi@sict2 @${QueryExecute}
+			;;
 		*)
 			echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE COMANDO"
  			exit 1

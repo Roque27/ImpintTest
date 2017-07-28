@@ -248,7 +248,9 @@
             <qry:insert-query name="SeleccionaEstadoInicial"/>
             <!-- INSERT Control de procesos salida-->
             <qry:element name="Main">
-                <qry:element name="SqlCommand" type="INSERT" id="1">
+                <qry:element name="SqlCommand">
+                    <qry:attribute name="type" value="INSERT"/>
+                    <qry:attribute name="id" value="1"/>
                     <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
                     <!--<qry:element name="control_procesos">
                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
@@ -318,7 +320,9 @@
                             <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
                             <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="equal" right="CD" type="string">
-                                <qry:element name="SqlCommand" type="UPDATE" id="2">
+                                <qry:element name="SqlCommand">
+                                    <qry:attribute name="type" value="UPDATE"/>
+                                    <qry:attribute name="id" value="2"/>
                                     <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
@@ -328,7 +332,9 @@
                                     </qry:element>-->
                                 </qry:element>
                             <qry:else/>
-                                <qry:element name="SqlCommand" type="UPDATE" id="3">
+                                <qry:element name="SqlCommand">
+                                    <qry:attribute name="type" value="UPDATE"/>
+                                    <qry:attribute name="id" value="3"/>
                                     <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
@@ -342,7 +348,9 @@
                         <qry:else/>
                             <qry:attribute name="Imputacion_Incobrables" value="{$Imputacion_Incobrables}"/>
                             <qry:if left="{$Imputacion_Incobrables}" operator="not-equal" right="1" type="integer">
-                                <qry:element name="SqlCommand" type="UPDATE" id="3">
+                                <qry:element name="SqlCommand">
+                                    <qry:attribute name="type" value="UPDATE"/>
+                                    <qry:attribute name="id" value="4"/>
                                     <qry:text value="UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = {$l_cpr_numero} ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="ord_estado" value="A"/>
@@ -372,7 +380,9 @@
 
             <!-- UPDATE Control de procesos salida-->
             <qry:element name="Main">
-                <qry:element name="SqlCommand" type="UPDATE" id="4">
+                <qry:element name="SqlCommand">
+                    <qry:attribute name="type" value="UPDATE"/>
+                    <qry:attribute name="id" value="5"/>
                     <qry:text value="UPDATE control_procesos SET est_codigo = '{$l_prox_est_codigo}' WHERE cpr_numero = {$l_cpr_numero}; "/>     
                     <!--<qry:element name="control_procesos">
                         <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
@@ -397,6 +407,13 @@
                     <!-- Quilombo -->
                 </qry:if>
             </qry:if>
+
+            <qry:element name="Main">
+                <qry:element name="SqlCommand">
+                    <qry:attribute name="type" value="EXECUTESQL"/>
+                    <qry:attribute name="id" value="6"/>
+                </qry:element>
+            </qry:element>
         </qry:out>
     </qry:query>
 
