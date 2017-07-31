@@ -18,40 +18,94 @@ QueryExecute=${Fichero}.execute.xml
 > ${QueryExecute}
 
 # ARGUMENTOS DEL PROCESO
-Archivo=
-Reporte=
-Incobrables=
-Usuario=
-Impresora=
-TipoCorreo=
-Correo=
-TorCodigo=
-Suc=
-Sec=
-OrdDesde=
-OrdHasta=
+
+Archivo=""
+Reporte=""
+Incobrables=0
+Usuario=""
+Impresora=""
+TipoCorreo=""
+Correo=""
+TorCodigo=""
+Suc=""
+Sec=""
+OrdDesde=""
+OrdHasta=""
+
+# CARGA DE ARGUMENTOS VARIABLES
+
+while [ "$1" != "" ]
+do
+#  echo PARAM: $1
+	argumento=$(echo $1 | cut -d"=" -f1)
+	valor=$(echo $1 | cut -d"=" -f2)
+
+  case ${argumento} in
+  file) echo 'Archivo: ' ${valor};
+		Archivo=${valor}
+    ;;
+	Reporte) echo 'Reporte: ' ${valor};
+		Reporte=${valor}
+    ;;
+	INCOBRABLES) echo 'Incobrables: ' ${valor};
+		if [ ${valor} == "S" ]; then
+		  Incobrables=1
+		else
+		 	Incobrables=0
+		fi
+    ;;
+	User) echo 'Usuario: ' ${valor};
+		Usuario=${valor}
+    ;;
+	impr) echo 'Impresora: ' ${valor};
+		Impresora=${valor}
+    ;;
+	Tipo) echo 'TipoCorreo: ' ${valor};
+		TipoCorreo=${valor}
+    ;;
+	Correo) echo 'Correo: ' ${valor};
+		Correo=${valor}
+    ;;
+	Tor_codigo) echo 'TorCodigo: ' ${valor};
+		TorCodigo=${valor}
+    ;;
+	Suc) echo 'Suc: ' ${valor};
+		Suc=${valor}
+    ;;
+	Sec) echo 'Sec: ' ${valor};
+		Sec=${valor}
+    ;;
+	Ord_Dsd) echo 'OrdDesde: ' ${valor};
+		OrdDesde=${valor}
+    ;;
+	Ord_Hst) echo 'OrdHasta: ' ${valor};
+		OrdHasta=${valor}
+    ;;
+  esac
+  shift
+done
 
 cat > ${Fichero}.param.xml <<EOF
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <IMPINT_PARAM>
-    <NOMBREARCHIVO PARAMFILE="ALEATORIO_19688046"/>
-    <REPORTE PARAMREPCODIGO="DEU_3401"/>
-    <INCOBRABLES PARAMINCOBRABLES="S"/>
-    <USER PARAMUSER="ASOSA"/>
-    <PRINT PARAMIMPR="1"/>
-    <TIPOCORREO PARAMCODTIPOCORREO="CO"/>
-    <CORREO PARAMCODCORREO="SEND"/>
-    <TOR_CODIGO PARAMTORCOD="I1"/>
-    <SUC PARAMSUC="12"/>
-    <SEC PARAMSEC="GESCOB"/>
-    <ORD_DESDE PARAMORDDSD="11259135"/>
-    <ORD_HASTA PARAMORDHST="11259135"/>
+    <NOMBREARCHIVO PARAMFILE="${Archivo}"/>
+    <REPORTE PARAMREPCODIGO="${Reporte}"/>
+    <INCOBRABLES PARAMINCOBRABLES="${Incobrables}"/>
+    <USER PARAMUSER="${Usuario}"/>
+    <PRINT PARAMIMPR="${Impresora}"/>
+    <TIPOCORREO PARAMCODTIPOCORREO="${TipoCorreo}"/>
+    <CORREO PARAMCODCORREO="${Correo}"/>
+    <TOR_CODIGO PARAMTORCOD="${TorCodigo}"/>
+    <SUC PARAMSUC="${Suc}"/>
+    <SEC PARAMSEC="${Sec}"/>
+    <ORD_DESDE PARAMORDDSD="${OrdDesde}"/>
+    <ORD_HASTA PARAMORDHST="${OrdHasta}"/>
 </IMPINT_PARAM>
 EOF
 
 #<ORD_HASTA PARAMORDHST="11260163"/>
 
-../Ora2Xml -user=lgas/taxi@sict2 -wenc=iso-8859-1 -ofile=${Salida} ${Ejecutable} ${Parametro}
+#../Ora2Xml -user=lgas/taxi@sict2 -wenc=iso-8859-1 -ofile=${Salida} ${Ejecutable} ${Parametro}
 #cat ${Salida} | ./XMLD
 echo ""
 
