@@ -12,12 +12,12 @@
 
 	<xsl:preserve-space elements="*"/>
 
-<xsl:template match="/">
-	<xsl:apply-templates select="/raiz/Main/SqlCommand"/>
-</xsl:template>
-
-<xsl:template match="SqlCommand">
-	<xsl:value-of select="@type"/><xsl:text>|</xsl:text><xsl:value-of select="@id"/>&fl;
-</xsl:template>
+	<xsl:template match="/">
+		<xsl:apply-templates select="/raiz/Main/SqlCommand"/>
+	</xsl:template>
+	
+	<xsl:template match="SqlCommand">
+		<xsl:value-of select="@type"/><xsl:text>|</xsl:text><xsl:value-of select="@id"/>&fl;
+	</xsl:template>
 
 </xsl:stylesheet>
