@@ -1,0 +1,1 @@
+UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1193425; 

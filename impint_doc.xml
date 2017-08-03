@@ -179,7 +179,7 @@
          <!-- No posee select propio -->
         <qry:out>
             
-            <qry:element name="raiz">
+            <qry:element name="Impint">
               <!--<qry:element name="PARAMETROS">
                 <qry:attribute name="NOMBREARCHIVO" value="#PARAM:/IMPINT_PARAM/NOMBREARCHIVO/@PARAMFILE"/>
                 <qry:attribute name="REPORTE" value="#PARAM:/IMPINT_PARAM/REPORTE/@PARAMREPCODIGO"/>
@@ -247,7 +247,7 @@
             <qry:insert-query name="SeleccionaFechaActual"/>
             <qry:insert-query name="SeleccionaEstadoInicial"/>
             <!-- INSERT Control de procesos salida-->
-            <qry:element name="Main">
+            <qry:element name="Notificacion">
                 <qry:element name="SqlCommand">
                     <qry:attribute name="type" value="INSERT"/>
                     <qry:attribute name="id" value="1"/>
@@ -274,7 +274,7 @@
                 <qry:set-variable name="l_tor_descripcion" value="#ROW:/ROW/@TOR_DESCRIPCION"/>
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
 
-                <qry:element name="Main">
+                <qry:element name="Datos">
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
                     <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="less" right="{$OrdenDesde}" type="integer">
@@ -379,20 +379,18 @@
             <qry:insert-query name="SeleccionaProxEstado"/>
 
             <!-- UPDATE Control de procesos salida-->
-            <qry:element name="Main">
-                <qry:element name="SqlCommand">
-                    <qry:attribute name="type" value="UPDATE"/>
-                    <qry:attribute name="id" value="5"/>
-                    <qry:text value="UPDATE control_procesos SET est_codigo = '{$l_prox_est_codigo}' WHERE cpr_numero = {$l_cpr_numero}; "/>     
-                    <!--<qry:element name="control_procesos">
-                        <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
-                        <qry:element name="WHERE">
-                            <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
-                        </qry:element>
-                    </qry:element>-->
-                </qry:element>
+            <qry:element name="SqlCommand">
+                <qry:attribute name="type" value="UPDATE"/>
+                <qry:attribute name="id" value="5"/>
+                <qry:text value="UPDATE control_procesos SET est_codigo = '{$l_prox_est_codigo}' WHERE cpr_numero = {$l_cpr_numero}; "/>     
+                <!--<qry:element name="control_procesos">
+                    <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
+                    <qry:element name="WHERE">
+                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                    </qry:element>
+                </qry:element>-->
             </qry:element>
-            
+
             
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
                 <qry:insert-query name="GrabaEnReportes"/>
@@ -780,6 +778,7 @@
         </qry:select>
         <qry:out>
             <qry:set-variable name="TESTnotifi" value="0"/>
+            <qry:element name="notificacion">
             <qry:for-each-row>
                 <qry:set-variable name="TESTnotifi" value="1" operation="+"/>
                 
@@ -787,7 +786,6 @@
                 <qry:if left="{$v_tabla}" operator="not-equal" right="DOCUMENTOS" type="string">
                     <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/> <!-- Largo del texto para la columna  -->
                 </qry:if>
-                <qry:element name="notificacion">
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
                         <qry:print output="stdout" value="Bucle-T-Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>
                         <qry:if left="{$ban}" operator="equal" right="1" type="integer">
@@ -1017,8 +1015,8 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
-                </qry:element>
             </qry:for-each-row>
+            </qry:element>
         </qry:out>
     </qry:query>
 
