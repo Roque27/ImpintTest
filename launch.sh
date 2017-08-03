@@ -3,6 +3,7 @@
 . /home/app_sicp_exe/vars/vars_sic.include
 
 # FICHEROS USADOS EN EL PROCESO
+
 Fichero=impint_doc
 Login=lgas/taxi@sict2
 Parametro=${Fichero}.param.xml
