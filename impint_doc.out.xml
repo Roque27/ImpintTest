@@ -2,27 +2,27 @@
 <Impint>
 
   <Notificacion>
-    <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1193427, 'IN', 1035, 'IN', 'P', '03-AUG-17'); </SqlCommand>
+    <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1193429, 'IN', 1035, 'IN', 'P', '04-AUG-17'); </SqlCommand>
   </Notificacion>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259135"/>
+    <codigoBarras barras="0011259135"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="MURATURE L M R DE             "/>
+      <persona razon_social="MURATURE L M R DE             "/>
       <contrato>
-        <srv_direccion cll_nombre="AV. DE MAYO (EX J. A. ROCA)" cnt_c_postal_pago="2700" cnt_nro_pago="1701" srv_agf_nombre="PERGAMINO"/>
+        <srv_direccion agf_nombre="PERGAMINO" cll_nombre="AV. DE MAYO (EX J. A. ROCA)" cod_postal_pago="2700" nro_pago="1701"/>
       </contrato>
       <ordenativo nro_ord="11259135       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="71676   "/>
+      <persona numero="71676   "/>
       <contrato srv_cod="71676   "/>
-      <contrato cnt_num="1 "/>
+      <contrato num="1 "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
@@ -46,58 +46,58 @@
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAp; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAp; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259136"/>
+    <codigoBarras barras="0011259136"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="FALETTY HORACIO AGUSTIN       "/>
+      <persona razon_social="FALETTY HORACIO AGUSTIN       "/>
       <contrato>
-        <srv_direccion cll_nombre="SAN LORENZO" cnt_c_postal_pago="2000" cnt_depto_pago="04" cnt_nro_pago="826" cnt_piso_pago="03" srv_agf_nombre="ROSARIO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal_pago="2000" depto_pago="04" nro_pago="826" piso_pago="03"/>
       </contrato>
       <ordenativo nro_ord="11259136       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="960888  "/>
+      <persona numero="960888  "/>
       <contrato srv_cod="73853   "/>
-      <contrato cnt_num="5 "/>
+      <contrato num="5 "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAq; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAq; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259137"/>
+    <codigoBarras barras="0011259137"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="ZUCCHINI CARLOS FEDERICO      "/>
+      <persona razon_social="ZUCCHINI CARLOS FEDERICO      "/>
       <contrato>
-        <srv_direccion cll_nombre="SAN LORENZO" cnt_c_postal_pago="2000" cnt_depto_pago="D03" cnt_nro_pago="833" cnt_piso_pago="09" cnt_torre_pago="P" srv_agf_nombre="ROSARIO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal_pago="2000" depto_pago="D03" nro_pago="833" piso_pago="09" torre_pago="P"/>
       </contrato>
       <ordenativo nro_ord="11259137       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="949214  "/>
+      <persona numero="949214  "/>
       <contrato srv_cod="41969   "/>
-      <contrato cnt_num="2 "/>
+      <contrato num="2 "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
@@ -111,29 +111,29 @@
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAr; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAr; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259138"/>
+    <codigoBarras barras="0011259138"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="JUNCO JUAN CARLOS             "/>
+      <persona razon_social="JUNCO JUAN CARLOS             "/>
       <contrato>
-        <srv_direccion cll_nombre="SAN LORENZO" cnt_c_postal_pago="2000" cnt_depto_pago="D02" cnt_nro_pago="857" cnt_piso_pago="04" cnt_torre_pago="P" srv_agf_nombre="ROSARIO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal_pago="2000" depto_pago="D02" nro_pago="857" piso_pago="04" torre_pago="P"/>
       </contrato>
       <ordenativo nro_ord="11259138       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="899907  "/>
+      <persona numero="899907  "/>
       <contrato srv_cod="45201   "/>
-      <contrato cnt_num="5 "/>
+      <contrato num="5 "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
@@ -143,29 +143,29 @@
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAA; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAA; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259139"/>
+    <codigoBarras barras="0011259139"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="GUEGLIO JOSEFINA              "/>
+      <persona razon_social="GUEGLIO JOSEFINA              "/>
       <contrato>
-        <srv_direccion cll_nombre="SAN LORENZO" cnt_c_postal_pago="2000" cnt_nro_pago="864" cnt_piso_pago="J" cnt_torre_pago="D" srv_agf_nombre="ROSARIO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal_pago="2000" nro_pago="864" piso_pago="J" torre_pago="D"/>
       </contrato>
       <ordenativo nro_ord="11259139       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="11622   "/>
+      <persona numero="11622   "/>
       <contrato srv_cod="11622   "/>
-      <contrato cnt_num="1 "/>
+      <contrato num="1 "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
       <documentoD2 llamada_sit_x="   "/>
@@ -173,40 +173,40 @@
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAB; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAB; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
-    <codigoBarras string_barras="0011259140"/>
+    <codigoBarras barras="0011259140"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
-      <persona prs_numero="CUSINIER GUILLERMO D          "/>
+      <persona razon_social="CUSINIER GUILLERMO D          "/>
       <contrato>
-        <srv_direccion cll_nombre="SAN LORENZO" cnt_c_postal_pago="2000" cnt_depto_pago="C" cnt_nro_pago="882" cnt_piso_pago="BD" cnt_torre_pago="P" srv_agf_nombre="ROSARIO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal_pago="2000" depto_pago="C" nro_pago="882" piso_pago="BD" torre_pago="P"/>
       </contrato>
       <ordenativo nro_ord="11259140       "/>
-      <ordenativo ord_fecha_generacion="20/07/2017"/>
-      <ordenativo ord_fecha_gen_habil_ant="19/07/2017"/>
+      <ordenativo fecha_generacion="20/07/2017"/>
+      <ordenativo fecha_gen_habil_ant="19/07/2017"/>
       <servicio scf_codigo="12 "/>
-      <sucursal scf_descripcion="Rosario                  "/>
+      <sucursal descripcion="Rosario                  "/>
       <servicio>
-        <srv_direccion srv_agf_nombre="ROSARIO" srv_c_postal="2000" srv_depto="D02" srv_nro="826" srv_piso="14" srv_torre="P" v_cll_nombre="SAN LORENZO"/>
+        <srv_direccion agf_nombre="ROSARIO" cll_nombre="SAN LORENZO" cod_postal="2000" depto="D02" nro="826" piso="14" torre="P"/>
       </servicio>
-      <persona prs_numero="1005773 "/>
+      <persona numero="1005773 "/>
       <contrato srv_cod="8836    "/>
-      <contrato cnt_num="4 "/>
+      <contrato num="4 "/>
       <documentoD2 llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo tor_descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
+      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193427 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAC; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAC; </SqlCommand>
   </Datos>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1193427; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1193429; </SqlCommand>
 
   <Main>
     <SqlCommand id="6" type="EXECUTESQL"/>
