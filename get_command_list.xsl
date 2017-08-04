@@ -13,7 +13,7 @@
 	<xsl:preserve-space elements="*"/>
 
 	<xsl:template match="/">
-		<xsl:apply-templates select="//SqlCommand"/>
+		<xsl:apply-templates select="/raiz/Main/SqlCommand"/>
 	</xsl:template>
 	
 	<xsl:template match="SqlCommand">

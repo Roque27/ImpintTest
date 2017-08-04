@@ -2,8 +2,6 @@
 
 . /home/app_sicp_exe/vars/vars_sic.include
 
-#Xalan salida2.xml get_impint.xsl
-
 # FICHEROS USADOS EN EL PROCESO
 Fichero=impint_doc
 Login=lgas/taxi@sict2
