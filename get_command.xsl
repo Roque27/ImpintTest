@@ -13,7 +13,7 @@
 	<xsl:preserve-space elements="*"/>
 
     <xsl:template match="/">
-        <xsl:copy-of select="/raiz/Main/SqlCommand[@id=$id]/node()"/>
+        <xsl:copy-of select="//SqlCommand[@id=$id]/node()"/>
     </xsl:template>
 </xsl:stylesheet>
 

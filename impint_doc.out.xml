@@ -2,7 +2,7 @@
 <Impint>
 
   <Notificacion>
-    <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1193429, 'IN', 1035, 'IN', 'P', '04-AUG-17'); </SqlCommand>
+    <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1200239, 'IN', 1035, 'IN', 'P', '07-AUG-17'); </SqlCommand>
   </Notificacion>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -23,32 +23,14 @@
       <persona numero="71676   "/>
       <contrato srv_cod="71676   "/>
       <contrato num="1 "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
-      <documentoD2 sin_datos="   "/>
+      <documento llamada_sit_x="   " sin_datos="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAp; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAp; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -69,15 +51,14 @@
       <persona numero="960888  "/>
       <contrato srv_cod="73853   "/>
       <contrato num="5 "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
+      <documento llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAq; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAq; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -98,22 +79,14 @@
       <persona numero="949214  "/>
       <contrato srv_cod="41969   "/>
       <contrato num="2 "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
+      <documento llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAr; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKioGAAr; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -134,18 +107,14 @@
       <persona numero="899907  "/>
       <contrato srv_cod="45201   "/>
       <contrato num="5 "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
+      <documento llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAA; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAA; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -166,16 +135,14 @@
       <persona numero="11622   "/>
       <contrato srv_cod="11622   "/>
       <contrato num="1 "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
-      <documentoD2 llamada_sit_x="   "/>
+      <documento/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAB; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAB; </SqlCommand>
   </Datos>
 
   <Datos CantidadDeFacturas="0" Imputacion_Incobrables="0">
@@ -196,17 +163,17 @@
       <persona numero="1005773 "/>
       <contrato srv_cod="8836    "/>
       <contrato num="4 "/>
-      <documentoD2 llamada_sit_x="   "/>
+      <documento llamada_sit_x="   "/>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
       <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
       <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1193429 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAC; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1200239 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKipGAAC; </SqlCommand>
   </Datos>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1193429; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1200239; </SqlCommand>
 
   <Main>
     <SqlCommand id="6" type="EXECUTESQL"/>

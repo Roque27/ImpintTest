@@ -803,7 +803,6 @@
                                 <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
                                     <!-- Tipo de tabla en memoria Documentos  -->
                                     <qry:set-variable name="document_tbl_type" value="ORI"/>
-
                                     <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
                                     <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
                                         <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
@@ -2223,10 +2222,10 @@
                     </qry:if>
                 </qry:if>
             </qry:if>
-            <qry:element name="documentoD2">
-            <qry:for-each-row  doc="$TBL_documentos:">
-                <qry:set-variable name="nro_linea" value="1" operation="+"/>
-                <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
+            <qry:element name="documento">
+                <qry:for-each-row  doc="$TBL_documentos:">
+                    <qry:set-variable name="nro_linea" value="1" operation="+"/>
+                    <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
                     <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
                         <qry:if left="{$srv_cod}" operator="greater" right="0" type="integer">
                             <qry:attribute name="srv_cod" value="$srv_cod" length="$largos" align="left"/>
@@ -2375,20 +2374,19 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
-                </qry:element>
-            </qry:for-each-row>
-            <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
-            <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
-				<qry:set-variable name="nro_linea" value="1" operation="+"/>
-				<qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
-			</qry:while>
+                </qry:for-each-row>
+                <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
+                <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
+				    <qry:set-variable name="nro_linea" value="1" operation="+"/>
+					    <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+			    </qry:while>
             </qry:element>
         </qry:out>
     </qry:query>
 
     <qry:query name="QueryDocumentos" > 
         <qry:select dump="0">
-            SELECT TO_CHAR(d.DOC_NUMERO) AS DOC_NUMERO
+            SELECT /*+ rule */ TO_CHAR(d.DOC_NUMERO) AS DOC_NUMERO
             	,d.DOC_TIPO
             	,to_char(d.DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
             	,COALESCE(d.DOC_PERIODO, 0) AS DOC_PERIODO
@@ -2454,9 +2452,9 @@
                 </qry:if>
             </qry:if>
             <qry:element name="documentoD2">
-            <qry:for-each-row  doc="$TBL_documentos:">
-                <qry:set-variable name="nro_linea" value="1" operation="+"/>
-                <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
+                <qry:for-each-row  doc="$TBL_documentos:">
+                    <qry:set-variable name="nro_linea" value="1" operation="+"/>
+                    <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
                     <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
                         <qry:if left="{$srv_cod}" operator="greater" right="0" type="integer">
                             <qry:attribute name="srv_cod" value="$srv_cod" length="$largos" align="left"/>
@@ -2605,12 +2603,12 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
-            </qry:for-each-row>
-            <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
-            <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
-				<qry:set-variable name="nro_linea" value="1" operation="+"/>
-				<qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
-			</qry:while>
+                </qry:for-each-row>
+                <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
+                <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
+				    <qry:set-variable name="nro_linea" value="1" operation="+"/>
+				    <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+			    </qry:while>
             </qry:element>
         </qry:out>
     </qry:query>
@@ -2742,7 +2740,6 @@
                     <qry:set-variable name="prs_num_temp" value="{$prs_num}"/>
                     <qry:set-variable name="prs_num" value="#ROW:/ROW/@PRS_NUMERO"/>
                     <qry:attribute name="num_ori" value="#ROW:/ROW/@PRS_NUMERO"/>
-                    </qry:element>
                 </qry:for-each-row>
             </qry:element>
         </qry:out>
