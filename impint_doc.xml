@@ -274,7 +274,8 @@
                 <qry:set-variable name="l_tor_descripcion" value="#ROW:/ROW/@TOR_DESCRIPCION"/>
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
 
-                <qry:element name="Datos">
+                <qry:element name="Reporte">
+                    <qry:attribute name="tipo" value="#ROW:/ROW/@TOR_CODIGO"/>
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
                     <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="less" right="{$OrdenDesde}" type="integer">
@@ -406,11 +407,9 @@
                 </qry:if>
             </qry:if>
 
-            <qry:element name="Main">
-                <qry:element name="SqlCommand">
-                    <qry:attribute name="type" value="EXECUTESQL"/>
-                    <qry:attribute name="id" value="6"/>
-                </qry:element>
+            <qry:element name="SqlCommand">
+                <qry:attribute name="type" value="EXECUTESQL"/>
+                <qry:attribute name="id" value="6"/>
             </qry:element>
         </qry:out>
     </qry:query>
@@ -1083,7 +1082,7 @@
                                             <qry:else/>
                                                 <qry:if left="{$v_columna}" operator="equal" right="AGF_CODIGO" type="string">
                                                     <qry:if left="#ROW:/ROW/@AGF_CODIGO" operator="greater" right="0" type="integer">
-                                                        <qry:attribute name="agf_codigo" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
+                                                        <qry:attribute name="codigo_area_geografica" value="#ROW:/ROW/@AGF_CODIGO" length="$largos" align="left"/>
                                                     <qry:else/>
                                                         <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                     </qry:if>
@@ -1113,12 +1112,12 @@
                                                                             <qry:if left="{$v_columna}" operator="equal" right="PRS_LOCALIDAD" type="string">
                                                                                 <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                 <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                    <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                    <qry:attribute name="area_geografica" value="$s_srv_agf_nombre"/>
                                                                                 </qry:if>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_columna}" operator="equal" right="PRS_DIRECCION" type="string">
                                                                                     <qry:element name="srv_direccion">
-                                                                                        <qry:attribute name="v_prs_direccion" value="#ROW:/ROW/@PRS_DIRECCION"/>
+                                                                                        <qry:attribute name="direccion" value="#ROW:/ROW/@PRS_DIRECCION"/>
                                                                                         <!-- logica complicada direccion -->
                                                                                             <qry:if left="#ROW:/ROW/@PRS_BIS" operator="not-equal" right="0" type="string">
                                                                                                 <qry:if left="#ROW:/ROW/@PRS_BIS" operator="not-equal" right="N" type="string">
@@ -1141,7 +1140,7 @@
                                                                                                 <qry:attribute name="cod_postal" value="#ROW:/ROW/@PRS_C_POSTAL"/>
                                                                                                 <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                                 <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                                    <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                                    <qry:attribute name="area_geografica" value="$s_srv_agf_nombre"/>
                                                                                                 </qry:if>
                                                                                             </qry:if>
                                                                                         <!-- logica complicada direccion -->
@@ -1286,7 +1285,7 @@
                                                                                     <qry:if left="#ROW:/ROW/@CNT_DIRECCION_PAGO" operator="not-equal" right="0" type="string">
                                                                                         <qry:attribute name="direccion_pago" value="#ROW:/ROW/@CNT_DIRECCION_PAGO"/>
                                                                                     <qry:else/>
-                                                                                        <qry:attribute name="cll_nombre" value="#ROW:/ROW/@CLL_NOMBRE"/>
+                                                                                        <qry:attribute name="calle" value="#ROW:/ROW/@CLL_NOMBRE"/>
                                                                                         
                                                                                         <qry:if left="#ROW:/ROW/@CNT_BIS" operator="not-equal" right="0" type="string">
                                                                                             <qry:if left="#ROW:/ROW/@CNT_BIS" operator="not-equal" right="N" type="string">
@@ -1310,7 +1309,7 @@
                                                                                             <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                                                                                             <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                                                             <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                                                                <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
+                                                                                                <qry:attribute name="area_geografica" value="$s_srv_agf_nombre"/>
                                                                                             </qry:if>
                                                                                         </qry:if>
 
@@ -1497,7 +1496,7 @@
                         <qry:attribute name="cod_postal" value=" {#ROW:/ROW/@PRS_C_POSTAL}"/>
                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                         <qry:if left="{$srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                            <qry:attribute name="agf_nombre" value="{$s_srv_agf_nombre}"/>
+                            <qry:attribute name="area_geografica" value="{$s_srv_agf_nombre}"/>
                         </qry:if>
                     </qry:if>
                 </qry:element>
@@ -1556,7 +1555,7 @@
                                                     <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
                                                 <qry:else/>
                                                     <!-- logica complicada direccion -->
-                                                    <qry:attribute name="cll_nombre" value="#ROW:/ROW/@CLL_NOMBRE"/>
+                                                    <qry:attribute name="calle" value="#ROW:/ROW/@CLL_NOMBRE"/>
                                                     <qry:if left="#ROW:/ROW/@SRV_BIS" operator="not-equal" right="0" type="string">
                                                         <qry:if left="#ROW:/ROW/@SRV_BIS" operator="not-equal" right="N" type="string">
                                                             <qry:attribute name="bis" value="#ROW:/ROW/@SRV_BIS"/>
@@ -1578,7 +1577,7 @@
                                                         <qry:attribute name="cod_postal" value="#ROW:/ROW/@SRV_C_POSTAL"/>
                                                         <qry:insert-query name="BuscaAreaGeografica" doc-param="#ROW:"/>
                                                         <qry:if left="{$s_srv_agf_nombre}" operator="not-equal" right="0" type="string"> 
-                                                            <qry:attribute name="agf_nombre" value="$s_srv_agf_nombre"/>
+                                                            <qry:attribute name="area_geografica" value="$s_srv_agf_nombre"/>
                                                         </qry:if>
                                                     </qry:if>
                                                     <!-- logica complicada direccion-->
@@ -2615,7 +2614,7 @@
 
     <qry:query name="QueryDocumentosD2" > 
         <qry:select dump="0">
-            SELECT TO_CHAR(DOC_NUMERO) AS DOC_NUMERO
+            SELECT /*+ rule */ TO_CHAR(DOC_NUMERO) AS DOC_NUMERO
             	,DOC_TIPO
             	,to_char(DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
             	,COALESCE(DOC_PERIODO, 0) AS DOC_PERIODO

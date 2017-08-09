@@ -1,0 +1,6 @@
+I1 = AVISO DEUDA COMUN BAJO FIRMA
+I4 = AVISO DEUDA COMUN BAJO FIRMA
+C2 = Cierre c/dispositivo seguridad (cepo) p/gestión deuda
+C3 = Corte c/retiro de medidor p/gestión deuda
+D2 = Rechazo cobranza por débito automático
+G1 = Intimación Grandes Clientes 48 horas
