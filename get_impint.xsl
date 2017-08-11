@@ -23,17 +23,37 @@
 
   <xsl:for-each select="//Reporte">
 
-  LITORAL GAS S.A.&fl;
-  AVISO DE DEUDA COMUN BAJO FIRMA&fl;
-  Razon Social:   <xsl:value-of select="codigoBarras/@barras"/>
+    LITORAL GAS S.A.&fl;
+    AVISO DE DEUDA COMUN BAJO FIRMA&fl;
+    <xsl:value-of select="//ordenativo/@descripcion"/>&fl;
+    Razon Social:   <xsl:value-of select="notificacion/persona/@razon_social"/>&fl;
+    N° AVISO:&fl;
+    <xsl:value-of select="//ordenativo/@nro_ord"/>&fl;
+    Dirección contrato:  <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
+    FECHA EMISION:  <xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
+    Domic.Suministro:   <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
+    CONTRATO:   <xsl:value-of select="//contrato/@srv_cod"/>&fl;
+    Descripción:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 
-    <xsl:for-each select="//Reporte">
-
-    
-
+    COMPROBANTE
+    <xsl:for-each select="notificacion/documento/item">
+      <xsl:value-of select="@tipo"/>&fl;
+      <xsl:value-of select="@numero"/>&fl;
     </xsl:for-each>
 
-  Codigo de barras:  <xsl:value-of select="codigoBarras/@barras"/>
+    FECHA VTO.
+    <xsl:for-each select="notificacion/documento/item">
+      <xsl:value-of select="@fecha_venctipo"/>&fl;
+    </xsl:for-each>
+
+    SALDO DEUDOR
+    <xsl:for-each select="notificacion/documento/item">
+      <xsl:value-of select="@saldo"/>&fl;
+    </xsl:for-each>
+
+    TOTAL A PAGAR HASTA EL XX/XX/XXXX
+
+    Código de barras:   <xsl:value-of select="codigoBarras/@barras"/>&fl;
 
   </xsl:for-each>
 

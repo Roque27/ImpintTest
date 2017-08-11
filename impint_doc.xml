@@ -274,7 +274,7 @@
                 <qry:set-variable name="l_tor_descripcion" value="#ROW:/ROW/@TOR_DESCRIPCION"/>
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
 
-                <qry:element name="Reporte">
+                <qry:element name="{#ROW:/ROW/@TOR_CODIGO}">
                     <qry:attribute name="tipo" value="#ROW:/ROW/@TOR_CODIGO"/>
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
@@ -2223,6 +2223,8 @@
             </qry:if>
             <qry:element name="documento">
                 <qry:for-each-row  doc="$TBL_documentos:">
+                    <qry:element name="item">
+                    <!-- <qry:print output="stdout" value="          Test Documentos - Columna: {$v_columna}"/> -->
                     <qry:set-variable name="nro_linea" value="1" operation="+"/>
                     <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
                     <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
@@ -2373,11 +2375,14 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
+                    </qry:element>
                 </qry:for-each-row>
                 <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
                 <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
-				    <qry:set-variable name="nro_linea" value="1" operation="+"/>
+                    <qry:element name="item">
+				        <qry:set-variable name="nro_linea" value="1" operation="+"/>
 					    <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+                    </qry:element>
 			    </qry:while>
             </qry:element>
         </qry:out>
@@ -2452,6 +2457,8 @@
             </qry:if>
             <qry:element name="documentoD2">
                 <qry:for-each-row  doc="$TBL_documentos:">
+                    <qry:element name="item">
+                    <!-- <qry:print output="stdout" value="          Test Documentos - Columna: {$v_columna}"/> -->
                     <qry:set-variable name="nro_linea" value="1" operation="+"/>
                     <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
                     <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
@@ -2602,11 +2609,14 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
+                </qry:element>
                 </qry:for-each-row>
                 <qry:set-variable name="num_rows_doc" value="1" operation="-"/>
                 <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
-				    <qry:set-variable name="nro_linea" value="1" operation="+"/>
-				    <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+                    <qry:element name="item">
+				        <qry:set-variable name="nro_linea" value="1" operation="+"/>
+				        <qry:attribute name="sin_datos" value="" length="$largos" align="left"/>
+                    </qry:element>
 			    </qry:while>
             </qry:element>
         </qry:out>
