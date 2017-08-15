@@ -23,6 +23,8 @@
 
   <xsl:for-each select="//Reporte">
 
+    <xsl:apply-templates select="facesp/factura[@no_facturar = 0 and @no_cobrar = 0 and @con_subsidio = 0]"/>
+
     LITORAL GAS S.A.&fl;
     AVISO DE DEUDA COMUN BAJO FIRMA&fl;
     <xsl:value-of select="//ordenativo/@descripcion"/>&fl;
@@ -33,7 +35,7 @@
     FECHA EMISION:  <xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
     Domic.Suministro:   <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
     CONTRATO:   <xsl:value-of select="//contrato/@srv_cod"/>&fl;
-    Descripción:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
+    
 
     COMPROBANTE
     <xsl:for-each select="notificacion/documento/item">
@@ -54,6 +56,8 @@
     TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
     Código de barras:   <xsl:value-of select="codigoBarras/@barras"/>&fl;
+
+    Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 
   </xsl:for-each>
 

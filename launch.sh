@@ -131,7 +131,7 @@ do
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
 			echo quit >> ${QueryExecute}
-			cat ${QueryExecute}
+			#cat ${QueryExecute}
 			#echo exit | sqlplus -s lgas/taxi@sict2 @${QueryExecute}
 			;;
 		*)

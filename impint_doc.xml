@@ -180,21 +180,22 @@
         <qry:out>
             
             <qry:element name="Impint">
-              <!--<qry:element name="PARAMETROS">
-                <qry:attribute name="NOMBREARCHIVO" value="#PARAM:/IMPINT_PARAM/NOMBREARCHIVO/@PARAMFILE"/>
-                <qry:attribute name="REPORTE" value="#PARAM:/IMPINT_PARAM/REPORTE/@PARAMREPCODIGO"/>
-                <qry:attribute name="INCOBRABLES" value="#PARAM:/IMPINT_PARAM/INCOBRABLES/@PARAMINCOBRABLES"/>
-                <qry:attribute name="USER" value="#PARAM:/IMPINT_PARAM/USER/@PARAMUSER"/>
-                <qry:attribute name="PRINT" value="#PARAM:/IMPINT_PARAM/PRINT/@PARAMIMPR"/>
-                <qry:attribute name="TIPOCORREO" value="#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO" />
-                <qry:attribute name="CORREO" value="#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO" />
-                <qry:attribute name="TOR_CODIGO" value="#PARAM:/IMPINT_PARAM/TOR_CODIGO/@PARAMTORCOD" />
-                <qry:attribute name="SUC" value="#PARAM:/IMPINT_PARAM/SUC/@PARAMSUC" />
-                <qry:attribute name="SEC" value="#PARAM:/IMPINT_PARAM/SEC/@PARAMSEC" />
-                <qry:attribute name="ORD_DESDE" value="#PARAM:/IMPINT_PARAM/ORD_DESDE/@PARAMORDDSD" />
-                <qry:attribute name="ORD_HASTA" value="#PARAM:/IMPINT_PARAM/ORD_HASTA/@PARAMORDHST"/>
-              </qry:element> -->
-              <qry:insert-query name="Main" doc-param="#PARAM:"/>
+            <!--
+            <qry:print output="stdout" value="PARAMETROS"/>
+            <qry:print output="stdout" value="NOMBREARCHIVO: {#PARAM:/IMPINT_PARAM/NOMBREARCHIVO/@PARAMFILE}"/>
+            <qry:print output="stdout" value="REPORTE: {#PARAM:/IMPINT_PARAM/REPORTE/@PARAMREPCODIGO}"/>
+            <qry:print output="stdout" value="INCOBRABLES: {#PARAM:/IMPINT_PARAM/INCOBRABLES/@PARAMINCOBRABLES}"/>
+            <qry:print output="stdout" value="USER: {#PARAM:/IMPINT_PARAM/USER/@PARAMUSER}"/>
+            <qry:print output="stdout" value="PRINT: {#PARAM:/IMPINT_PARAM/PRINT/@PARAMIMPR}"/>
+            <qry:print output="stdout" value="TIPOCORREO: {#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO}" />
+            <qry:print output="stdout" value="CORREO: {#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO}" />
+            <qry:print output="stdout" value="TOR_CODIGO: {#PARAM:/IMPINT_PARAM/TOR_CODIGO/@PARAMTORCOD}" />
+            <qry:print output="stdout" value="SUC: {#PARAM:/IMPINT_PARAM/SUC/@PARAMSUC}" />
+            <qry:print output="stdout" value="SEC: {#PARAM:/IMPINT_PARAM/SEC/@PARAMSEC}" />
+            <qry:print output="stdout" value="ORD_DESDE: {#PARAM:/IMPINT_PARAM/ORD_DESDE/@PARAMORDDSD}" />
+            <qry:print output="stdout" value="ORD_HASTA: {#PARAM:/IMPINT_PARAM/ORD_HASTA/@PARAMORDHST}"/>
+            -->
+            <qry:insert-query name="Main" doc-param="#PARAM:"/>
               
             </qry:element>
         </qry:out>
@@ -229,6 +230,7 @@
               AND o.ord_numero BETWEEN {#PARAM:/IMPINT_PARAM/ORD_DESDE/@PARAMORDDSD} AND {#PARAM:/IMPINT_PARAM/ORD_HASTA/@PARAMORDHST}
               AND o.crr_tipo = {#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO}
               AND o.crr_codigo = {#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO}
+              AND o.ord_situacion = 'P'
               <!-- AND o.ord_situacion = 'P'-->
               AND o.ord_estado = 'D'
             ORDER BY o.ord_numero
@@ -247,23 +249,22 @@
             <qry:insert-query name="SeleccionaFechaActual"/>
             <qry:insert-query name="SeleccionaEstadoInicial"/>
             <!-- INSERT Control de procesos salida-->
-            <qry:element name="Notificacion">
-                <qry:element name="SqlCommand">
-                    <qry:attribute name="type" value="INSERT"/>
-                    <qry:attribute name="id" value="1"/>
-                    <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
-                    <!--<qry:element name="control_procesos">
-                        <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
-                        <qry:attribute name="cpr_tipo_proceso" value="IN"/>
-                        <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
-                        <qry:attribute name="prc_codigo" value="IN"/>
-                        <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
-                        <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
-                    </qry:element>-->
-                </qry:element>
+            <qry:element name="SqlCommand">
+                <qry:attribute name="type" value="INSERT"/>
+                <qry:attribute name="id" value="1"/>
+                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
+                <!--<qry:element name="control_procesos">
+                    <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
+                    <qry:attribute name="cpr_tipo_proceso" value="IN"/>
+                    <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
+                    <qry:attribute name="prc_codigo" value="IN"/>
+                    <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
+                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
+                </qry:element>-->
             </qry:element>
-            
+
             <qry:for-each-row>
+                
                 <qry:set-variable name="TESTmain" value="1" operation="+"/>
                 <qry:print output="stdout" value="INICIO BUCLE - Main nro {$TESTmain} "/>
                 <qry:set-variable name="srv_cod" value="#ROW:/ROW/@SRV_CODIGO"/>
@@ -274,7 +275,7 @@
                 <qry:set-variable name="l_tor_descripcion" value="#ROW:/ROW/@TOR_DESCRIPCION"/>
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
 
-                <qry:element name="{#ROW:/ROW/@TOR_CODIGO}">
+                <qry:element name="Reporte">
                     <qry:attribute name="tipo" value="#ROW:/ROW/@TOR_CODIGO"/>
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
@@ -2224,7 +2225,6 @@
             <qry:element name="documento">
                 <qry:for-each-row  doc="$TBL_documentos:">
                     <qry:element name="item">
-                    <!-- <qry:print output="stdout" value="          Test Documentos - Columna: {$v_columna}"/> -->
                     <qry:set-variable name="nro_linea" value="1" operation="+"/>
                     <qry:set-variable name="t_doc_saldo" value="#ROW:/ROW/@DOC_SALDO" operation="+"/> 
                     <qry:if left="{$v_columna}" operator="equal" right="SRV_CODIGO" type="string">
