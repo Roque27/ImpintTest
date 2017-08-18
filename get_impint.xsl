@@ -43,15 +43,18 @@
       <xsl:value-of select="@numero"/>&fl;
     </xsl:for-each>
 
+
     FECHA VTO.
     <xsl:for-each select="notificacion/documento/item">
       <xsl:value-of select="@fecha_venctipo"/>&fl;
     </xsl:for-each>
 
+
     SALDO DEUDOR
     <xsl:for-each select="notificacion/documento/item">
       <xsl:value-of select="@saldo"/>&fl;
     </xsl:for-each>
+
 
     TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
@@ -59,9 +62,10 @@
 
     Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 
+    Emisor: <xsl:value-of select="codigoBarras/@barras"/>&fl;
+
   </xsl:for-each>
 
   </xsl:template>
 
 </xsl:stylesheet>
-

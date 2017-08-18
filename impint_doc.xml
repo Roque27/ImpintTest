@@ -158,6 +158,7 @@
         <qry:variable name="Tiene_Comprobantes_Financiaciones" type="integer" value="0"/>
         <qry:variable name="Tiene_Otros_Comprobantes" type="integer" value="0"/>
         <qry:variable name="ImporteDelAviso" type="double" value="0"/>
+        <qry:variable name="ImporteDelAvisoGeneraReporte" type="integer"/>
 
         <!-- Totales_Tramite -->
         
@@ -319,6 +320,36 @@
                         <qry:if left="{$CantidadDeFacturas}" operator="greater" right="0" type="integer">
                             <qry:set-variable name="Escribi" value="1" operation="+"/>
 
+                            <!--  
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_NUMERO}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@SCF_CODIGO}"/>
+                            <qry:print output="stdout" value="TEEST : {$l_cpr_numero}"/>
+                            <qry:print output="stdout" value="TEEST : {$ImporteDelAviso}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_razon_social}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_calle}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_nro}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_piso}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_depto}"/>
+                            <qry:print output="stdout" value="TEEST : {$cll_nombre_completo}"/>
+                            <qry:print output="stdout" value="TEEST : {$cll_nombre}"/>
+                            <qry:print output="stdout" value="TEEST : {$cnt_nro_pago}"/>
+                            <qry:print output="stdout" value="TEEST : {$cnt_piso_pago}"/>
+                            <qry:print output="stdout" value="TEEST : {$cnt_depto_pago}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@CRR_TIPO}"/>
+                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@CRR_CODIGO}"/>
+                            <qry:print output="stdout" value="TEEST : {$CantidadDeFacturas}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_c_postal}"/>
+                            <qry:print output="stdout" value="TEEST : {$prs_agf_nombre}"/>
+                            <qry:print output="stdout" value="TEEST : {$cnt_c_postal_pago}"/>
+                            <qry:print output="stdout" value="TEEST : {$cnt_agf_nombre}"/>
+                            -->
+                            
+                            <qry:set-variable name="ImporteDelAviso" value="100" operation="*"/>
+                            <qry:set-variable name="ImporteDelAvisoGeneraReporte" value="{$ImporteDelAviso}"/>
+
                             <qry:insert-query name="GeneraArchivo" doc-param="#ROW:"/>
 
                             <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="equal" right="CD" type="string">
@@ -393,7 +424,6 @@
                 </qry:element>-->
             </qry:element>
 
-            
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
                 <qry:insert-query name="GrabaEnReportes"/>
             <qry:else/>
@@ -636,7 +666,7 @@
             SELECT LPAD({#PARAM:/ROW/@ORD_NUMERO}, 8, 0) AS ORD_NUMERO
                 ,LPAD({#PARAM:/ROW/@SCF_CODIGO}, 2, '0') AS SCF_CODIGO
                 ,LPAD({$l_cpr_numero}, 6, '0') AS CPR_NUMERO
-                <!--,LPAD(TRUNC({$ImporteDelAviso}*100), 9, '0') AS IMPORTE_AVISO
+                ,LPAD({$ImporteDelAvisoGeneraReporte}, 9, '0') AS IMPORTE_AVISO
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},7,4) AS ANIO
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},4,2) AS MES
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},1,2) AS DIA
@@ -656,11 +686,12 @@
                 ,{$prs_c_postal} AS CODIGO_POSTAL
                 ,{$prs_agf_nombre} AS LOCALIDAD
                 ,{$cnt_c_postal_pago} AS CODIGO_POSTAL_PAGO
-                ,{$cnt_agf_nombre} AS LOCALIDAD_PAGO-->
+                ,{$cnt_agf_nombre} AS LOCALIDAD_PAGO
             FROM DUAL
         </qry:select>
         <qry:out>
-            <!--<qry:for-each-row>
+            
+            <qry:for-each-row>
                 <qry:element name="ArchivoLote">
                     <qry:attribute name="tipo_de_resgistro" value="1"/>
                     <qry:attribute name="aviso_simple" value="A"/>
@@ -699,7 +730,7 @@
                     <qry:attribute name="codigo_zona" value=" " length="3" align="left"/>
                     <qry:attribute name="codigo_incidencia" value="00" length="2" align="left"/>
                 </qry:element>
-            </qry:for-each-row>-->
+            </qry:for-each-row>
         </qry:out>
     </qry:query>
 
