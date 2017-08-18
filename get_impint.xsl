@@ -39,8 +39,7 @@
 
     COMPROBANTE
     <xsl:for-each select="notificacion/documento/item">
-      <xsl:value-of select="@tipo"/>&fl;
-      <xsl:value-of select="@numero"/>&fl;
+      <xsl:value-of select="@tipo"/>&sp;<xsl:value-of select="@numero"/>&fl;
     </xsl:for-each>
 
 
@@ -62,7 +61,7 @@
 
     Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 
-    Emisor: <xsl:value-of select="codigoBarras/@barras"/>&fl;
+    Emisor: <xsl:value-of select="//servicio/@scf_codigo"/>- <xsl:value-of select="notificacion/sucursal/@descripcion"/>&fl;
 
   </xsl:for-each>
 
