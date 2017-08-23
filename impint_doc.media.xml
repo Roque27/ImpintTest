@@ -5,7 +5,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335692"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="CAFFIERI MARTA SANDRA         "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal_pago="2930" depto_pago="09" nro_pago="361"/>
@@ -44,9 +44,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
@@ -54,7 +54,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335693"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="MONTES MIRTA BEATRIZ          "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal_pago="2930" depto_pago="11" nro_pago="385"/>
@@ -93,9 +93,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
@@ -103,7 +103,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335694"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="FIGUEROA IRMA HAYDEE          "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="DE GARAY JUAN" cod_postal_pago="2930" nro_pago="680"/>
@@ -142,9 +142,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
@@ -152,7 +152,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335695"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="MOLINARI EMILCE               "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="BROWN GUILLERMO ALTE." cod_postal_pago="2930" nro_pago="150"/>
@@ -191,9 +191,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
@@ -201,7 +201,7 @@
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
     <codigoBarras barras="0011335696"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="SCAZZARIELLO CARLOS           "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="25"/>
@@ -240,9 +240,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="19058.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="25  " numero_ordenativo="11335696" numero_proceso="121599" piso_pago="0 " razon_social="SCAZZARIELLO CARLOS      " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
@@ -251,7 +251,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335697"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="SALIVA DE TUFILLI M           "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="30"/>
@@ -290,9 +290,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
@@ -300,7 +300,7 @@
 
   <Reporte CantidadDeFacturas="3" tipo="I1">
     <codigoBarras barras="0011335698"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="BITONTE ROQUE                 "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="45"/>
@@ -339,9 +339,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121599" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
@@ -350,7 +350,7 @@
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
     <codigoBarras barras="0011335699"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="PREFECTURA NAVAL ARGENTINA    "/>
       <contrato>
         <srv_direccion direccion_pago="25 DE MAYO 250 2930 - SAN PEDRO"/>
@@ -389,9 +389,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="28120.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="380 " numero_ordenativo="11335699" numero_proceso="121599" piso_pago="0 " razon_social="PREFECTURA NAVAL ARGENTIN" sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
@@ -400,7 +400,7 @@
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <codigoBarras barras="0011335700"/>
-    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
+    <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente">
       <persona razon_social="CAPURRO JUAN SALVADOR         "/>
       <contrato>
         <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="870"/>
@@ -439,9 +439,9 @@
         <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 más IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 más IVA"/>
-      <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
+      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
+      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
+      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>

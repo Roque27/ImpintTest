@@ -7,6 +7,7 @@ Fichero=impint_doc
 Login=lgas/taxi@sict2
 Parametro=${Fichero}.param.xml
 Ejecutable=${Fichero}.xml
+Intermedia=${Fichero}.media.xml
 Salida=${Fichero}.out.xml
 QueryInsert=${Fichero}.insert.xml
 QueryUpdate=${Fichero}.update.xml
@@ -105,8 +106,8 @@ cat > ${Fichero}.param.xml <<EOF
 </IMPINT_PARAM>
 EOF
 
-../Ora2Xml -user=lgas/taxi@sict2 -wenc=iso-8859-1 -ofile=${Salida} ${Ejecutable} ${Parametro}
-#cat ${Salida} | ./XMLD
+../Ora2Xml -user=lgas/taxi@sict2 -wenc=iso-8859-1 -ofile=${Intermedia} ${Ejecutable} ${Parametro}
+cat ${Intermedia} | ./XMLD > ${Salida}
 echo ""
 
 for key in `xalan -in ${Salida} -xsl get_command_list.xsl`

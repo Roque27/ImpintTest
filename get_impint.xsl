@@ -6,65 +6,54 @@
 <!ENTITY sp "<xsl:text> </xsl:text>">
 ]>
 
-<xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-	<xsl:output
+<xsl:output
 		method="text"
 		encoding="iso-8859-1"
 		omit-xml-declaration="yes"
 		indent="no"/>
 
-	<xsl:param name="lote"/>		
+<xsl:param name="lote"/>		
 
-	<xsl:preserve-space elements="*"/>
+<xsl:preserve-space elements="*"/>
 
-  <xsl:template match="/">
+<xsl:template match="/">
 
-  <xsl:for-each select="//Reporte">
+<xsl:for-each select="//Reporte">
 
-    <xsl:apply-templates select="facesp/factura[@no_facturar = 0 and @no_cobrar = 0 and @con_subsidio = 0]"/>
+<xsl:if test="@tipo = 'COMUN'"><xsl:apply-templates select="facesp/factura[@no_facturar = 0 and @no_cobrar = 0 and @con_subsidio = 0]"/></xsl:if>
 
-    LITORAL GAS S.A.&fl;
-    AVISO DE DEUDA COMUN BAJO FIRMA&fl;
-    <xsl:value-of select="//ordenativo/@descripcion"/>&fl;
-    Razon Social:   <xsl:value-of select="notificacion/persona/@razon_social"/>&fl;
-    N° AVISO:&fl;
-    <xsl:value-of select="//ordenativo/@nro_ord"/>&fl;
-    Dirección contrato:  <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
-    FECHA EMISION:  <xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
-    Domic.Suministro:   <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
-    CONTRATO:   <xsl:value-of select="//contrato/@srv_cod"/>&fl;
-    
+<xsl:apply-templates select="facesp/factura[@no_facturar = 0 and @no_cobrar = 0 and @con_subsidio = 0]"/>
 
-    COMPROBANTE
-    <xsl:for-each select="notificacion/documento/item">
-      <xsl:value-of select="@tipo"/>&sp;<xsl:value-of select="@numero"/>&fl;
-    </xsl:for-each>
+LITORAL GAS S.A.&fl;
+AVISO DE DEUDA COMUN BAJO FIRMA&fl;
+<xsl:value-of select="//ordenativo/@descripcion"/>&fl;
+Razon Social:   <xsl:value-of select="notificacion/persona/@razon_social"/>&fl;
+N° AVISO:&fl;
+<xsl:value-of select="//ordenativo/@nro_ord"/>&fl;
+Dirección contrato:  <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
+FECHA EMISION:  <xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
+Domic.Suministro:   <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
+CONTRATO:   <xsl:value-of select="//contrato/@srv_cod"/>&fl;
 
+COMPROBANTE &sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp; FECHA VTO. &sp;&sp;&sp;&sp; SALDO DEUDOR
+<xsl:for-each select="notificacion/documento/item">
+  <xsl:value-of select="@tipo"/>&sp;&sp;&sp;<xsl:value-of select="@numero"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@fecha_venc_1"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@saldo"/>&fl;
+</xsl:for-each>
 
-    FECHA VTO.
-    <xsl:for-each select="notificacion/documento/item">
-      <xsl:value-of select="@fecha_venctipo"/>&fl;
-    </xsl:for-each>
+TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
+Codigo de barras Litoral:   &fl;
 
-    SALDO DEUDOR
-    <xsl:for-each select="notificacion/documento/item">
-      <xsl:value-of select="@saldo"/>&fl;
-    </xsl:for-each>
+Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 
+Emisor: <xsl:value-of select="//servicio/@scf_codigo"/>- <xsl:value-of select="notificacion/sucursal/@descripcion"/>&fl;
 
-    TOTAL A PAGAR HASTA EL XX/XX/XXXX
+Codigo de barras correo:   <xsl:value-of select="codigoBarras/@barras_correo"/>&fl;
 
-    Código de barras:   <xsl:value-of select="codigoBarras/@barras"/>&fl;
+</xsl:for-each>
 
-    Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
-
-    Emisor: <xsl:value-of select="//servicio/@scf_codigo"/>- <xsl:value-of select="notificacion/sucursal/@descripcion"/>&fl;
-
-  </xsl:for-each>
-
-  </xsl:template>
+</xsl:template>
 
 </xsl:stylesheet>

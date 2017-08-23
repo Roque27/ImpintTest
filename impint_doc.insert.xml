@@ -1,1 +1,1 @@
-INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1211343, 'IN', 999, 'IN', 'P', '16-AUG-17'); 
+INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1215982, 'IN', 1323, 'IN', 'P', '22-AUG-17'); 
