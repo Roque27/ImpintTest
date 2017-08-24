@@ -152,7 +152,7 @@
         <!-- Tarifas -->
 
         <!-- Documentos -->
-        <qry:variable name="t_doc_saldo" type="integer" value="0"/>
+        <qry:variable name="t_doc_saldo" type="double" value="0"/>
         <qry:variable name="num_rows_doc" type="integer" value="20"/>  <!-- El valor ya esta hardcodeado -->
         <qry:variable name="nro_linea" type="integer" value="0"/>
         <qry:variable name="Tiene_Comprobantes_Financiaciones" type="integer" value="0"/>
@@ -2261,6 +2261,7 @@
                 </qry:if>
             </qry:if>
             <qry:element name="documento">
+                <qry:set-variable name="t_doc_saldo" value="0"/>
                 <qry:for-each-row  doc="$TBL_documentos:">
                     <qry:element name="item">
                         <qry:set-variable name="nro_linea" value="1" operation="+"/>
@@ -2349,6 +2350,7 @@
 					    <qry:attribute name="sin_datos" value="" length="12" align="left"/>
                     </qry:element>
 			    </qry:while>
+                <qry:attribute name="saldo_total" value="{$t_doc_saldo}" format-number=" 2"/>
             </qry:element>
         </qry:out>
     </qry:query>
@@ -2421,6 +2423,7 @@
                 </qry:if>
             </qry:if>
             <qry:element name="documentoD2">
+                <qry:set-variable name="t_doc_saldo" value="0"/>
                 <qry:for-each-row  doc="$TBL_documentos:">
                     <qry:element name="item">
                         <qry:set-variable name="nro_linea" value="1" operation="+"/>
@@ -2509,6 +2512,7 @@
 				        <qry:attribute name="sin_datos" value="" length="12" align="left"/>
                     </qry:element>
 			    </qry:while>
+                <qry:attribute name="saldo_total" value="{$t_doc_saldo}" format-number=" 2"/>
             </qry:element>
         </qry:out>
     </qry:query>

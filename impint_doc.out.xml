@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <Impint>
 
-  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1216017, 'IN', 1323, 'IN', 'P', '24/08/2017'); </SqlCommand>
+  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1216024, 'IN', 1323, 'IN', 'P', '24/08/2017'); </SqlCommand>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
@@ -20,7 +20,7 @@
       <persona numero="991547  "/>
       <contrato srv_cod="909596  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -49,7 +49,7 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335692" barras_litoral="81870011335692000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
@@ -69,7 +69,7 @@
       <persona numero="991056  "/>
       <contrato srv_cod="909354  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -98,7 +98,7 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335693" barras_litoral="81870011335693000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
@@ -118,7 +118,7 @@
       <persona numero="1223143 "/>
       <contrato srv_cod="1072788 "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -147,7 +147,7 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335694" barras_litoral="81870011335694000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
@@ -167,7 +167,7 @@
       <persona numero="468342  "/>
       <contrato srv_cod="468342  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -196,7 +196,7 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335695" barras_litoral="81870011335695000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
@@ -216,7 +216,7 @@
       <persona numero="897881  "/>
       <contrato srv_cod="468352  "/>
       <contrato num="2 "/>
-      <documento>
+      <documento saldo_total="249.04">
         <item anio="2017 " asi_numero="342932" cnt_num="2" consumo="25" estado="D" fecha_emision="18/05/2017  " fecha_venc="05/06/17    " fecha_venc_1="05/06/2017  " fecha_venc_2="0           " importe="153.68" importe_basico="117.28" llamada_sit_x="   " numero="9814734692  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      153.68" sin_datos="            " srv_cod="468352" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item anio="2017 " asi_numero="339239" cnt_num="2" consumo="20" estado="D" fecha_emision="22/03/2017  " fecha_venc="10/04/17    " fecha_venc_1="10/04/2017  " fecha_venc_2="0           " importe="95.36" importe_basico="73.30" llamada_sit_x="   " numero="9814034626  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="       95.36" sin_datos="            " srv_cod="468352" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item sin_datos="            "/>
@@ -245,8 +245,8 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335696" barras_litoral="81870011335696000012345454240820172408201710"/>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="19058.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="25  " numero_ordenativo="11335696" numero_proceso="121601" piso_pago="0 " razon_social="SCAZZARIELLO CARLOS      " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="19058.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="25  " numero_ordenativo="11335696" numero_proceso="121602" piso_pago="0 " razon_social="SCAZZARIELLO CARLOS      " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216024 WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
@@ -266,7 +266,7 @@
       <persona numero="468353  "/>
       <contrato srv_cod="468353  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -295,7 +295,7 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335697" barras_litoral="81870011335697000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="3" tipo="I1">
@@ -315,7 +315,7 @@
       <persona numero="468354  "/>
       <contrato srv_cod="468354  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="257.30">
         <item anio="2017 " asi_numero="342932" cnt_num="1" consumo="83" estado="D" fecha_emision="18/05/2017  " fecha_venc="05/06/17    " fecha_venc_1="05/06/2017  " fecha_venc_2="0           " importe="176.62" importe_basico="140.79" llamada_sit_x="   " numero="9814734696  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      176.62" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item anio="2017 " asi_numero="336137" cnt_num="1" consumo="59" estado="D" fecha_emision="23/01/2017  " fecha_venc="07/02/17    " fecha_venc_1="07/02/2017  " fecha_venc_2="0           " importe="28.24" importe_basico="94.16" llamada_sit_x="   " numero="9813289225  " periodo="1/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="       28.24" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item anio="2017 " asi_numero="339239" cnt_num="1" consumo="62" estado="D" fecha_emision="22/03/2017  " fecha_venc="10/04/17    " fecha_venc_1="10/04/2017  " fecha_venc_2="0           " importe="52.44" importe_basico="97.94" llamada_sit_x="   " numero="9814034630  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="       52.44" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
@@ -344,8 +344,8 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335698" barras_litoral="81870011335698000012345454240820172408201710"/>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121601" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121602" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216024 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
@@ -365,7 +365,7 @@
       <persona numero="795     "/>
       <contrato srv_cod="468375  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="399.56">
         <item anio="2017 " asi_numero="342932" cnt_num="1" consumo="64" estado="D" fecha_emision="18/05/2017  " fecha_venc="12/06/17    " fecha_venc_1="12/06/2017  " fecha_venc_2="0           " importe="198.86" importe_basico="158.96" llamada_sit_x="   " numero="9814734717  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      198.86" sin_datos="            " srv_cod="468375" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item anio="2017 " asi_numero="339239" cnt_num="1" consumo="25" estado="D" fecha_emision="22/03/2017  " fecha_venc="17/04/17    " fecha_venc_1="17/04/2017  " fecha_venc_2="0           " importe="200.70" importe_basico="122.24" llamada_sit_x="   " numero="9814034651  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      200.70" sin_datos="            " srv_cod="468375" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item sin_datos="            "/>
@@ -394,8 +394,8 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335699" barras_litoral="81870011335699000012345454240820172408201710"/>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="28120.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="380 " numero_ordenativo="11335699" numero_proceso="121601" piso_pago="0 " razon_social="PREFECTURA NAVAL ARGENTIN" sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="28120.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="380 " numero_ordenativo="11335699" numero_proceso="121602" piso_pago="0 " razon_social="PREFECTURA NAVAL ARGENTIN" sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216024 WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
@@ -415,7 +415,7 @@
       <persona numero="1081853 "/>
       <contrato srv_cod="969267  "/>
       <contrato num="1 "/>
-      <documento>
+      <documento saldo_total="0.00">
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -444,14 +444,14 @@
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
     <codigoBarras barras_correo="0011335700" barras_litoral="81870011335700000012345454240820172408201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216024 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
   </Reporte>
 
   <CMD/>
 
   <CMD/>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1216017; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1216024; </SqlCommand>
 
   <SqlCommand id="6" type="EXECUTESQL"/>
 

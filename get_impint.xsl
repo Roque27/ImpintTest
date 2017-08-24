@@ -4,6 +4,7 @@
 <!ENTITY fl "<xsl:text>
 </xsl:text>">
 <!ENTITY sp "<xsl:text> </xsl:text>">
+<!ENTITY deg "&#176;">
 ]>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -30,9 +31,9 @@ LITORAL GAS S.A.&fl;
 AVISO DE DEUDA COMUN BAJO FIRMA&fl;
 <xsl:value-of select="//ordenativo/@descripcion"/>&fl;
 Razon Social:   <xsl:value-of select="notificacion/persona/@razon_social"/>&fl;
-N° AVISO:&fl;
+N&deg; AVISO:&fl;
 <xsl:value-of select="//ordenativo/@nro_ord"/>&fl;
-Dirección contrato:  <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
+Domic.Contrato:  <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
 FECHA EMISION:  <xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
 Domic.Suministro:   <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
 CONTRATO:   <xsl:value-of select="//contrato/@srv_cod"/>&fl;
@@ -43,6 +44,8 @@ COMPROBANTE &sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp; FECHA VTO. &sp;&sp;&sp;&sp; SAL
 </xsl:for-each>
 
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
+
+Saldo:	<xsl:value-of select="notificacion/documento/@saldo_total"/>&fl;
 
 Codigo de barras Litoral:   <xsl:value-of select="codigoBarras/@barras_litoral"/>&fl;
 
