@@ -44,7 +44,7 @@ COMPROBANTE &sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp; FECHA VTO. &sp;&sp;&sp;&sp; SAL
 
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Codigo de barras Litoral:   &fl;
+Codigo de barras Litoral:   <xsl:value-of select="codigoBarras/@barras_litoral"/>&fl;
 
 Texto 2:  <xsl:value-of select="notificacion/@eno_texto"/>&fl;
 

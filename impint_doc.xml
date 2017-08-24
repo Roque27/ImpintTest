@@ -447,7 +447,7 @@
 
     <qry:query name="SeleccionaFechaActual" > 
         <qry:select>
-            SELECT sysdate AS FECHA
+            SELECT TO_CHAR(sysdate, 'dd/mm/yyyy') AS FECHA
             FROM DUAL
         </qry:select>
         <qry:out>
@@ -756,6 +756,15 @@
                 <qry:set-variable name="ban" value="0"/>
                 <qry:set-variable name="v_tabla" value=" "/>
                 
+                    <qry:if left="{$not_codigo}" operator="equal" right="I7" type="string">
+                        <!-- No deja usar los caracteres raros -->
+                    <qry:else/>
+                        <!-- No deja usar los caracteres raros -->
+                    </qry:if>
+                    <!-- Inicio iteracion cursor Texto -->
+                    <qry:insert-query name="NotifiTexto" doc-param="#ROW:"/>
+                    <!-- Fin iteracion cursor Texto -->
+                    
                     <!-- No deja usar los caracteres raros -->
                     <qry:if left="{$not_codigo}" operator="equal" right="I1" type="string">
                         <qry:insert-query name="SelectCodigoBarras" doc-param="#ROW:"/>
@@ -768,16 +777,6 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
-
-                    <qry:if left="{$not_codigo}" operator="equal" right="I7" type="string">
-                        <!-- No deja usar los caracteres raros -->
-                    <qry:else/>
-                        <!-- No deja usar los caracteres raros -->
-                    </qry:if>
-                    <!-- Inicio iteracion cursor Texto -->
-                    <qry:insert-query name="NotifiTexto" doc-param="#ROW:"/>
-                    <!-- Fin iteracion cursor Texto -->
-                    
                 
             </qry:for-each-row>
         </qry:out>
@@ -2650,6 +2649,14 @@
     <qry:query name="SelectCodigoBarras"> 
         <qry:select dump="0">
             SELECT LPAD({$nro_ord}, 10, '0') AS NRO_ORD
+                ,LPAD('81', 2, '0') AS COD_EMPRESA
+                ,LPAD('87', 2, '0') AS TIPO_COMPROBANTE
+                ,LPAD({$nro_ord}, 10, '0') AS NRO_COMPROBANTE
+                ,LPAD((REPLACE('123454.54', '.')), 12, '0') AS IMPORTE
+                ,LPAD((REPLACE({$sysdate}, '/')), 8, '0') AS FECHA_LIMITE_1
+                ,LPAD((REPLACE({$sysdate}, '/')), 8, '0') AS FECHA_LIMITE_2
+                ,LPAD('1', 1, '0') AS TIPO_FACTURA
+                ,LPAD('0', 1, '0') AS DIGITO_VERIFICADOR
             FROM DUAL
         </qry:select>
         <qry:out>
@@ -2657,7 +2664,8 @@
             <!-- Como hacer con el tema de la impresion del codigo de barras -->
             <qry:element name="codigoBarras" >
                 <qry:for-each-row>
-                    <qry:attribute name="barras_litoral" value="" length="42" align="left"/>
+                    <qry:print output="stdout" value="                                  TEST: Fecha {$sysdate}"/>
+                    <qry:attribute name="barras_litoral" value="{#ROW:/ROW/@COD_EMPRESA}{#ROW:/ROW/@TIPO_COMPROBANTE}{#ROW:/ROW/@NRO_COMPROBANTE}{#ROW:/ROW/@IMPORTE}{#ROW:/ROW/@FECHA_LIMITE_1}{#ROW:/ROW/@FECHA_LIMITE_2}{#ROW:/ROW/@TIPO_FACTURA}{#ROW:/ROW/@DIGITO_VERIFICADOR}" length="44" align="left"/>
                     <qry:set-variable name="nrobarra" value="#ROW:/ROW/@NRO_ORD"/>
                     <qry:attribute name="barras_correo" value="#ROW:/ROW/@NRO_ORD" length="10" align="left"/>
                 </qry:for-each-row>

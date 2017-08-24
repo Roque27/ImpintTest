@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <Impint>
 
-  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1215997, 'IN', 1323, 'IN', 'P', '23-AUG-17'); </SqlCommand>
+  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1216017, 'IN', 1323, 'IN', 'P', '24/08/2017'); </SqlCommand>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335692"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="CAFFIERI MARTA SANDRA         "/>
       <contrato>
@@ -49,11 +48,11 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
+    <codigoBarras barras_correo="0011335692" barras_litoral="81870011335692000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335693"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="MONTES MIRTA BEATRIZ          "/>
       <contrato>
@@ -98,11 +97,11 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
+    <codigoBarras barras_correo="0011335693" barras_litoral="81870011335693000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335694"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="FIGUEROA IRMA HAYDEE          "/>
       <contrato>
@@ -147,11 +146,11 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
+    <codigoBarras barras_correo="0011335694" barras_litoral="81870011335694000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335695"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="MOLINARI EMILCE               "/>
       <contrato>
@@ -196,11 +195,11 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
+    <codigoBarras barras_correo="0011335695" barras_litoral="81870011335695000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
-    <codigoBarras barras="0011335696"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="SCAZZARIELLO CARLOS           "/>
       <contrato>
@@ -245,12 +244,12 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="19058.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="25  " numero_ordenativo="11335696" numero_proceso="121599" piso_pago="0 " razon_social="SCAZZARIELLO CARLOS      " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1215997 WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
+    <codigoBarras barras_correo="0011335696" barras_litoral="81870011335696000012345454240820172408201710"/>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="19058.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="25  " numero_ordenativo="11335696" numero_proceso="121601" piso_pago="0 " razon_social="SCAZZARIELLO CARLOS      " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335697"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="SALIVA DE TUFILLI M           "/>
       <contrato>
@@ -295,11 +294,11 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
+    <codigoBarras barras_correo="0011335697" barras_litoral="81870011335697000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="3" tipo="I1">
-    <codigoBarras barras="0011335698"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="BITONTE ROQUE                 "/>
       <contrato>
@@ -344,12 +343,12 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121599" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1215997 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
+    <codigoBarras barras_correo="0011335698" barras_litoral="81870011335698000012345454240820172408201710"/>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121601" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="2" tipo="I1">
-    <codigoBarras barras="0011335699"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="PREFECTURA NAVAL ARGENTINA    "/>
       <contrato>
@@ -394,12 +393,12 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="28120.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="380 " numero_ordenativo="11335699" numero_proceso="121599" piso_pago="0 " razon_social="PREFECTURA NAVAL ARGENTIN" sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1215997 WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
+    <codigoBarras barras_correo="0011335699" barras_litoral="81870011335699000012345454240820172408201710"/>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00002" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="28120.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="380 " numero_ordenativo="11335699" numero_proceso="121601" piso_pago="0 " razon_social="PREFECTURA NAVAL ARGENTIN" sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1216017 WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
   </Reporte>
 
   <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
-    <codigoBarras barras="0011335700"/>
     <notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente">
       <persona razon_social="CAPURRO JUAN SALVADOR         "/>
       <contrato>
@@ -444,14 +443,15 @@
       <cargos reconexion="Cargo por reconexión                 : $  350.00 más"/>
       <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
     </notificacion>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1215997 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
+    <codigoBarras barras_correo="0011335700" barras_litoral="81870011335700000012345454240820172408201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1216017 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
   </Reporte>
 
   <CMD/>
 
   <CMD/>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1215997; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1216017; </SqlCommand>
 
   <SqlCommand id="6" type="EXECUTESQL"/>
 
