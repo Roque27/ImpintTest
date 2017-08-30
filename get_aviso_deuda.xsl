@@ -71,13 +71,14 @@ Codigo de barras correo:
 <xsl:value-of select="codigoBarras/@barras_correo"/>&fl;
 
 Texto 2:  
-<xsl:value-of select="notificacion/@eno_texto"/>&fl;
+<xsl:apply-templates select="notificacion/texto_notificacion"/>
+<!--<xsl:value-of select="notificacion/texto_notificacion[1]/@eno_texto"/>&fl;-->
 
 <xsl:variable
 name="Texto2_lineas"
 select="(string-length(notificacion/@eno_texto) - string-length(translate(notificacion/@eno_texto, '&#xD;&#xA;', ''))) + 1"/>
 
-<xsl:for-each select="(//node())[(20 - $Texto2_lineas) >= position()]">
+<xsl:for-each select="(//node())[(30 - $Texto2_lineas) >= position()]">
 &fl;
 </xsl:for-each>
 
@@ -85,6 +86,10 @@ select="(string-length(notificacion/@eno_texto) - string-length(translate(notifi
 
 <xsl:template match="item">
 <xsl:value-of select="@tipo"/>&sp;&sp;&sp;<xsl:value-of select="@numero"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@fecha_venc_1"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@saldo"/>&fl;
+</xsl:template>
+
+<xsl:template match="texto_notificacion">
+<xsl:value-of select="@eno_texto"/>&fl;
 </xsl:template>
 
 </xsl:stylesheet>

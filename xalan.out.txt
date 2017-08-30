@@ -5,18 +5,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   CAFFIERI MARTA SANDRA         
+Razon Social:   
+CAFFIERI MARTA SANDRA         
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -42,23 +47,46 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335692000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335692000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335692
 
 
-Codigo de barras correo:   0011335692
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -66,18 +94,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   MONTES MIRTA BEATRIZ          
+Razon Social:   
+MONTES MIRTA BEATRIZ          
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -103,23 +136,46 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335693000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335693000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335693
 
 
-Codigo de barras correo:   0011335693
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -127,18 +183,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   FIGUEROA IRMA HAYDEE          
+Razon Social:   
+FIGUEROA IRMA HAYDEE          
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -164,23 +225,46 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335694000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335694000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335694
 
 
-Codigo de barras correo:   0011335694
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -188,18 +272,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   MOLINARI EMILCE               
+Razon Social:   
+MOLINARI EMILCE               
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -225,23 +314,46 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335695000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335695000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335695
 
 
-Codigo de barras correo:   0011335695
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -249,79 +361,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   SCAZZARIELLO CARLOS           
+Razon Social:   
+SCAZZARIELLO CARLOS           
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
-
-
-COMPROBANTE           FECHA VTO.      SALDO DEUDOR
-F     9814734692      05/06/2017            153.68
-F     9814034626      10/04/2017             95.36
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-
-
-TOTAL A PAGAR HASTA EL XX/XX/XXXX
-
-Saldo:	249.04
-
-
-CÃ³digo de barras Litoral:   81870011335696000012345454240820172408201710
-
-
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
-
-
-Emisor: 85 - Baradero                 
-
-
-Codigo de barras correo:   0011335696
-
-
-LITORAL GAS S.A.
-
-AVISO DE DEUDA COMUN BAJO FIRMA
-
-
-Razon Social:   SALIVA DE TUFILLI M           
-
-N° AVISO:
-11335692       
-
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
-
-FECHA EMISION:  03/08/2017
-
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
-
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -347,23 +403,46 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335697000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335696000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335696
 
 
-Codigo de barras correo:   0011335697
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -371,18 +450,112 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   BITONTE ROQUE                 
+Razon Social:   
+SALIVA DE TUFILLI M           
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
+CONTRATO:   
+909596  
+
+
+COMPROBANTE           FECHA VTO.      SALDO DEUDOR
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+
+
+
+TOTAL A PAGAR HASTA EL XX/XX/XXXX
+
+Saldo:	
+0.00
+
+
+Codigo de barras Litoral:   
+81870011335697000012345454300820173008201710
+
+
+Emisor: 
+85 - Baradero                 
+
+
+Codigo de barras correo:   
+0011335697
+
+
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LITORAL GAS S.A.
+
+AVISO DE DEUDA COMUN BAJO FIRMA
+
+
+Razon Social:   
+BITONTE ROQUE                 
+
+N° AVISO:
+11335692       
+
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
+
+FECHA EMISION:  
+03/08/2017
+
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
+
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -408,23 +581,46 @@ F     9814034630      10/04/2017             52.44
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	257.30
+Saldo:	
+257.30
 
 
-CÃ³digo de barras Litoral:   81870011335698000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335698000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335698
 
 
-Codigo de barras correo:   0011335698
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 LITORAL GAS S.A.
@@ -432,79 +628,23 @@ LITORAL GAS S.A.
 AVISO DE DEUDA COMUN BAJO FIRMA
 
 
-Razon Social:   PREFECTURA NAVAL ARGENTINA    
+Razon Social:   
+PREFECTURA NAVAL ARGENTINA    
 
 N° AVISO:
 11335692       
 
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
 
-FECHA EMISION:  03/08/2017
+FECHA EMISION:  
+03/08/2017
 
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
 
-CONTRATO:   909596  
-
-
-COMPROBANTE           FECHA VTO.      SALDO DEUDOR
-F     9814734717      12/06/2017            198.86
-F     9814034651      17/04/2017            200.70
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-
-
-TOTAL A PAGAR HASTA EL XX/XX/XXXX
-
-Saldo:	399.56
-
-
-CÃ³digo de barras Litoral:   81870011335699000012345454240820172408201710
-
-
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
-
-
-Emisor: 85 - Baradero                 
-
-
-Codigo de barras correo:   0011335699
-
-
-LITORAL GAS S.A.
-
-AVISO DE DEUDA COMUN BAJO FIRMA
-
-
-Razon Social:   CAPURRO JUAN SALVADOR         
-
-N° AVISO:
-11335692       
-
-Domic.Contrato:  DEL POZO F. 361 (2930) SAN PEDRO
-
-FECHA EMISION:  03/08/2017
-
-Domic.Suministro:   DEL POZO F. 361 09   (2930) SAN PEDRO
-
-CONTRATO:   909596  
+CONTRATO:   
+909596  
 
 
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
@@ -530,20 +670,132 @@ COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
 
 
+
 TOTAL A PAGAR HASTA EL XX/XX/XXXX
 
-Saldo:	0.00
+Saldo:	
+0.00
 
 
-CÃ³digo de barras Litoral:   81870011335700000012345454240820172408201710
+Codigo de barras Litoral:   
+81870011335699000012345454300820173008201710
 
 
-Texto 2:  Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
-original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
-Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente
+Emisor: 
+85 - Baradero                 
 
 
-Emisor: 85 - Baradero                 
+Codigo de barras correo:   
+0011335699
 
 
-Codigo de barras correo:   0011335700
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LITORAL GAS S.A.
+
+AVISO DE DEUDA COMUN BAJO FIRMA
+
+
+Razon Social:   
+CAPURRO JUAN SALVADOR         
+
+N° AVISO:
+11335692       
+
+Domic.Contrato:  
+DEL POZO F. 361 (2930) SAN PEDRO
+
+FECHA EMISION:  
+03/08/2017
+
+Domic.Suministro:   
+DEL POZO F. 361 09   (2930) SAN PEDRO
+
+CONTRATO:   
+909596  
+
+
+COMPROBANTE           FECHA VTO.      SALDO DEUDOR
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+
+
+
+TOTAL A PAGAR HASTA EL XX/XX/XXXX
+
+Saldo:	
+0.00
+
+
+Codigo de barras Litoral:   
+81870011335700000012345454300820173008201710
+
+
+Emisor: 
+85 - Baradero                 
+
+
+Codigo de barras correo:   
+0011335700
+
+
+Texto 2:  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

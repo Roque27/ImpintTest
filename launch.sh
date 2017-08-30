@@ -12,6 +12,8 @@ Salida=${Fichero}.out.xml
 QueryInsert=${Fichero}.insert.xml
 QueryUpdate=${Fichero}.update.xml
 QueryExecute=${Fichero}.execute.xml
+XslAvisoDeuda=get_aviso_deuda.xsl
+SalidaXalan=xalan.out.txt
 
 > ${Salida}
 > ${QueryInsert}
@@ -143,3 +145,39 @@ do
 done
 
 echo ""
+
+# I1 = AVISO DEUDA COMUN BAJO FIRMA
+# I4 = AVISO DEUDA COMUN BAJO FIRMA
+# C2 = Cierre c/dispositivo seguridad (cepo) p/gestión deuda
+# C3 = Corte c/retiro de medidor p/gestión deuda
+# D2 = Rechazo cobranza por débito automático
+# G1 = Intimación Grandes Clientes 48 horas
+
+case ${TorCodigo} in
+	I1)
+		echo "============== AVISO DEUDA COMUN BAJO FIRMA =============="
+		xalan -in ${Salida} -xsl ${XslAvisoDeuda} -out ${SalidaXalan}
+		cat ${SalidaXalan}
+		;;
+	I4)
+		echo "============== AVISO DEUDA COMUN BAJO FIRMA =============="
+		;;
+  C2)
+		echo "============== Cierre c/dispositivo seguridad (cepo) p/gestión deuda =============="
+		;;
+	C3)
+		echo "============== Corte c/retiro de medidor p/gestión deuda =============="
+		;;
+	D2)
+		echo "============== Rechazo cobranza por débito automático =============="
+		;;
+	G1)
+		echo "============== Intimación Grandes Clientes 48 horas =============="
+		;;
+	*)
+		echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE REPORTE A IMPRIMIR"
+ 		exit 1
+		;;
+esac
+
+#./launch.sh id=MSALA/PaSsWoRd Tipo=CO Correo=SEND Suc=85 Sec=GESDEU Tor_codigo=I1 Ord_Dsd=11335692 Ord_Hst=11335700 User=MSALA file=ALEATORIO_19827415 Reporte=DEU_3401

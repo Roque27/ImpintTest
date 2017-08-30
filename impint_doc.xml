@@ -861,7 +861,13 @@
                             </qry:if>
                             <qry:set-variable name="ban" value="0"/>
                         <qry:else/>
-                            <qry:attribute name="eno_texto" value="#ROW:/ROW/@ENO_TEXTO"/>
+                            <qry:if left="#ROW:/ROW/@ENO_TEXTO" operator="not-equal" right="&#xA;" type="string">
+                                <qry:if left="#ROW:/ROW/@ENO_TEXTO" operator="not-equal" right="/" type="string">
+                                    <qry:element name="texto_notificacion">
+                                        <qry:attribute name="eno_texto" value="#ROW:/ROW/@ENO_TEXTO" length="2000"/>
+                                    </qry:element>
+                                </qry:if>
+                            </qry:if>
                         </qry:if>
                     <qry:else/>
                         <qry:insert-query name="NotifiCargaTablas"/>
