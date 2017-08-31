@@ -71,14 +71,20 @@ Codigo de barras correo:
 <xsl:value-of select="codigoBarras/@barras_correo"/>&fl;
 
 Texto 2:  
-<xsl:apply-templates select="notificacion/texto_notificacion"/>
-<!--<xsl:value-of select="notificacion/texto_notificacion[1]/@eno_texto"/>&fl;-->
+<!--<xsl:apply-templates select="notificacion/texto_notificacion"/>-->
+<xsl:value-of select="notificacion/texto_notificacion[1]/@eno_texto"/>
+
+<xsl:value-of select="notificacion/texto_notificacion[2]/@eno_texto"/>&fl;
 
 <xsl:variable
-name="Texto2_lineas"
-select="(string-length(notificacion/@eno_texto) - string-length(translate(notificacion/@eno_texto, '&#xD;&#xA;', ''))) + 1"/>
+name="Texto2_1_lineas"
+select="(string-length(notificacion/texto_notificacion[1]/@eno_texto) - string-length(translate(notificacion/texto_notificacion[1]/@eno_texto, '&#xD;&#xA;', ''))) + 1"/>
 
-<xsl:for-each select="(//node())[(30 - $Texto2_lineas) >= position()]">
+<xsl:variable
+name="Texto2_2_lineas"
+select="(string-length(notificacion/texto_notificacion[2]/@eno_texto) - string-length(translate(notificacion/texto_notificacion[2]/@eno_texto, '&#xD;&#xA;', ''))) + 1"/>
+
+<xsl:for-each select="(//node())[(25 - ($Texto2_1_lineas + $Texto2_2_lineas)) >= position()]">
 &fl;
 </xsl:for-each>
 

@@ -55,7 +55,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335692000012345454300820173008201710
+81870011335692000012345454310820173108201710
 
 
 Emisor: 
@@ -69,20 +69,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -144,7 +149,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335693000012345454300820173008201710
+81870011335693000012345454310820173108201710
 
 
 Emisor: 
@@ -158,20 +163,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -233,7 +243,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335694000012345454300820173008201710
+81870011335694000012345454310820173108201710
 
 
 Emisor: 
@@ -247,20 +257,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -322,7 +337,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335695000012345454300820173008201710
+81870011335695000012345454310820173108201710
 
 
 Emisor: 
@@ -336,20 +351,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -411,7 +431,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335696000012345454300820173008201710
+81870011335696000012345454310820173108201710
 
 
 Emisor: 
@@ -425,20 +445,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -500,7 +525,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335697000012345454300820173008201710
+81870011335697000012345454310820173108201710
 
 
 Emisor: 
@@ -514,20 +539,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -589,7 +619,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335698000012345454300820173008201710
+81870011335698000012345454310820173108201710
 
 
 Emisor: 
@@ -603,20 +633,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -678,7 +713,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335699000012345454300820173008201710
+81870011335699000012345454310820173108201710
 
 
 Emisor: 
@@ -692,20 +727,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
@@ -767,7 +807,7 @@ Saldo:
 
 
 Codigo de barras Litoral:   
-81870011335700000012345454300820173008201710
+81870011335700000012345454310820173108201710
 
 
 Emisor: 
@@ -781,20 +821,25 @@ Codigo de barras correo:
 Texto 2:  
 
 
+El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no
+contienen intereses por mora, los cuales se le incluirán en la primera LSP/Factura que se le 
+emita luego de efectuado el pago. El cargo por este aviso se le incluirá en su siguiente LSP/
+Factura. 
+Si canceló la deuda hasta el día hábil anterior (inclusive) a la recepción de este aviso,
+ya se le habrá acreditado el pago, por lo que le rogamos desestimarlo.
+INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.hábiles de recibido este
+aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-
+tura deberá abonar la deuda más intereses y cargos autorizados.
+Recibimos su consulta por esta notificación en el teléfono 0810-444-5427 (LGAS).
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)
+original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.
+Si concurre a una sucursal de Litoral Gas podrá abonar exclusivamente con tarjetas de 
+crédito/débito o cheques propios, o bien solicitar una Boleta para pago en efectivo
+en entidades recaudadoras, que también puede imprimirla  ingresando en 
+www.litoral-gas.com.ar Oficina Virtual.
+Este aviso no opera como libre deuda.
 
 
 
