@@ -278,6 +278,7 @@
 
                 <qry:element name="Reporte">
                     <qry:attribute name="tipo" value="#ROW:/ROW/@TOR_CODIGO"/>
+                    <qry:attribute name="fecha_emision" value="{#PARAM:/IMPINT_PARAM/FECHA_EMISION/@PARAMFECEMI}"/>
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
                     <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="less" right="{$OrdenDesde}" type="integer">
@@ -821,7 +822,7 @@
                         <qry:if left="{$ban}" operator="equal" right="1" type="integer">
                             <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
                                 <!-- Tipo de tabla en memoria Documentos  -->
-                                <qry:set-variable name="num_rows_doc" value="20"/>
+                                <qry:set-variable name="num_rows_doc" value="30"/>
                                 <qry:set-variable name="nro_linea" value="0"/>
                                 <qry:set-variable name="document_tbl_type" value="DOC"/>
                                 <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
@@ -834,7 +835,7 @@
                             <qry:else/>
                                 <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
                                     <!-- Tipo de tabla en memoria Documentos  -->
-                                    <qry:set-variable name="num_rows_doc" value="20"/>
+                                    <qry:set-variable name="num_rows_doc" value="30"/>
                                     <qry:set-variable name="nro_linea" value="0"/>
                                     <qry:set-variable name="document_tbl_type" value="ORI"/>
                                     <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
@@ -877,7 +878,7 @@
                                 <qry:if left="{$ban}" operator="equal" right="1" type="integer">
                                     <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
                                         <!-- Tipo de tabla en memoria Documentos  -->
-                                        <qry:set-variable name="num_rows_doc" value="20"/>
+                                        <qry:set-variable name="num_rows_doc" value="30"/>
                                         <qry:set-variable name="nro_linea" value="0"/>
                                         <qry:set-variable name="document_tbl_type" value="DOC"/>
                                     
@@ -891,7 +892,7 @@
                                     <qry:else/>
                                         <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS_GAR" type="string">
                                             <!-- Tipo de tabla en memoria Documentos  -->
-                                            <qry:set-variable name="num_rows_doc" value="20"/>
+                                            <qry:set-variable name="num_rows_doc" value="30"/>
                                             <qry:set-variable name="nro_linea" value="0"/>
                                             <qry:set-variable name="document_tbl_type" value="ORI"/>
                                         

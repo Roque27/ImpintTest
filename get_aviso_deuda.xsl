@@ -43,12 +43,19 @@ N&deg; AVISO:&fl;
 Domic.Contrato:  
 <xsl:value-of select="//contrato/srv_direccion/@calle"/>&sp;<xsl:value-of select="//contrato/srv_direccion/@nro_pago"/>&sp;(<xsl:value-of select="//contrato/srv_direccion/@cod_postal_pago"/>)&sp;<xsl:value-of select="//contrato/srv_direccion/@area_geografica"/>&fl;
 FECHA EMISION:  
-<xsl:value-of select="//ordenativo/@fecha_generacion"/>&fl;
+<xsl:value-of select="@fecha_emision"/>&fl;
 Domic.Suministro:   
 <xsl:value-of select="//servicio/srv_direccion/@calle"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@nro"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@depto"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@piso"/>&sp;<xsl:value-of select="//servicio/srv_direccion/@torre"/>&sp;(<xsl:value-of select="//servicio/srv_direccion/@cod_postal"/>)&sp;<xsl:value-of select="//servicio/srv_direccion/@area_geografica"/>&fl;
 CONTRATO:   
 <xsl:value-of select="//contrato/@srv_cod"/>&fl;
 
+Texto 1 [4 lineas maximo]:
+Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
+Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
+doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
+(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.&fl;
+
+Items [30 lineas maximo]:
 COMPROBANTE &sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp;&sp; FECHA VTO. &sp;&sp;&sp;&sp; SALDO DEUDOR
 <xsl:apply-templates select="notificacion/documento/item"/>
 <!--
@@ -70,8 +77,7 @@ Emisor:
 Codigo de barras correo:   
 <xsl:value-of select="codigoBarras/@barras_correo"/>&fl;
 
-Texto 2:  
-<!--<xsl:apply-templates select="notificacion/texto_notificacion"/>-->
+Texto 2 [25 lineas maximo]:
 <xsl:value-of select="notificacion/texto_notificacion[1]/@eno_texto"/>
 
 <xsl:value-of select="notificacion/texto_notificacion[2]/@eno_texto"/>&fl;
@@ -92,10 +98,6 @@ select="(string-length(notificacion/texto_notificacion[2]/@eno_texto) - string-l
 
 <xsl:template match="item">
 <xsl:value-of select="@tipo"/>&sp;&sp;&sp;<xsl:value-of select="@numero"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@fecha_venc_1"/>&sp;&sp;&sp;&sp;<xsl:value-of select="@saldo"/>&fl;
-</xsl:template>
-
-<xsl:template match="texto_notificacion">
-<xsl:value-of select="@eno_texto"/>&fl;
 </xsl:template>
 
 </xsl:stylesheet>

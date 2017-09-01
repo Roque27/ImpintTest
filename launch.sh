@@ -34,6 +34,7 @@ Suc=0
 Sec=" "
 OrdDesde=0
 OrdHasta=0
+FechaEmision=$(date +%d-%m-%Y)
 
 # CARGA DE ARGUMENTOS VARIABLES
 
@@ -86,6 +87,9 @@ do
 		  OrdDesde=${OrdHasta}
 		fi
     ;;
+	Fecha_Emision) #echo 'FechaEmision: ' ${valor};
+		FechaEmision=${valor}
+    ;;
   esac
   shift
 done
@@ -105,6 +109,7 @@ cat > ${Fichero}.param.xml <<EOF
     <SEC PARAMSEC="${Sec}"/>
     <ORD_DESDE PARAMORDDSD="${OrdDesde}"/>
     <ORD_HASTA PARAMORDHST="${OrdHasta}"/>
+		<FECHA_EMISION PARAMFECEMI="${FechaEmision}"/>
 </IMPINT_PARAM>
 EOF
 
@@ -155,12 +160,12 @@ echo ""
 
 case ${TorCodigo} in
 	I1)
-		echo "============== AVISO DEUDA COMUN BAJO FIRMA =============="
+		echo "============== Aviso Deuda comun bajo firma =============="
 		xalan -in ${Salida} -xsl ${XslAvisoDeuda} -out ${SalidaXalan}
 		cat ${SalidaXalan}
 		;;
 	I4)
-		echo "============== AVISO DEUDA COMUN BAJO FIRMA =============="
+		echo "============== Aviso Deuda comun bajo firma =============="
 		;;
   C2)
 		echo "============== Cierre c/dispositivo seguridad (cepo) p/gestión deuda =============="

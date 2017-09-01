@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <Impint>
 
-  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1219813, 'IN', 1323, 'IN', 'P', '31/08/2017'); </SqlCommand>
+  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1219819, 'IN', 1323, 'IN', 'P', '01/09/2017'); </SqlCommand>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="CAFFIERI MARTA SANDRA         "/>
       <contrato>
@@ -41,6 +41,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -50,11 +60,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335692" barras_litoral="81870011335692000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
+    <codigoBarras barras_correo="0011335692" barras_litoral="81870011335692000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="MONTES MIRTA BEATRIZ          "/>
       <contrato>
@@ -92,6 +102,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -101,11 +121,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335693" barras_litoral="81870011335693000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
+    <codigoBarras barras_correo="0011335693" barras_litoral="81870011335693000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="FIGUEROA IRMA HAYDEE          "/>
       <contrato>
@@ -143,6 +163,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -152,11 +182,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335694" barras_litoral="81870011335694000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
+    <codigoBarras barras_correo="0011335694" barras_litoral="81870011335694000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="MOLINARI EMILCE               "/>
       <contrato>
@@ -194,6 +224,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -203,11 +243,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335695" barras_litoral="81870011335695000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
+    <codigoBarras barras_correo="0011335695" barras_litoral="81870011335695000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="SCAZZARIELLO CARLOS           "/>
       <contrato>
@@ -245,6 +285,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -254,11 +304,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335696" barras_litoral="81870011335696000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
+    <codigoBarras barras_correo="0011335696" barras_litoral="81870011335696000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="SALIVA DE TUFILLI M           "/>
       <contrato>
@@ -296,6 +346,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -305,11 +365,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335697" barras_litoral="81870011335697000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
+    <codigoBarras barras_correo="0011335697" barras_litoral="81870011335697000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="3" tipo="I1">
+  <Reporte CantidadDeFacturas="3" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="BITONTE ROQUE                 "/>
       <contrato>
@@ -347,6 +407,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -356,12 +426,12 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335698" barras_litoral="81870011335698000012345454310820173108201710"/>
+    <codigoBarras barras_correo="0011335698" barras_litoral="81870011335698000012345454010920170109201710"/>
     <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121981" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1219813 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1219819 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="PREFECTURA NAVAL ARGENTINA    "/>
       <contrato>
@@ -399,6 +469,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -408,11 +488,11 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335699" barras_litoral="81870011335699000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
+    <codigoBarras barras_correo="0011335699" barras_litoral="81870011335699000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" tipo="I1">
+  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
     <notificacion>
       <persona razon_social="CAPURRO JUAN SALVADOR         "/>
       <contrato>
@@ -450,6 +530,16 @@
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
+        <item sin_datos="            "/>
       </documento>
       <totalesTramite sin_datos="                                                            "/>
       <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
@@ -459,15 +549,15 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335700" barras_litoral="81870011335700000012345454310820173108201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219813 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
+    <codigoBarras barras_correo="0011335700" barras_litoral="81870011335700000012345454010920170109201710"/>
+    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
   </Reporte>
 
   <CMD/>
 
   <CMD/>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1219813; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1219819; </SqlCommand>
 
   <SqlCommand id="6" type="EXECUTESQL"/>
 
