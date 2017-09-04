@@ -1,0 +1,362 @@
+#
+# Linea:Posicion:Longitud:Font:X:Y
+[Formulario]
+# 
+# En el campo formulario, utilizar la secuencia:
+#
+#                   \E&fNy4X
+#
+# ... donde se debe reemplazar "N" por uno de los siguientes:
+#
+#     1: Ordenes de trabajo
+#     2: Nota de credito clientes comunes
+#     3: Nota de credito grandes clientes
+#     4: Recibo de cobranza
+#     5: Factura grandes clientes
+#     6: Boletas de deposito
+#
+#                    300dpi   A4      Portrait         Formulario
+NombreDelFormulario: \E*t300R \E&l26A \E&l0O    \E&l0S \E&f5y4X
+
+[Fonts]
+#
+# Fonts proporcionales (El tama#o se fija en "v")
+#
+AB8:   \E(19U \E(s1p        8v   0s 3b 16602T      # Arial Bold
+AB9:   \E(19U \E(s1p        9v   0s 3b 16602T      # Arial Bold
+A7:    \E(19U \E(s1p        7v   0s 0b 16602T      # Arial
+A6:    \E(19U \E(s1p        6v   0s 0b 16602T      # Arial
+#
+# Fonts no proporcionales (El tama#o se fija en "h")
+#
+14cpi: \E(19U \E(s0p    14h      0s 0b 0T          # 14 cpi     
+17cpi: \E(19U \E(s0p    17h      0s 0b 0T          # 17 cpi
+18cpi: \E(19U \E(s0p    18h      0s 0b 0T          # 18 cpi     
+
+[LineasDeListado]
+#
+# Cabecera
+#
+1:1:8:AB8:2150:110          # Original/Copia
+2:1:40:A7:1750:140          # Lugar de emision
+3:1:10:A7:1750:220          # Fecha de emision
+4:1:14:A7:1750:300          # Numero de factura
+4:15:50:AB9:300:0           # Leyenda FP       
+5:1:60:AB9:50:380           # Razon social
+5:61:40:A7:1080:380         # Tipo de cliente
+5:101:8:AB8:1750:380        # Numero de cliente
+6:1:50:AB8:50:420           # Domicilio
+6:51:60:A7:1080:430         # Tipo de contribuyente
+7:1:38:AB8:50:460           # Codigo postal y localidad
+7:39:16:A7:1080:480         # CUIT
+7:55:10:AB8:1750:430        # Numero de contrato
+8:1:16:A7:1080:530          # Ingresos brutos
+#
+# Lecturas
+#
+9::17:A7:540:620            # Periodo de consumo
+#
+10::36:18cpi:900:900        # Linea "DETALLE DE CONSUMO EN HOJA ADJUNTA"
+#
+# primer linea
+#
+11:1:10:17cpi:55:760        # Numero de medidor
+11:11:10:17cpi:292:760      # Fecha lectura anterior
+11:21:9:17cpi:545:760       # lectura anterior       
+11:30:10:17cpi:795:760      # Fecha ultima lectura   
+11:40:9:17cpi:1063:760      # ultima lectura         
+11:49:12:17cpi:1320:760     # factor de correccion   
+11:61:9:17cpi:1570:760      # volumen consumido      
+11:70:6:17cpi:1890:760      # poder calorifico       
+11:76:9:17cpi:2120:760      # volumen consumido a 9300
+#
+# segunda linea
+#
+12:1:10:17cpi:55:790        # Numero de medidor
+12:11:10:17cpi:292:790      # Fecha lectura anterior
+12:21:9:17cpi:545:790       # lectura anterior       
+12:30:10:17cpi:795:790      # Fecha ultima lectura   
+12:40:9:17cpi:1063:790      # ultima lectura         
+12:49:12:17cpi:1320:790     # factor de correccion   
+12:61:9:17cpi:1570:790      # volumen consumido      
+12:70:6:17cpi:1890:790      # poder calorifico       
+12:76:9:17cpi:2120:790      # volumen consumido a 9300
+#
+# Tercer linea
+#
+13:1:10:17cpi:55:820        # Numero de medidor
+13:11:10:17cpi:292:820      # Fecha lectura anterior
+13:21:9:17cpi:545:820       # lectura anterior       
+13:30:10:17cpi:795:820      # Fecha ultima lectura   
+13:40:9:17cpi:1063:820      # ultima lectura         
+13:49:12:17cpi:1320:820     # factor de correccion   
+13:61:9:17cpi:1570:820      # volumen consumido      
+13:70:6:17cpi:1890:820      # poder calorifico       
+13:76:9:17cpi:2120:820      # volumen consumido a 9300
+#
+# cuarta linea
+#
+14:1:10:17cpi:55:850        # Numero de medidor
+14:11:10:17cpi:292:850      # Fecha lectura anterior
+14:21:9:17cpi:545:850       # lectura anterior       
+14:30:10:17cpi:795:850      # Fecha ultima lectura   
+14:40:9:17cpi:1063:850      # ultima lectura         
+14:49:12:17cpi:1320:850     # factor de correccion   
+14:61:9:17cpi:1570:850      # volumen consumido      
+14:70:6:17cpi:1890:850      # poder calorifico       
+14:76:9:17cpi:2120:850      # volumen consumido a 9300
+#
+# quinta linea
+#
+15:1:10:17cpi:55:880        # Numero de medidor
+15:11:10:17cpi:292:880      # Fecha lectura anterior
+15:21:9:17cpi:545:880       # lectura anterior       
+15:30:10:17cpi:795:880      # Fecha ultima lectura   
+15:40:9:17cpi:1063:880      # ultima lectura         
+15:49:12:17cpi:1320:880     # factor de correccion   
+15:61:9:17cpi:1570:880      # volumen consumido      
+15:70:6:17cpi:1890:880      # poder calorifico       
+15:76:9:17cpi:2120:880      # volumen consumido a 9300
+#
+# sexta linea
+#
+16:1:10:17cpi:55:910        # Numero de medidor
+16:11:10:17cpi:292:910      # Fecha lectura anterior
+16:21:9:17cpi:545:910       # lectura anterior       
+16:30:10:17cpi:795:910      # Fecha ultima lectura   
+16:40:9:17cpi:1063:910      # ultima lectura         
+16:49:12:17cpi:1320:910     # factor de correccion   
+16:61:9:17cpi:1570:910      # volumen consumido      
+16:70:6:17cpi:1890:910      # poder calorifico       
+16:76:9:17cpi:2120:910      # volumen consumido a 9300
+#
+# septima linea
+#
+17:1:10:17cpi:55:940        # Numero de medidor
+17:11:10:17cpi:292:940      # Fecha lectura anterior
+17:21:9:17cpi:545:940       # lectura anterior       
+17:30:10:17cpi:795:940      # Fecha ultima lectura   
+17:40:9:17cpi:1063:940      # ultima lectura         
+17:49:12:17cpi:1320:940     # factor de correccion   
+17:61:9:17cpi:1570:940      # volumen consumido      
+17:70:6:17cpi:1890:940      # poder calorifico       
+17:76:9:17cpi:2120:940      # volumen consumido a 9300
+
+# octava linea
+#
+18:1:10:17cpi:55:970        # Numero de medidor
+18:11:10:17cpi:292:970      # Fecha lectura anterior
+18:21:9:17cpi:545:970       # lectura anterior       
+18:30:10:17cpi:795:970      # Fecha ultima lectura   
+18:40:9:17cpi:1063:970      # ultima lectura         
+18:49:12:17cpi:1320:970     # factor de correccion   
+18:61:9:17cpi:1570:970      # volumen consumido      
+18:70:6:17cpi:1890:970      # poder calorifico       
+18:76:9:17cpi:2120:970      # volumen consumido a 9300
+#
+# novena linea
+#
+19:1:10:17cpi:55:1000       # Numero de medidor
+19:11:10:17cpi:292:1000     # Fecha lectura anterior
+19:21:9:17cpi:545:1000      # lectura anterior       
+19:30:10:17cpi:795:1000     # Fecha ultima lectura   
+19:40:9:17cpi:1063:1000     # ultima lectura         
+19:49:12:17cpi:1320:1000    # factor de correccion   
+19:61:9:17cpi:1570:1000     # volumen consumido      
+19:70:6:17cpi:1890:1000     # poder calorifico       
+19:76:9:17cpi:2120:1000     # volumen consumido a 9300
+#
+# decima linea
+#
+20:1:10:17cpi:55:1030       # Numero de medidor
+20:11:10:17cpi:292:1030     # Fecha lectura anterior
+20:21:9:17cpi:545:1030      # lectura anterior
+20:30:10:17cpi:795:1030     # Fecha ultima lectura
+20:40:9:17cpi:1063:1030     # ultima lectura
+20:49:12:17cpi:1320:1030    # factor de correccion
+20:61:9:17cpi:1570:1030     # volumen consumido
+20:70:6:17cpi:1890:1030     # poder calorifico
+20:76:9:17cpi:2120:1030     # volumen consumido a 9300
+#
+# decimoprimer linea
+#
+21:1:10:17cpi:55:1060       # Numero de medidor
+21:11:10:17cpi:292:1060     # Fecha lectura anterior
+21:21:9:17cpi:545:1060      # lectura anterior
+21:30:10:17cpi:795:1060     # Fecha ultima lectura
+21:40:9:17cpi:1063:1060     # ultima lectura
+21:49:12:17cpi:1320:1060    # factor de correccion
+21:61:9:17cpi:1570:1060     # volumen consumido
+21:70:6:17cpi:1890:1060     # poder calorifico
+21:76:9:17cpi:2120:1060     # volumen consumido a 9300
+#
+# decimosegunda linea
+#
+22:1:10:17cpi:55:1090       # Numero de medidor
+22:11:10:17cpi:292:1090     # Fecha lectura anterior
+22:21:9:17cpi:545:1090      # lectura anterior
+22:30:10:17cpi:795:1090     # Fecha ultima lectura
+22:40:9:17cpi:1063:1090     # ultima lectura
+22:49:12:17cpi:1320:1090    # factor de correccion
+22:61:9:17cpi:1570:1090     # volumen consumido
+22:70:6:17cpi:1890:1090     # poder calorifico
+22:76:9:17cpi:2120:1090     # volumen consumido a 9300
+#
+# Totales
+#
+23:1:9:14cpi:2110:1147      # volumen consumido a 9300
+#
+# Conceptos
+#
+24:1:40:A7:980:1220         # descripcion del servicio
+# primer linea
+25:1:60:17cpi:50:1350       # concepto
+25:61:13:17cpi:1790:1350    # importe parcial
+25:74:13:17cpi:2080:1350    # importe total
+# segunda linea
+26:1:60:17cpi:50:1380       # concepto
+26:61:13:17cpi:1790:1380    # importe parcial
+26:74:13:17cpi:2080:1380    # importe total
+# tercer linea
+27:1:60:17cpi:50:1410       # concepto
+27:61:13:17cpi:1790:1410    # importe parcial
+27:74:13:17cpi:2080:1410    # importe total
+# cuarta linea
+28:1:60:17cpi:50:1440       # concepto
+28:61:13:17cpi:1790:1440    # importe parcial
+28:74:13:17cpi:2080:1440    # importe total
+# quinta linea
+29:1:60:17cpi:50:1470       # concepto
+29:61:13:17cpi:1790:1470    # importe parcial
+29:74:13:17cpi:2080:1470    # importe total
+# sexta linea
+30:1:60:17cpi:50:1500       # concepto
+30:61:13:17cpi:1790:1500    # importe parcial
+30:74:13:17cpi:2080:1500    # importe total
+# septima linea
+31:1:60:17cpi:50:1530       # concepto
+31:61:13:17cpi:1790:1530    # importe parcial
+31:74:13:17cpi:2080:1530    # importe total
+# octava linea
+32:1:60:17cpi:50:1560       # concepto
+32:61:13:17cpi:1790:1560    # importe parcial
+32:74:13:17cpi:2080:1560    # importe total
+# novena linea
+33:1:60:17cpi:50:1590       # concepto
+33:61:13:17cpi:1790:1590    # importe parcial
+33:74:13:17cpi:2080:1590    # importe total
+# decima linea
+34:1:60:17cpi:50:1620       # concepto
+34:61:13:17cpi:1790:1620    # importe parcial
+34:74:13:17cpi:2080:1620    # importe total
+# decimoprimer linea
+35:1:60:17cpi:50:1650       # concepto
+35:61:13:17cpi:1790:1650    # importe parcial
+35:74:13:17cpi:2080:1650    # importe total
+# decimosegunda linea
+36:1:60:17cpi:50:1680       # concepto
+36:61:13:17cpi:1790:1680    # importe parcial
+36:74:13:17cpi:2080:1680    # importe total
+# decimotercera linea
+37:1:60:17cpi:50:1710       # concepto
+37:61:13:17cpi:1790:1710    # importe parcial
+37:74:13:17cpi:2080:1710    # importe total
+# decimocuarta linea
+38:1:60:17cpi:50:1740       # concepto
+38:61:13:17cpi:1790:1740    # importe parcial
+38:74:13:17cpi:2080:1740    # importe total
+# decimoquinta linea
+39:1:60:17cpi:50:1770       # concepto
+39:61:13:17cpi:1790:1770    # importe parcial
+39:74:13:17cpi:2080:1770    # importe total
+# decimosexta linea
+40:1:60:17cpi:50:1800       # concepto
+40:61:13:17cpi:1790:1800    # importe parcial
+40:74:13:17cpi:2080:1800    # importe total
+# linea de totales
+42:1:50:14cpi:670:1840      # resolucion
+42:61:13:14cpi:2030:1840    # importe total
+# linea de referencias
+43:1:72:17cpi:520:1880       # Leyenda "Por cuenta y orden CUIT N° 30-70904335-4..."
+43:73:73:17cpi:520:1910      # Leyenda "Este concepto podra estar afectado por..."
+43:146:71:17cpi:520:1940     # Leyenda "y/o municipales de acuerdo a lo que definan..."
+#
+# Otros conceptos
+#
+# primer linea
+44:1:60:17cpi:50:2070       # concepto
+44:61:16:17cpi:1730:2070    # importe parcial
+44:77:13:17cpi:2080:2070    # importe total
+# segunda linea
+45:1:60:17cpi:50:2100       # concepto
+45:61:16:17cpi:1730:2100    # importe parcial
+45:77:13:17cpi:2080:2100    # importe total
+# tercer linea
+46:1:60:17cpi:50:2130       # concepto
+46:61:16:17cpi:1730:2130    # importe parcial
+46:77:13:17cpi:2080:2130    # importe total
+# cuarta linea
+47:1:60:17cpi:50:2160       # concepto
+47:61:16:17cpi:1730:2160    # importe parcial
+47:77:13:17cpi:2080:2160    # importe total
+# quinta linea
+48:1:60:17cpi:50:2190       # concepto
+48:61:16:17cpi:1730:2190    # importe parcial
+48:77:13:17cpi:2080:2190    # importe total
+# sexta linea
+49:1:60:17cpi:50:2220       # concepto
+49:61:16:17cpi:1730:2220    # importe parcial
+49:77:13:17cpi:2080:2220    # importe total
+# septima linea
+50:1:60:17cpi:50:2250       # concepto
+50:61:16:17cpi:1730:2250    # importe parcial
+50:77:13:17cpi:2080:2250    # importe total
+# octava linea
+51:1:60:17cpi:50:2280       # concepto
+51:61:16:17cpi:1730:2280    # importe parcial
+51:77:13:17cpi:2080:2280    # importe total
+# novena linea
+52:1:60:17cpi:50:2310       # concepto
+52:61:16:17cpi:1730:2310    # importe parcial
+52:77:13:17cpi:2080:2310    # importe total
+# decima linea
+53:1:60:17cpi:50:2340       # concepto
+53:61:16:17cpi:1730:2340    # importe parcial
+53:77:13:17cpi:2080:2340    # importe total
+# decimoprimer linea
+54:1:60:17cpi:50:2370       # concepto
+54:61:16:17cpi:1730:2370    # importe parcial
+54:77:13:17cpi:2080:2370    # importe total
+# decimosegunda linea
+55:1:60:17cpi:50:2400       # concepto
+55:61:16:17cpi:1730:2400    # importe parcial
+55:77:13:17cpi:2080:2400    # importe total
+#
+# "EL MONTO DE IVA DISCRIMINADO"...
+41:1:70:14cpi:50:2390       # concepto
+#
+# linea de subtotal
+56:1:13:14cpi:2050:2440
+#
+# linea de total
+57:1:13:14cpi:2050:2510
+# 
+58:1:60:18cpi:50:2640       # direccion del suministro
+58:61:3:18cpi:1350:2640     # codigo de localidad
+58:64:6:18cpi:1503:2640     # ruta
+58:70:2:18cpi:1700:2640     # grupo de lectura
+58:72:4:18cpi:1858:2640     # grupo de facturacion
+58:76:4:18cpi:2032:2640     # suministro original
+58:80:4:18cpi:2215:2640     # tipo de tarifa
+#
+59:1:80:18cpi:410:2730      # lugar de pago
+#
+60:1:200:A6:160:2850        # Plazo de pago
+61:1:200:A6:160:2890        # Plazo de pago
+62:1:16:AB8:1440:480        # 1er Vencimiento   
+62:18:10:AB8:1750:480       # 1er Vencimiento   
+62:29:16:AB8:1440:530       # 2er Vencimiento   
+62:46:10:AB8:1750:530       # 2er Vencimiento   
+63:1:35:A6:160:2930			# Categoria PURE 2006
+64:1:200:AB9:160:2980       # Texto Ajuste Tarifario
+65:1:200:AB9:160:3020       # Texto Ajuste Tarifario

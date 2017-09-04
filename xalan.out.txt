@@ -24,13 +24,6 @@ CONTRATO:
 909596  
 
 
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
-
-
 Items [30 lineas maximo]:
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
@@ -133,13 +126,6 @@ DEL POZO F. 361 09   (2930) SAN PEDRO
 
 CONTRATO:   
 909596  
-
-
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
 
 
 Items [30 lineas maximo]:
@@ -246,13 +232,6 @@ CONTRATO:
 909596  
 
 
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
-
-
 Items [30 lineas maximo]:
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
@@ -355,13 +334,6 @@ DEL POZO F. 361 09   (2930) SAN PEDRO
 
 CONTRATO:   
 909596  
-
-
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
 
 
 Items [30 lineas maximo]:
@@ -468,13 +440,6 @@ CONTRATO:
 909596  
 
 
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
-
-
 Items [30 lineas maximo]:
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
@@ -577,13 +542,6 @@ DEL POZO F. 361 09   (2930) SAN PEDRO
 
 CONTRATO:   
 909596  
-
-
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
 
 
 Items [30 lineas maximo]:
@@ -690,13 +648,6 @@ CONTRATO:
 909596  
 
 
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
-
-
 Items [30 lineas maximo]:
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
 F     9814734696      05/06/2017            176.62
@@ -801,13 +752,6 @@ CONTRATO:
 909596  
 
 
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
-
-
 Items [30 lineas maximo]:
 COMPROBANTE           FECHA VTO.      SALDO DEUDOR
            
@@ -910,13 +854,6 @@ DEL POZO F. 361 09   (2930) SAN PEDRO
 
 CONTRATO:   
 909596  
-
-
-Texto 1 [4 lineas maximo]:
-Sr. Cliente: Le comunicamos que a la fecha del presente Aviso, registra deuda vencida con esta
-Distribuidora de acuerdo al siguiente detalle, el cual incluye cobranzas en entidades recauda-
-doras hasta el XX/XX/XXXX (inclusive). Si Ud. canceló su deuda hasta el día hábil anterior
-(inclusive) a la fecha de recepción de este Aviso, le rogamos desestimarlo.
 
 
 Items [30 lineas maximo]:

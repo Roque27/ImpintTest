@@ -1,0 +1,50 @@
+#
+# Linea:Posicion:Longitud:Font:X:Y
+[Formulario]
+#
+# En el campo formulario, utilizar la secuencia:
+#
+#                   \E&fNy4X
+#
+# ... donde se debe reemplazar "N" por uno de los siguientes:
+#
+#     1: Ordenes de trabajo
+#     2: Nota de credito clientes comunes
+#     3: Nota de credito grandes clientes
+#     4: Recibo de cobranza
+#     5: Factura grandes clientes
+#     6: Boletas de deposito
+#
+#                    300dpi   A4      Portrait         Formulario
+#NombreDelFormulario: \E*t300R \E&l26A \E&l0O    \E&l0S \E&f5y4X
+NombreDelFormulario: \E*t300R \E&l26A \E&l0O \E&l0S
+
+[Fonts]
+#
+# Fonts proporcionales (El tama#o se fija en "v")
+#
+A6:    \E(19U \E(s1p        6v   0s 0b 16602T      # Arial
+A7:    \E(19U \E(s1p        7v   0s 0b 16602T      # Arial
+A8:    \E(19U \E(s1p        8v   0s 0b 16602T      # Arial
+A9:    \E(19U \E(s1p        9v   0s 0b 16602T      # Arial
+AB6:   \E(19U \E(s1p        6v   0s 3b 16602T      # Arial Bold
+AB7:   \E(19U \E(s1p        7v   0s 3b 16602T      # Arial Bold
+AB8:   \E(19U \E(s1p        8v   0s 3b 16602T      # Arial Bold
+AB9:   \E(19U \E(s1p        9v   0s 3b 16602T      # Arial Bold
+AB12:  \E(19U \E(s1p       12v   0s 3b 16602T      # Arial Bold
+AB11:  \E(19U \E(s1p       11v   0s 3b 16602T      # Arial Bold
+#
+# Fonts no proporcionales (El tama#o se fija en "h")
+#
+12cpi: \E(19U \E(s0p    12h      0s 0b 0T          # 12 cpi
+14cpi: \E(19U \E(s0p    14h      0s 0b 0T          # 14 cpi
+17cpi: \E(19U \E(s0p    17h      0s 0b 0T          # 17 cpi
+17cpib:\E(19U \E(s0p    17h      0s 3b 0T          # 17 cpi
+18cpi: \E(19U \E(s0p    18h      0s 0b 0T          # 18 cpi
+18cpib:\E(19U \E(s0p    18h      0s 3b 0T          # 18 cpi Bold
+20cpi:  \E(19U \E(s0p   20h      0s 0b 0T          # 20 cpi
+20cpib: \E(19U \E(s0p   20h      0s 3b 0T          # 20 cpi Bold
+26cpi:  \E(19U \E(s0p   26h      0s 0b 0T          # 26 cpi
+28cpi:  \E(19U \E(s0p   28h      0s 0b 0T          # 28 cpi
+
+[LineasDeListado]
