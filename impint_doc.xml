@@ -17,6 +17,7 @@
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
         <qry:variable name="sysdate" type="string"/>
+        <qry:variable name="sysdate_insert" type="string"/>
         
         <qry:variable name="l_usr_numero" type="integer"/>
         <qry:variable name="l_tim_codigo" type="string"/>
@@ -167,6 +168,8 @@
         <!-- Prs_Num_Ori -->
 
         <!-- SelectCodigoBarras -->
+        <qry:variable name="barras_litoral_var" type="string"/>
+        <qry:variable name="barras_correo_var" type="string"/>
         
         <!-- Buscar_Codigos_Control -->
         <qry:variable name="v_tim_codigo" type="string"/>
@@ -253,14 +256,14 @@
             <qry:element name="SqlCommand">
                 <qry:attribute name="type" value="INSERT"/>
                 <qry:attribute name="id" value="1"/>
-                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
+                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', TO_DATE('{$sysdate_insert}')); "/>
                 <!--<qry:element name="control_procesos">
                     <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                     <qry:attribute name="cpr_tipo_proceso" value="IN"/>
                     <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
                     <qry:attribute name="prc_codigo" value="IN"/>
                     <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
-                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
+                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate_insert}"/>
                 </qry:element>-->
             </qry:element>
 
@@ -357,7 +360,7 @@
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
                                     <qry:attribute name="id" value="2"/>
-                                    <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
+                                    <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
@@ -369,7 +372,7 @@
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
                                     <qry:attribute name="id" value="3"/>
-                                    <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
+                                    <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
@@ -385,7 +388,7 @@
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
                                     <qry:attribute name="id" value="4"/>
-                                    <qry:text value="UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = {$l_cpr_numero} ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = {#ROW:/ROW/@ROWID}; "/>
+                                    <qry:text value="UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = {$l_cpr_numero} ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="ord_estado" value="A"/>
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
@@ -449,11 +452,13 @@
     <qry:query name="SeleccionaFechaActual" > 
         <qry:select>
             SELECT TO_CHAR(sysdate, 'dd/mm/yyyy') AS FECHA
+                ,TO_CHAR(sysdate, 'mm/dd/yyyy') AS FECHA_INSERT
             FROM DUAL
         </qry:select>
         <qry:out>
             <qry:for-each-row>
                 <qry:set-variable name="sysdate" value="#ROW:/ROW/@FECHA"/>
+                <qry:set-variable name="sysdate_insert" value="#ROW:/ROW/@FECHA_INSERT"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -2673,14 +2678,31 @@
         <qry:out>
             <!-- TODO -->
             <!-- Como hacer con el tema de la impresion del codigo de barras -->
-            <qry:element name="codigoBarras" >
+            <qry:element name="codigoBarras">
                 <qry:for-each-row>
                     <qry:print output="stdout" value="                                  TEST: Fecha {$sysdate}"/>
-                    <qry:attribute name="barras_litoral" value="{#ROW:/ROW/@COD_EMPRESA}{#ROW:/ROW/@TIPO_COMPROBANTE}{#ROW:/ROW/@NRO_COMPROBANTE}{#ROW:/ROW/@IMPORTE}{#ROW:/ROW/@FECHA_LIMITE_1}{#ROW:/ROW/@FECHA_LIMITE_2}{#ROW:/ROW/@TIPO_FACTURA}{#ROW:/ROW/@DIGITO_VERIFICADOR}" length="44" align="left"/>
+                    <qry:set-variable name="barras_litoral_var" value="{#ROW:/ROW/@COD_EMPRESA}{#ROW:/ROW/@TIPO_COMPROBANTE}{#ROW:/ROW/@NRO_COMPROBANTE}{#ROW:/ROW/@IMPORTE}{#ROW:/ROW/@FECHA_LIMITE_1}{#ROW:/ROW/@FECHA_LIMITE_2}{#ROW:/ROW/@TIPO_FACTURA}{#ROW:/ROW/@DIGITO_VERIFICADOR}"/>
                     <qry:set-variable name="nrobarra" value="#ROW:/ROW/@NRO_ORD"/>
-                    <qry:attribute name="barras_correo" value="#ROW:/ROW/@NRO_ORD" length="10" align="left"/>
+                    <qry:set-variable name="barras_correo_var" value="#ROW:/ROW/@NRO_ORD"/>
+                    <qry:insert-query name="Numeros2Barra"/>
                 </qry:for-each-row>
             </qry:element>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="Numeros2Barra"> 
+        <qry:select>
+            SELECT CONVIERTE_BARRA({$barras_correo_var}) AS COD_CORREO,
+                CONVIERTE_BARRA({$barras_litoral_var}) AS COD_LITORAL
+            FROM DUAL 
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:attribute name="barras_litoral_codigo" value="{$barras_litoral_var}" />
+                <qry:attribute name="barras_litoral" value="{#ROW:/ROW/@COD_LITORAL}" />
+                <qry:attribute name="barras_correo_codigo" value="{$barras_correo_var}" />
+                <qry:attribute name="barras_correo" value="{#ROW:/ROW/@COD_CORREO}" />
+            </qry:for-each-row>
         </qry:out>
     </qry:query>
     

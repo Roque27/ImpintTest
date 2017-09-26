@@ -11,9 +11,11 @@ Intermedia=${Fichero}.media.xml
 Salida=${Fichero}.out.xml
 QueryInsert=${Fichero}.insert.xml
 QueryUpdate=${Fichero}.update.xml
-QueryExecute=${Fichero}.execute.xml
+QueryExecute=${Fichero}.execute.sql
+SalidaExecute=0
+QueryLog=${Fichero}.logsql.xml
 XslAvisoDeuda=get_aviso_deuda.xsl
-SalidaXalan=xalan.out.txt
+SalidaXalan=xalan.out.lst
 
 > ${Salida}
 > ${QueryInsert}
@@ -117,6 +119,7 @@ EOF
 cat ${Intermedia} | ./XMLD > ${Salida}
 echo ""
 
+echo "BEGIN " >> ${QueryExecute}
 for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
 do
 	command=`echo ${key} | cut -d"|" -f1`
@@ -138,9 +141,11 @@ do
 			;;
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
+			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; RAISE; END; / " >> ${QueryExecute}
 			echo quit >> ${QueryExecute}
 			#cat ${QueryExecute}
-			#echo exit | sqlplus -s lgas/taxi@sict2 @${QueryExecute}
+			#sqlplus lgas/taxi@sict2 @${QueryExecute} #>> ${QueryLog}
+			SalidaExecute=$?
 			;;
 		*)
 			echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE COMANDO"
@@ -151,38 +156,42 @@ done
 
 echo ""
 
-# I1 = AVISO DEUDA COMUN BAJO FIRMA
-# I4 = AVISO DEUDA COMUN BAJO FIRMA
-# C2 = Cierre c/dispositivo seguridad (cepo) p/gestión deuda
-# C3 = Corte c/retiro de medidor p/gestión deuda
-# D2 = Rechazo cobranza por débito automático
-# G1 = Intimación Grandes Clientes 48 horas
+if [ ${SalidaExecute} != 0 ]
+then
+	cat ${QueryLog}
+else
+	# I1 = AVISO DEUDA COMUN BAJO FIRMA
+	# I4 = AVISO DEUDA COMUN BAJO FIRMA
+	# C2 = Cierre c/dispositivo seguridad (cepo) p/gestión deuda
+	# C3 = Corte c/retiro de medidor p/gestión deuda
+	# D2 = Rechazo cobranza por débito automático
+	# G1 = Intimación Grandes Clientes 48 horas
 
-case ${TorCodigo} in
-	I1)
-		echo "============== Aviso Deuda comun bajo firma =============="
-		xalan -in ${Salida} -xsl ${XslAvisoDeuda} -out ${SalidaXalan}
-		cat ${SalidaXalan}
-		;;
-	I4)
-		echo "============== Aviso Deuda comun bajo firma =============="
-		;;
-  C2)
-		echo "============== Cierre c/dispositivo seguridad (cepo) p/gestión deuda =============="
-		;;
-	C3)
-		echo "============== Corte c/retiro de medidor p/gestión deuda =============="
-		;;
-	D2)
-		echo "============== Rechazo cobranza por débito automático =============="
-		;;
-	G1)
-		echo "============== Intimación Grandes Clientes 48 horas =============="
-		;;
-	*)
-		echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE REPORTE A IMPRIMIR"
- 		exit 1
-		;;
-esac
+	case ${TorCodigo} in
+		I1)
+			echo "============== Aviso Deuda comun bajo firma =============="
+			xalan -in ${Salida} -xsl ${XslAvisoDeuda} | tr "~" "\033" | tr "^" "\014" > ${SalidaXalan}
+			;;
+		I4)
+			echo "============== Aviso Deuda comun bajo firma =============="
+			;;
+	  C2)
+			echo "============== Cierre c/dispositivo seguridad (cepo) p/gestión deuda =============="
+			;;
+		C3)
+			echo "============== Corte c/retiro de medidor p/gestión deuda =============="
+			;;
+		D2)
+			echo "============== Rechazo cobranza por débito automático =============="
+			;;
+		G1)
+			echo "============== Intimación Grandes Clientes 48 horas =============="
+			;;
+		*)
+			echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE REPORTE A IMPRIMIR"
+	 		exit 1
+			;;
+	esac
+fi
 
 #./launch.sh id=MSALA/PaSsWoRd Tipo=CO Correo=SEND Suc=85 Sec=GESDEU Tor_codigo=I1 Ord_Dsd=11335692 Ord_Hst=11335700 User=MSALA file=ALEATORIO_19827415 Reporte=DEU_3401

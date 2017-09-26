@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
 <Impint>
 
-  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1219819, 'IN', 1323, 'IN', 'P', '01/09/2017'); </SqlCommand>
+  <SqlCommand id="1" type="INSERT">INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1242177, 'IN', 1255, 'IN', 'P', '26/09/2017'); </SqlCommand>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
+  <Reporte CantidadDeFacturas="6" fecha_emision="26-09-2017" tipo="I1">
     <notificacion>
-      <persona razon_social="CAFFIERI MARTA SANDRA         "/>
+      <persona razon_social="BARCELO LILIANA IRIS          "/>
       <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal_pago="2930" depto_pago="09" nro_pago="361"/>
+        <srv_direccion area_geografica="ARRECIFES" calle="FRASCHERI" cod_postal_pago="2740" depto_pago="B" nro_pago="186" piso_pago="PA"/>
       </contrato>
-      <ordenativo nro_ord="11335692       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
+      <ordenativo nro_ord="11533576       "/>
+      <ordenativo fecha_generacion="11/09/2017"/>
+      <ordenativo fecha_gen_habil_ant="08/09/2017"/>
+      <servicio scf_codigo="89 "/>
+      <sucursal descripcion="Pergamino                "/>
       <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
+        <srv_direccion area_geografica="ARRECIFES" calle="FRASCHERI" cod_postal="2740" depto="B" nro="186" piso="PA"/>
       </servicio>
-      <persona numero="991547  "/>
-      <contrato srv_cod="909596  "/>
+      <persona numero="842164  "/>
+      <contrato srv_cod="811359  "/>
       <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
+      <documento saldo_total="4384.04">
+        <item anio="2017 " asi_numero="342932" cnt_num="1" consumo="35" estado="D" fecha_emision="18/05/2017  " fecha_venc="05/06/17    " fecha_venc_1="05/06/2017  " fecha_venc_2="0           " importe="468.40" importe_basico="373.99" llamada_sit_x="   " numero="9814736446  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      234.20" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2017 " asi_numero="336137" cnt_num="1" consumo="96" estado="D" fecha_emision="23/01/2017  " fecha_venc="07/02/17    " fecha_venc_1="07/02/2017  " fecha_venc_2="0           " importe="785.96" importe_basico="604.28" llamada_sit_x="   " numero="9813290971  " periodo="1/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      785.96" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2017 " asi_numero="339239" cnt_num="1" consumo="65" estado="D" fecha_emision="22/03/2017  " fecha_venc="10/04/17    " fecha_venc_1="10/04/2017  " fecha_venc_2="0           " importe="612.78" importe_basico="471.17" llamada_sit_x="   " numero="9814036380  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      612.78" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2016 " asi_numero="333162" cnt_num="1" consumo="421" estado="D" fecha_emision="26/11/2016  " fecha_venc="15/12/16    " fecha_venc_1="15/12/2016  " fecha_venc_2="0           " importe="1030.02" importe_basico="790.23" llamada_sit_x="   " numero="9812595666  " periodo="11/2016  " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="     1030.02" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2016 " asi_numero="331628" cnt_num="1" consumo="669" estado="D" fecha_emision="31/10/2016  " fecha_venc="23/11/16    " fecha_venc_1="23/11/2016  " fecha_venc_2="0           " importe="1043.16" importe_basico="800.38" llamada_sit_x="   " numero="9811858597  " periodo="9/2016   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="     1043.16" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2016 " asi_numero="330673" cnt_num="1" consumo="710" estado="D" fecha_emision="13/10/2016  " fecha_venc="31/10/16    " fecha_venc_1="31/10/2016  " fecha_venc_2="0           " importe="1355.84" importe_basico="1449.72" llamada_sit_x="   " numero="9810942415  " periodo="7/2016   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      677.92" sin_datos="            " srv_cod="811359" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -60,93 +60,33 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335692" barras_litoral="81870011335692000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAY; </SqlCommand>
+    <codigoBarras barras_correo="&lt;nnWWnWnnnWWNwnnWwNnnnNNww>" barras_correo_codigo="0011533576" barras_litoral="&lt;WnnwNwnnWNnnWWnWnnnWWNwnnWwNnnnNNwwnnWWnnnWWnwNnnWwwNnNwnWnNwnWnNnWNnwnNwWnnwNNwwnnNWnWNnwnNwWnnwNNwwnnNWwnNNw>" barras_litoral_codigo="81870011533576000012345454260920172609201710"/>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="FRASCHERI         " cantidad_facturas="00006" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2740   " codigo_zona="   " departamento_pago="B  " dia="11" importe_aviso="448977.00" localidad_pago="ARRECIFES                     " mes="09" nro_puerta_pago="186 " numero_ordenativo="11533576" numero_proceso="124217" piso_pago="PA" razon_social="BARCELO LILIANA IRIS     " sucursal="89" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1242177 WHERE rowid = 'AAAVexAAKAAL+sAAAJ'; </SqlCommand>
   </Reporte>
 
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
+  <Reporte CantidadDeFacturas="4" fecha_emision="26-09-2017" tipo="I1">
     <notificacion>
-      <persona razon_social="MONTES MIRTA BEATRIZ          "/>
+      <persona razon_social="GUAMIS NADAL                  "/>
       <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal_pago="2930" depto_pago="11" nro_pago="385"/>
+        <srv_direccion area_geografica="ARRECIFES" calle="FRASCHERI" cod_postal_pago="2740" nro_pago="365"/>
       </contrato>
-      <ordenativo nro_ord="11335693       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
+      <ordenativo nro_ord="11533577       "/>
+      <ordenativo fecha_generacion="11/09/2017"/>
+      <ordenativo fecha_gen_habil_ant="08/09/2017"/>
+      <servicio scf_codigo="89 "/>
+      <sucursal descripcion="Pergamino                "/>
       <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
+        <srv_direccion area_geografica="ARRECIFES" calle="FRASCHERI" cod_postal="2740" depto="B" nro="186" piso="PA"/>
       </servicio>
-      <persona numero="991056  "/>
-      <contrato srv_cod="909354  "/>
+      <persona numero="469311  "/>
+      <contrato srv_cod="469311  "/>
       <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335693" barras_litoral="81870011335693000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAZ; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="FIGUEROA IRMA HAYDEE          "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DE GARAY JUAN" cod_postal_pago="2930" nro_pago="680"/>
-      </contrato>
-      <ordenativo nro_ord="11335694       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="1223143 "/>
-      <contrato srv_cod="1072788 "/>
-      <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
+      <documento saldo_total="5546.76">
+        <item anio="2017 " asi_numero="342932" cnt_num="1" consumo="369" estado="D" fecha_emision="18/05/2017  " fecha_venc="05/06/17    " fecha_venc_1="05/06/2017  " fecha_venc_2="0           " importe="2463.44" importe_basico="1966.28" llamada_sit_x="   " numero="9814736465  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="     2463.44" sin_datos="            " srv_cod="469311" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2017 " asi_numero="336137" cnt_num="1" consumo="186" estado="D" fecha_emision="23/01/2017  " fecha_venc="07/02/17    " fecha_venc_1="07/02/2017  " fecha_venc_2="0           " importe="939.16" importe_basico="721.85" llamada_sit_x="   " numero="9813290990  " periodo="1/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      939.16" sin_datos="            " srv_cod="469311" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2017 " asi_numero="339239" cnt_num="1" consumo="171" estado="D" fecha_emision="22/03/2017  " fecha_venc="10/04/17    " fecha_venc_1="10/04/2017  " fecha_venc_2="0           " importe="1013.90" importe_basico="779.40" llamada_sit_x="   " numero="9814036399  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="     1013.90" sin_datos="            " srv_cod="469311" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
+        <item anio="2016 " asi_numero="333162" cnt_num="1" consumo="434" estado="D" fecha_emision="26/11/2016  " fecha_venc="15/12/16    " fecha_venc_1="15/12/2016  " fecha_venc_2="0           " importe="1130.26" importe_basico="868.10" llamada_sit_x="   " numero="9812595685  " periodo="11/2016  " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="     1130.26" sin_datos="            " srv_cod="469311" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
         <item sin_datos="            "/>
@@ -182,382 +122,16 @@
       <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
       <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
     </notificacion>
-    <codigoBarras barras_correo="0011335694" barras_litoral="81870011335694000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAa; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="MOLINARI EMILCE               "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="BROWN GUILLERMO ALTE." cod_postal_pago="2930" nro_pago="150"/>
-      </contrato>
-      <ordenativo nro_ord="11335695       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="468342  "/>
-      <contrato srv_cod="468342  "/>
-      <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335695" barras_litoral="81870011335695000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAb; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="SCAZZARIELLO CARLOS           "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="25"/>
-      </contrato>
-      <ordenativo nro_ord="11335696       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="897881  "/>
-      <contrato srv_cod="468352  "/>
-      <contrato num="2 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335696" barras_litoral="81870011335696000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAc; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="SALIVA DE TUFILLI M           "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="30"/>
-      </contrato>
-      <ordenativo nro_ord="11335697       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="468353  "/>
-      <contrato srv_cod="468353  "/>
-      <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335697" barras_litoral="81870011335697000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAd; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="3" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="BITONTE ROQUE                 "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="45"/>
-      </contrato>
-      <ordenativo nro_ord="11335698       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="468354  "/>
-      <contrato srv_cod="468354  "/>
-      <contrato num="1 "/>
-      <documento saldo_total="257.30">
-        <item anio="2017 " asi_numero="342932" cnt_num="1" consumo="83" estado="D" fecha_emision="18/05/2017  " fecha_venc="05/06/17    " fecha_venc_1="05/06/2017  " fecha_venc_2="0           " importe="176.62" importe_basico="140.79" llamada_sit_x="   " numero="9814734696  " periodo="5/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="      176.62" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
-        <item anio="2017 " asi_numero="336137" cnt_num="1" consumo="59" estado="D" fecha_emision="23/01/2017  " fecha_venc="07/02/17    " fecha_venc_1="07/02/2017  " fecha_venc_2="0           " importe="28.24" importe_basico="94.16" llamada_sit_x="   " numero="9813289225  " periodo="1/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="       28.24" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
-        <item anio="2017 " asi_numero="339239" cnt_num="1" consumo="62" estado="D" fecha_emision="22/03/2017  " fecha_venc="10/04/17    " fecha_venc_1="10/04/2017  " fecha_venc_2="0           " importe="52.44" importe_basico="97.94" llamada_sit_x="   " numero="9814034630  " periodo="3/2017   " recargo_venc_2="0.00" recargo_venc_3="0.00" saldo="       52.44" sin_datos="            " srv_cod="468354" tipo="F  " tipo_origen="0  " urc_codigo="0"/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335698" barras_litoral="81870011335698000012345454010920170109201710"/>
-    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="SAN LORENZO       " cantidad_facturas="00003" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2930   " codigo_zona="   " departamento_pago="0  " dia="03" importe_aviso="33289.000" localidad_pago="SAN PEDRO                     " mes="08" nro_puerta_pago="45  " numero_ordenativo="11335698" numero_proceso="121981" piso_pago="0 " razon_social="BITONTE ROQUE            " sucursal="94" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
-    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1219819 WHERE rowid = AAAVexAAJAAKhtRAAe; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="PREFECTURA NAVAL ARGENTINA    "/>
-      <contrato>
-        <srv_direccion direccion_pago="25 DE MAYO 250 2930 - SAN PEDRO"/>
-      </contrato>
-      <ordenativo nro_ord="11335699       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="795     "/>
-      <contrato srv_cod="468375  "/>
-      <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335699" barras_litoral="81870011335699000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAf; </SqlCommand>
-  </Reporte>
-
-  <Reporte CantidadDeFacturas="0" Imputacion_Incobrables="0" fecha_emision="01-09-2017" tipo="I1">
-    <notificacion>
-      <persona razon_social="CAPURRO JUAN SALVADOR         "/>
-      <contrato>
-        <srv_direccion area_geografica="SAN PEDRO" calle="SAN LORENZO" cod_postal_pago="2930" nro_pago="870"/>
-      </contrato>
-      <ordenativo nro_ord="11335700       "/>
-      <ordenativo fecha_generacion="03/08/2017"/>
-      <ordenativo fecha_gen_habil_ant="02/08/2017"/>
-      <servicio scf_codigo="85 "/>
-      <sucursal descripcion="Baradero                 "/>
-      <servicio>
-        <srv_direccion area_geografica="SAN PEDRO" calle="DEL POZO F." cod_postal="2930" depto="09" nro="361"/>
-      </servicio>
-      <persona numero="1081853 "/>
-      <contrato srv_cod="969267  "/>
-      <contrato num="1 "/>
-      <documento saldo_total="0.00">
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-        <item sin_datos="            "/>
-      </documento>
-      <totalesTramite sin_datos="                                                            "/>
-      <cargos aviso="Cargo por aviso de deuda             : $   50.00 m^225!s IVA"/>
-      <cargos telegrama="Cargo por carta documento o telegrama: $  170.00 m^225!s IVA"/>
-      <cargos reconexion="Cargo por reconexi^243!n                 : $  350.00 m^225!s"/>
-      <tipoOrdenativo descripcion="AVISO DEUDA COMUN BAJO FIRMA"/>
-      <texto_notificacion eno_texto="&#xA;El detalle no incluye deuda por Cargo Decreto PEN 2067/08. Los saldos de comprobantes no&#xA;contienen intereses por mora, los cuales se le incluir^225!n en la primera LSP/Factura que se le &#xA;emita luego de efectuado el pago. El cargo por este aviso se le incluir^225! en su siguiente LSP/&#xA;Factura. &#xA;Si cancel^243! la deuda hasta el d^237!a h^225!bil anterior (inclusive) a la recepci^243!n de este aviso,&#xA;ya se le habr^225! acreditado el pago, por lo que le rogamos desestimarlo.&#xA;INTIMAMOS a Ud.a regularizar la deuda detallada dentro de las 72 hs.h^225!biles de recibido este&#xA;aviso, bajo apercibimiento de suspender el suministro en el domicilio. Para solicitar la reaper-&#xA;tura deber^225! abonar la deuda m^225!s intereses y cargos autorizados.&#xA;Recibimos su consulta por esta notificaci^243!n en el tel^233!fono 0810-444-5427 (LGAS).&#xA;&#xA;&#xA;"/>
-      <texto_notificacion eno_texto="Para abonar la deuda concurra a una entidad recaudadora llevando la(s) LSP/Factura(s)&#xA;original(es). Consulte la lista de entidades de cobranza en www.litoral-gas.com.ar.&#xA;Si concurre a una sucursal de Litoral Gas podr^225! abonar exclusivamente con tarjetas de &#xA;cr^233!dito/d^233!bito o cheques propios, o bien solicitar una Boleta para pago en efectivo&#xA;en entidades recaudadoras, que tambi^233!n puede imprimirla  ingresando en &#xA;www.litoral-gas.com.ar Oficina Virtual.&#xA;Este aviso no opera como libre deuda.&#xA;"/>
-    </notificacion>
-    <codigoBarras barras_correo="0011335700" barras_litoral="81870011335700000012345454010920170109201710"/>
-    <SqlCommand id="4" type="UPDATE">UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = 1219819 ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = AAAVexAAJAAKhtRAAg; </SqlCommand>
+    <codigoBarras barras_correo="&lt;nnWWnWnnnWWNwnnWwNnnnnnWW>" barras_correo_codigo="0011533577" barras_litoral="&lt;WnnwNwnnWNnnWWnWnnnWWNwnnWwNnnnnnWWnnWWnnnWWnwNnnWwwNnNwnWnNwnWnNnWNnwnNwWnnwNNwwnnNWnWNnwnNwWnnwNNwwnnNWwnNNw>" barras_litoral_codigo="81870011533577000012345454260920172609201710"/>
+    <ArchivoLote anio="2017" aviso_simple="A" calle_pago="FRASCHERI         " cantidad_facturas="00004" codigo_correo="SEND    " codigo_incidencia="00" codigo_postal_pago="2740   " codigo_zona="   " departamento_pago="0  " dia="11" importe_aviso="433563.00" localidad_pago="ARRECIFES                     " mes="09" nro_puerta_pago="365 " numero_ordenativo="11533577" numero_proceso="124217" piso_pago="0 " razon_social="GUAMIS NADAL             " sucursal="89" tipo_correo="CO" tipo_de_resgistro="1" titulo_aviso="                              " vacio="        "/>
+    <SqlCommand id="3" type="UPDATE">UPDATE ordenativos SET cpr_numero = 1242177 WHERE rowid = 'AAAVexAAKAAL+sAAAK'; </SqlCommand>
   </Reporte>
 
   <CMD/>
 
   <CMD/>
 
-  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1219819; </SqlCommand>
+  <SqlCommand id="5" type="UPDATE">UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1242177; </SqlCommand>
 
   <SqlCommand id="6" type="EXECUTESQL"/>
 
