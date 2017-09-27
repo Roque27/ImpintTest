@@ -1,0 +1,3 @@
+BEGIN 
+INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES(1242198, 'IN', 1255, 'IN', 'P', '26/09/2017'); UPDATE ordenativos SET cpr_numero = 1242198 WHERE rowid = 'AAAVexAAKAAL+sAAAJ'; UPDATE ordenativos SET cpr_numero = 1242198 WHERE rowid = 'AAAVexAAKAAL+sAAAK'; UPDATE ordenativos SET cpr_numero = 1242198 WHERE rowid = 'AAAVexAAKAAL+sAAAJ'; UPDATE ordenativos SET cpr_numero = 1242198 WHERE rowid = 'AAAVexAAKAAL+sAAAK'; UPDATE control_procesos SET est_codigo = 'I' WHERE cpr_numero = 1242198; EXCEPTION WHEN OTHERS THEN ROLLBACK; RAISE; END; / 
+quit

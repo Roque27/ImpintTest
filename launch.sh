@@ -119,7 +119,13 @@ EOF
 cat ${Intermedia} | ./XMLD > ${Salida}
 echo ""
 
-echo "BEGIN " >> ${QueryExecute}
+echo "set timing on
+set showmode off
+set serveroutput on
+set pause off
+set verify off
+spool ${QueryLog} 
+BEGIN " >> ${QueryExecute}
 for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
 do
 	command=`echo ${key} | cut -d"|" -f1`
@@ -141,11 +147,12 @@ do
 			;;
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
-			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; RAISE; END; / " >> ${QueryExecute}
-			echo quit >> ${QueryExecute}
+			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; RAISE; END; spool off " >> ${QueryExecute}
+			echo "exit;" >> ${QueryExecute}
 			#cat ${QueryExecute}
-			#sqlplus lgas/taxi@sict2 @${QueryExecute} #>> ${QueryLog}
-			SalidaExecute=$?
+			sqlplus -s lgas/taxi@sict2 < ${QueryExecute} #> ${QueryLog}
+			SalidaExecute=`grep ERROR ${QueryLog} | wc -l`
+			#SalidaExecute=$?
 			;;
 		*)
 			echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE COMANDO"
@@ -155,6 +162,10 @@ do
 done
 
 echo ""
+echo "lelele 1"
+echo ${SalidaExecute}
+echo "lelele 2"
+#cat ${QueryLog}
 
 if [ ${SalidaExecute} != 0 ]
 then
