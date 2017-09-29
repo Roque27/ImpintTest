@@ -124,6 +124,9 @@ set showmode off
 set serveroutput on
 set pause off
 set verify off
+set linesize 1000
+WHENEVER SQLERROR EXIT SQL.SQLCODE
+spool on
 spool ${QueryLog} 
 BEGIN " >> ${QueryExecute}
 for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
@@ -147,12 +150,16 @@ do
 			;;
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
-			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; RAISE; END; spool off " >> ${QueryExecute}
+			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; END; " >> ${QueryExecute}
+			echo "spool off " >> ${QueryExecute}
 			echo "exit;" >> ${QueryExecute}
 			#cat ${QueryExecute}
-			sqlplus -s lgas/taxi@sict2 < ${QueryExecute} #> ${QueryLog}
+			sqlplus lgas/taxi@sict2 < ${QueryExecute} #> ${QueryLog}
 			SalidaExecute=`grep ERROR ${QueryLog} | wc -l`
-			#SalidaExecute=$?
+			if [ ${SalidaExecute} = 0 ]
+			then
+				SalidaExecute=`grep unknown ${QueryLog} | wc -l`
+			fi
 			;;
 		*)
 			echo "ERROR NO SE PUDO DETERMINAR EL TIPO DE COMANDO"
@@ -162,14 +169,12 @@ do
 done
 
 echo ""
-echo "lelele 1"
+echo "Codigo de salida: "	
 echo ${SalidaExecute}
-echo "lelele 2"
-#cat ${QueryLog}
 
 if [ ${SalidaExecute} != 0 ]
 then
-	cat ${QueryLog}
+	cat ${QueryLog} | head -1
 else
 	# I1 = AVISO DEUDA COMUN BAJO FIRMA
 	# I4 = AVISO DEUDA COMUN BAJO FIRMA
