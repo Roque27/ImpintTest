@@ -119,16 +119,7 @@ EOF
 cat ${Intermedia} | ./XMLD > ${Salida}
 echo ""
 
-echo "set timing on
-set showmode off
-set serveroutput on
-set pause off
-set verify off
-set linesize 1000
-WHENEVER SQLERROR EXIT SQL.SQLCODE
-spool on
-spool ${QueryLog} 
-BEGIN " >> ${QueryExecute}
+echo "BEGIN " >> ${QueryExecute}
 for key in `xalan -in ${Salida} -xsl get_command_list.xsl`
 do
 	command=`echo ${key} | cut -d"|" -f1`
@@ -150,11 +141,22 @@ do
 			;;
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
-			echo "EXCEPTION WHEN OTHERS THEN ROLLBACK; END; " >> ${QueryExecute}
-			echo "spool off " >> ${QueryExecute}
-			echo "exit;" >> ${QueryExecute}
-			#cat ${QueryExecute}
-			sqlplus lgas/taxi@sict2 < ${QueryExecute} #> ${QueryLog}
+			# ----------------------------------------------------------------------------------------
+			echo "exception when others then ROLLBACK; dbms_output.put_line('@ERROR'); end;" >> ${QueryExecute}
+
+			sqlplus -s lgas/taxi@sict2 <<EOF >${QueryLog} 2>&1 
+			set serveroutput on size 20000 
+			whenever sqlerror exit 2; 
+			whenever oserror exit 2; 
+			declare 
+ 				myvar varchar(20);
+			@${QueryExecute}
+			/
+			quit
+EOF
+
+			# ----------------------------------------------------------------------------------------
+
 			SalidaExecute=`grep ERROR ${QueryLog} | wc -l`
 			if [ ${SalidaExecute} = 0 ]
 			then
@@ -169,8 +171,10 @@ do
 done
 
 echo ""
-echo "Codigo de salida: "	
+echo "Codigo Analizado de salida: "	
 echo ${SalidaExecute}
+echo "Codigo de salida: "	
+echo $?
 
 if [ ${SalidaExecute} != 0 ]
 then
