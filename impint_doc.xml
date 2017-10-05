@@ -17,6 +17,7 @@
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
         <qry:variable name="sysdate" type="string"/>
+        <qry:variable name="sysdate_insert" type="string"/>
         
         <qry:variable name="l_usr_numero" type="integer"/>
         <qry:variable name="l_tim_codigo" type="string"/>
@@ -255,14 +256,14 @@
             <qry:element name="SqlCommand">
                 <qry:attribute name="type" value="INSERT"/>
                 <qry:attribute name="id" value="1"/>
-                <qry:text value="INSERTasd INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', '{$sysdate}'); "/>
+                <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', TO_DATE('{$sysdate_insert}', 'MM/DD/YYYY')); "/>
                 <!--<qry:element name="control_procesos">
                     <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                     <qry:attribute name="cpr_tipo_proceso" value="IN"/>
                     <qry:attribute name="usr_numero_incorpora" value="{$l_usr_numero}"/>
                     <qry:attribute name="prc_codigo" value="IN"/>
                     <qry:attribute name="est_codigo" value="{$l_est_codigo}"/>
-                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate}"/>
+                    <qry:attribute name="cpr_fecha_inicio" value="{$sysdate_insert}"/>
                 </qry:element>-->
             </qry:element>
 
@@ -451,11 +452,13 @@
     <qry:query name="SeleccionaFechaActual" > 
         <qry:select>
             SELECT TO_CHAR(sysdate, 'dd/mm/yyyy') AS FECHA
+                  ,TO_CHAR(sysdate, 'mm/dd/yyyy') AS FECHA_INSERT
             FROM DUAL
         </qry:select>
         <qry:out>
             <qry:for-each-row>
                 <qry:set-variable name="sysdate" value="#ROW:/ROW/@FECHA"/>
+                <qry:set-variable name="sysdate_insert" value="#ROW:/ROW/@FECHA_INSERT"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>

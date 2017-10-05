@@ -143,34 +143,27 @@ do
     EXECUTESQL)
 			echo "================= EXECUTESQL ====================================================="
 			# ----------------------------------------------------------------------------------------
-			echo "commit work; exception when others then ROLLBACK; dbms_output.put_line('ERROR en Exception'); end;" >> ${QueryExecute}
+			echo "exception when others then ROLLBACK; dbms_output.put_line('ERROR'); end;" >> ${QueryExecute}
 
 			sqlplus -s lgas/taxi@sict2 <<EOF >${QueryLog} 2>&1 
-
 			set serveroutput on size 20000 
-
 			whenever sqlerror exit 2; 
-
 			whenever oserror exit 2; 
-
+			
 			@${QueryExecute}
-
 			/
 			quit
 EOF
-			echo ""
-			cat ${QueryLog}
-			echo ""
 
 			if [ $? -ne 0 ]     # codigo de retorno del sqlplus 
  				then 
-   				echo "ERROR en Out" >> ${QueryLog}
+   				echo "ERROR" >> ${QueryLog}
 			fi 
 			# ----------------------------------------------------------------------------------------
 
 			SalidaExecute=`grep ERROR ${QueryLog} | wc -l`
 
-			if [ ${SalidaExecute} -gt 1 ]
+			if [ ${SalidaExecute} -gt 0 ]
 			then
 				SalidaExecute=`expr $SalidaExecute - 1`
 			fi
@@ -202,7 +195,7 @@ then
 	echo "Ha ocurrido un error en el proceso"
 	echo "Log del proceso: "
 	echo ""
-	cat ${QueryLog} #| head -1
+	cat ${QueryLog} | head -1
 	echo ""
 else
 	# I1 = AVISO DEUDA COMUN BAJO FIRMA
@@ -240,5 +233,3 @@ else
 			;;
 	esac
 fi
-
-#./launch.sh id=MSALA/PaSsWoRd Tipo=CO Correo=SEND Suc=85 Sec=GESDEU Tor_codigo=I1 Ord_Dsd=11335692 Ord_Hst=11335700 User=MSALA file=ALEATORIO_19827415 Reporte=DEU_3401
