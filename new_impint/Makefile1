@@ -1,0 +1,34 @@
+SHELL=/usr/bin/sh
+CC=/usr/bin/cc
+PROC=$(ORACLE_HOME)/bin/proc
+SIC_HOME=$(HOME_SIC)
+SIC_DIR_LIB=$(SIC_HOME)/lib
+SIC_INCLUDE=$(SIC_DIR_LIB)/include
+ORA_LIB=$(ORACLE_HOME)/lib
+C_FLAGS=-I$(SIC_INCLUDE) -g
+LD_FLAGS=-L$(ORA_LIB) -L/usr/lib -L$(SIC_DIR_LIB)/clib -L$(SIC_DIR_LIB)/olib -L$(SIC_DIR_LIB)/blib -L$(SIC_DIR_LIB)/wrep /home/app_sicp_exe/sic/lib/clib/clib.a /home/app_sicp_exe/sic/lib/olib/olib.a /home/app_sicp_exe/sic/lib/blib/blib.a /home/app_sicp_exe/sic/lib/wrep/rwwclib.a -L/opt/oracle/OraHome1/lib/ -lclntsh -ldl -lm -lpthread -lnsl -lirc -lm -lpthread -lpthread -lpthread
+PROC_FLAGS=include=$(SIC_INCLUDE) ireclen=255 oreclen=255 select_error=no  sqlcheck=full userid=LGAS/${PasswordDeLGAS} lines=n hold_cursor=yes maxopencursors=300
+FUENTES_PC=depura.pc imp2.pc
+FUENTES_C=$(FUENTES_PC:.pc=.c)
+OBJETOS=$(FUENTES_C:.c=.o)
+.SUFFIXES:	.o .c .pc 
+
+imp2:	$(OBJETOS)
+	@echo -e ".o -> imp2"
+	@$(CC) -I$(SIC_INCLUDE) $(C_FLAGS) -o imp2 $(OBJETOS) $(LD_FLAGS) >make.log
+	@cp imp2 ${ALAMO_BIN} 
+	@rm -f *.c *.o *.lis
+depura.o:	depura.c 
+	@echo -e "-> $*.o"
+	@$(CC) -c depura.c $(C_FLAGS) >make.log
+depura.c:	depura.pc 
+	@echo -e -n "depura.pc -> depura.c "
+	@$(PROC) $(PROC_FLAGS) iname=depura.pc >make.log
+imp2.o:	imp2.c gen_txt.h depura.h 
+	@echo -e "-> $*.o"
+	@$(CC) -c imp2.c $(C_FLAGS) >make.log
+imp2.c:	imp2.pc gen_txt.h depura.h 
+	@echo -e -n "imp2.pc -> imp2.c "
+	@$(PROC) $(PROC_FLAGS) iname=imp2.pc >make.log
+clean:
+	@rm -f *.o *.c

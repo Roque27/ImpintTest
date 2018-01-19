@@ -1,0 +1,3527 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <olib.h>
+#include <clib.h>
+#include <oratype.h>
+#include <rwwccnts.h>
+#include <generic.h>
+#include "gen_txt.h"
+#include "depura.h"
+/*
+  Modificacion del 14-01-2001, para que imprima el codigo de barras
+  requerido por SEND. Falta realizar pruebas de usuario, y pasar a
+  produccion
+*/
+exec sql include sqlca;
+exec sql include oraca;
+exec sql whenever sqlerror do ErrorSql(__FILE__, __LINE__);
+exec sql whenever notfound continue;
+exec sql whenever sqlwarning continue;
+exec oracle option (oraca=yes);
+
+exec sql begin declare section;
+     long    l_trt_numero;short s_trt_numero;
+     long    l_ord_numero;short s_ord_numero;
+     long    l_srv_codigo;short s_srv_codigo;
+     long    l_cnt_numero;short s_cnt_numero;
+     long    l_prs_numero;short s_prs_numero;
+     long    l_o_prs_numero;short s_o_prs_numero;
+     long    l_Suc;
+     long    l_Ord_Dsd;
+     long    l_Ord_Hst;
+     varchar l_Sec[9];
+     varchar l_tor_codigo[3];short s_tor_codigo;
+     varchar l_HoraDelDia[17];
+     varchar l_rowid[26];
+     varchar l_usr_codigo[9];
+     varchar l_Tor_codigo[3];
+     varchar l_TipoCorreo[3];
+     varchar l_Correo[9];
+     varchar l_crr_genera_planilla[2];short s_crr_genera_planilla;
+     varchar l_crr_archivo_lote[51];short s_crr_archivo_lote;
+     varchar l_crr_archivo_lote_path[256];short s_crr_archivo_lote_path;
+     long    l_scf_codigo;short s_scf_codigo;
+     varchar l_prs_razon_social[61];
+     varchar l_prs_direccion[46];
+     varchar v_prs_bis[2];short s_prs_bis;
+     varchar v_prs_torre[4];short s_prs_torre;
+     varchar l_cll_nombre[31];short s_cll_nombre;
+     varchar l_cll_nombre_completo[28];short s_cll_nombre_completo;
+     varchar l_cnt_nro_pago[6];short s_cnt_nro_pago;
+     varchar l_cnt_bis[2];short s_cnt_bis;
+     varchar l_cnt_piso_pago[3];short s_cnt_piso_pago;
+     varchar l_cnt_depto_pago[4];short s_cnt_depto_pago;
+     varchar l_cnt_c_postal_pago[8];short s_cnt_c_postal_pago;
+     varchar l_cnt_agf_nombre[31];short s_cnt_agf_nombre;
+     varchar l_buffer[8192];
+     varchar l_FechaDelDia[17];
+     varchar l_not_codigo[4];
+     varchar l_cfc_codigo[3];
+     varchar l_sec_codigo[9]; short s_sec_codigo;
+     varchar l_tor_grupo[3]; short s_tor_grupo;
+     varchar l_tor_descripcion[61]; short s_tor_descripcion;
+     varchar l_ord_fecha_generacion[11];short s_ord_fecha_generacion;
+     varchar l_Impr[16];
+     varchar l_File[61];
+     varchar l_tim_codigo[6];
+     long    l_cpr_numero;
+     varchar l_prc_codigo[5];
+     varchar l_est_codigo[5];
+     varchar l_prox_est_codigo[5];
+     long    l_usr_numero;
+
+     varchar ll_prs_calle[19];
+     varchar ll_prs_nro[5];
+     varchar ll_prs_piso[3];
+     varchar ll_prs_depto[4];
+     varchar ll_prs_torre[4];
+     varchar ll_prs_c_postal[9];
+     varchar ll_prs_agf_nombre[31];
+     long    ll_prs_agf_codigo;
+
+exec sql end declare section;
+
+char *TiposOrdenativo (int largos[],char *v_columna,char *campo,long srv_cod,int cnt_num);
+void   GeneraArchivo(void);
+char   *pdepura;
+char   *userid;
+char   *Tor_codigo;
+char   *Rep_codigo;
+char   *Suc;
+char   *Ord_Dsd;
+char   *Ord_Hst;
+char   *Sec;
+char   *User;
+char   *TipoCorreo;
+char   *Correo;
+char   *Impr;
+char   *File;
+char   l_bar_code[512];
+double ImporteDelAviso;
+int    CantidadDeFacturas;
+char   sec_codigo[9];
+char   tor_grupo[3];
+int    pent, psal;
+char   psalida[128];
+int    Tiene_Comprobantes_Financiaciones;
+int    Tiene_Otros_Comprobantes;
+FILE   *lote;
+/*
+  Cambios del 24-9-2003: jinfante/cjazmin
+*/
+int Imputacion_Incobrables;
+
+/* FAB 6/4/09 - Req. 2823
+t_doc_saldo tiene el total del saldo de los documentos que se intiman, para controlarlo con el parámetro MININT
+p_minint tiene el valor del parámetro
+Esto de las variables globales está mal, pero todo el programa es un desastre, así que nada le hace una mancha mas al tigre
+*/
+double t_doc_saldo=0.0;
+double p_minint=0.0;
+
+main(int argc, char **argv)
+ {
+  /* BF:
+   * DF:
+   * EF: */
+
+  FILE *out_file;
+  char l_out_file[133];
+  char l_out_lote[133];
+  long SQLCODE=0;
+  char Cmd[512];
+  long OrdenDesde, OrdenHasta;
+  char MiTerminal[64];
+  int i;
+  long Escribi=0;
+  char UsuarioContra[10] ;
+
+  oraca.orastxtf=ORASTFERR;
+
+  /*
+   * Lectura y verificacion de parametros.
+   */
+
+/* //fb 21.12.2006 - Si agrega el if, porque en linux da error sino se indico el parámetro
+  GetParamString(argc,argv, "depura", &pdepura) ;
+  NivelDepuracion= atoi (pdepura) ;
+*/
+
+  if(GetParamString(argc,argv, "depura", &pdepura))
+  {
+     NivelDepuracion = atoi (pdepura);
+  }
+  else
+  {
+  	 NivelDepuracion = 0;
+  }
+
+  GetParamString(argc,argv,"id",&userid);
+  GetParamString(argc,argv,"User",&User);
+  Str2Varchar(User, l_usr_codigo);
+  GetParamString(argc,argv,"Tipo",&TipoCorreo);
+  Str2Varchar(TipoCorreo, l_TipoCorreo);
+  GetParamString(argc,argv,"Correo",&Correo);
+  Str2Varchar(Correo, l_Correo);
+  /* Parametros agregados el 6-6-2000 */
+  GetParamString(argc,argv,"Suc",&Suc);
+  l_Suc=atol(Suc);
+  GetParamString(argc,argv,"Ord_Dsd",&Ord_Dsd);
+  l_Ord_Dsd=atol(Ord_Dsd);
+  GetParamString(argc,argv,"Ord_Hst",&Ord_Hst);
+  l_Ord_Hst=atol(Ord_Hst);
+  GetParamString(argc,argv,"Tor_codigo",&Tor_codigo);
+  Str2Varchar(Tor_codigo, l_Tor_codigo);
+  GetParamString(argc,argv,"Reporte",&Rep_codigo);
+  GetParamString(argc,argv,"Sec",&Sec);
+
+  /*
+    Cambios del 24-9-2003: jinfante/cjazmin
+  */
+  Imputacion_Incobrables=0;
+  for(i=1; i<argc; i++)
+   {
+    fprintf(stderr, "parametro %i = (%s)\n", i, argv[i]);
+    if(!strcmp(argv[i], "INCOBRABLES=S"))
+     {
+      Imputacion_Incobrables=1;
+      break;
+     }
+   }
+
+  Str2Varchar(Sec, l_Sec);
+  /* */
+  if(!GetParamString(argc,argv,"impresora",&Impr))
+  {
+    Abortar("Error en parametro 'impresora'",argv[0]);
+  }
+  Str2Varchar(Impr, l_Impr);
+
+  GetParamString(argc,argv,"file",&File);
+  Str2Varchar(File, l_File);
+
+  sprintf(l_out_file, "%s/%s", getenv("ALAMO_LST"), File);
+  out_file=fopen(l_out_file, "w");
+
+  /*
+   * Depurar (1, "id=%s\n", userid);
+   * Depurar (1, "l_TipoCorreo=%s\n", l_TipoCorreo.arr);
+   * Depurar (1, "Correo=%s\n", l_Correo.arr);
+   * Depurar (1, "l_out_file=%s\n", l_out_file);
+   * Depurar (1, "User=%s\n", l_usr_codigo.arr);
+   * Depurar (1, "impresora=%s\n", l_Impr.arr);
+   */
+
+  /*
+   * Se conecta a la base y obtiene la fecha, usuario y tipo de impresora.
+   */
+
+  Connect(userid,DISPCONNECT);
+  
+  exec sql alter session set optimizer_features_enable = '8.1.7';
+
+  ClearVarchar(l_FechaDelDia);
+  exec sql select to_char(sysdate,'dd/mm/yyyy hh:mi')
+  	into :l_FechaDelDia
+  	from sys.dual;
+  AddNullVarchar(l_FechaDelDia);
+  OrdenDesde=9999999;
+  OrdenHasta=0;
+  bzero(sec_codigo, sizeof(sec_codigo));
+  bzero(tor_grupo, sizeof(tor_grupo));
+
+  Depurar (0, "l_FechaDelDia=%s\n", l_FechaDelDia.arr);
+  
+  exec sql
+     select usr_numero
+     into :l_usr_numero
+     from usuarios
+     where usr_codigo = :l_usr_codigo;
+
+  Depurar (0, "l_usr_numero=%i\n", l_usr_numero);
+	 
+  ClearVarchar(l_tim_codigo);
+  exec sql select tim_codigo
+  	into :l_tim_codigo
+  	from impresoras
+    where impresoras.prt_codigo = :l_Impr;
+  AddNullVarchar(l_tim_codigo);
+
+  Depurar (0, "l_tim_codigo=%s\n", l_tim_codigo.arr);
+  
+   /* FAB 6/4/09 - Req. 2823
+   Busca el parámetro MININT
+   */
+   exec sql
+		select to_number(pgr_valor)
+		into :p_minint
+		from param_gral
+		where pgr_codigo = 'MININT';
+
+   Depurar (0, "p_minint=%lf\n", p_minint);
+		
+  /*
+   * Obtiene datos sobre los formatos de
+   * salida para el correo especificado.
+   */
+
+  ClearVarchar(l_crr_genera_planilla);
+  ClearVarchar(l_crr_archivo_lote);
+  ClearVarchar(l_crr_archivo_lote_path);
+  exec sql
+       SELECT crr_genera_planilla,
+              crr_archivo_sql,
+              crr_archivo_sql_path
+       INTO :l_crr_genera_planilla:s_crr_genera_planilla,
+            :l_crr_archivo_lote:s_crr_archivo_lote,
+            :l_crr_archivo_lote_path:s_crr_archivo_lote_path
+       FROM  correos c, usuarios u
+       WHERE usr_codigo = :l_usr_codigo AND
+             c.scf_codigo = u.scf_codigo AND
+	         crr_tipo = :l_TipoCorreo AND
+             crr_codigo = :l_Correo;
+  if(SQLCODE==1403)
+   {
+    Depurar (0, "%s:Error leyendo registro de correos\n", argv[0]);
+    exit(-1);
+   }
+
+   Depurar (0, "l_crr_genera_planilla=%s\n", l_crr_genera_planilla.arr);
+   Depurar (0, "l_crr_archivo_lote=%s\n", l_crr_archivo_lote.arr);
+   Depurar (0, "l_crr_archivo_lote_path=%s\n", l_crr_archivo_lote_path.arr);
+   
+  /*
+   * Obtiene un numero de secuencia  (???)
+   */
+
+  exec sql select cpr_numero.nextval
+       into :l_cpr_numero
+       from sys.dual;
+  Depurar (0, "El numero es %d\n", l_cpr_numero);
+  
+  if(s_crr_genera_planilla==-1)
+  {
+    Str2Varchar("N", l_crr_genera_planilla);
+  }
+  else
+  {
+    AddNullVarchar(l_crr_genera_planilla);
+  }
+
+  /* Le agrego un pid al nombre para hacerlo unico */
+    sprintf(l_out_lote, "%s/%s%05d", getenv("ALAMO_LST"), "err", getpid());
+
+  Depurar (0, "Generando lote en archivo %s\n", l_out_lote);
+  lote=fopen(l_out_lote, "w");
+
+  /*
+   * Obtiene el fun_estado_inicial('IN')
+   * e inserta el registro correspondiente en control_procesos.
+   */
+
+  ClearVarchar(l_est_codigo);
+
+  Depurar(0, "Ejecuto PL/SQL fun_estado_inicial\n");
+
+  exec sql execute
+     begin
+       :l_est_codigo:=fun_estado_inicial('IN');
+     end;
+  end-exec;
+  AddNullVarchar(l_est_codigo);
+  Depurar (0, "Fin de PL/SQL fun_estado_inicial\n");
+
+  Depurar (0, "Inserto en control_procesos\n");
+  exec sql insert into control_procesos
+           (cpr_numero,
+            cpr_tipo_proceso,
+            usr_numero_incorpora,
+            prc_codigo,
+            est_codigo,
+            cpr_fecha_inicio)
+       values(:l_cpr_numero,
+              'IN',
+              :l_usr_numero,
+              'IN',
+              :l_est_codigo,
+              sysdate);
+  exec sql commit;
+
+  /*
+   * Cursor principal (MiCursor)
+   *
+   * Consulta la tabla de ordenativos de grupos NT y CD
+   * del usuario y sucursal predeterminados,
+   * para el tipo y codigo de correo especificado,
+   * y trae: numeros de ordenativo, tramite,
+   *         servicio y contrato,
+   *         tipo de ordenativo, grupo del tipo,
+   *         fecha de generacion,
+   *         sucursal y sector de origen. (???)
+   */
+  exec sql declare MiCursor cursor for
+       select o.trt_numero,
+              o.ord_numero,
+              o.srv_codigo,
+              o.cnt_numero,
+              nvl(o.tor_codigo,''),
+              to_char(o.ord_fecha_generacion,'dd/mm/yyyy'),
+              u.scf_codigo,
+              o.sec_codigo_origen,
+              t.tor_grupo,
+              t.tor_descripcion,
+              o.prs_numero,
+              o.rowid
+       from ordenativos o,
+            tipos_ordenativo t,
+            usuarios u
+       where t.tor_codigo = :l_Tor_codigo and
+       -- (t.tor_grupo = 'NT' or t.tor_grupo = 'CD' or t.tor_grupo = 'CO') and
+             o.tor_codigo = t.tor_codigo and
+             u.usr_codigo = :l_usr_codigo and
+             o.scf_codigo_origen = :l_Suc and
+             o.sec_codigo_origen = :l_Sec and
+             o.ord_numero between :l_Ord_Dsd and :l_Ord_Hst and
+             o.crr_tipo = :l_TipoCorreo and
+             o.crr_codigo = :l_Correo and
+             o.ord_situacion = 'P' and
+             o.ord_estado = 'D'
+       order by o.ord_numero;
+
+
+  /*
+   * ------------------ Inicio del bucle principal -----------------------
+   */
+
+  Depurar (1, "Abro cursor\n");
+  bzero(sec_codigo, sizeof sec_codigo);
+  bzero(tor_grupo, sizeof tor_grupo);
+  exec sql open MiCursor;
+  for(;;)
+  {
+    /*
+      Blanqueo el contador de comprobantes de financiaciones internas
+    */
+    Tiene_Comprobantes_Financiaciones=0;
+    Tiene_Otros_Comprobantes=0;
+    /*
+     * Toma un registro del cursor principal (ordenativos).
+     */
+    ClearVarchar(l_tor_codigo);
+    ClearVarchar(l_sec_codigo);
+    ClearVarchar(l_tor_grupo);
+    exec sql whenever sqlerror do ErrorSql(__FILE__, __LINE__);
+    exec sql fetch MiCursor into :l_trt_numero:s_trt_numero,
+                                 :l_ord_numero:s_ord_numero,
+                                 :l_srv_codigo:s_srv_codigo,
+                                 :l_cnt_numero:s_cnt_numero,
+                                 :l_tor_codigo:s_tor_codigo,
+                                 :l_ord_fecha_generacion:s_ord_fecha_generacion,
+                                 :l_scf_codigo:s_scf_codigo,
+                                 :l_sec_codigo:s_sec_codigo,
+                                 :l_tor_grupo:s_tor_grupo,
+                                 :l_tor_descripcion:s_tor_descripcion,
+                                 :l_o_prs_numero:s_o_prs_numero,
+                                 :l_rowid;
+    /* Si no hay mas registros, fin del bucle principal */
+    if (SQLCODE==1403)
+      break;
+
+    if(s_o_prs_numero==-1)
+      l_o_prs_numero=0;
+    if(l_ord_numero<OrdenDesde)
+      OrdenDesde=l_ord_numero;
+    if(l_ord_numero>OrdenHasta)
+      OrdenHasta=l_ord_numero;
+
+    /*
+     * Para el primer fetch (???) toma sector
+     * de origen del ordenativo y grupo del tipo
+     * de ordenativo.  (???)
+     */
+
+    AddNullVarchar(l_tor_codigo);
+    AddNullVarchar(l_tor_descripcion);
+    if(strlen(sec_codigo)==0)
+      if(s_sec_codigo==-1)
+        l_sec_codigo.len=l_sec_codigo.arr[0]=0;
+      else
+       {
+        AddNullVarchar(l_sec_codigo);
+        strcpy(sec_codigo, l_sec_codigo.arr);
+       }
+    if(strlen(tor_grupo)==0)
+      if(s_tor_grupo==-1)
+        l_tor_grupo.len=l_tor_grupo.arr[0]=0;
+      else
+       {
+        AddNullVarchar(l_tor_grupo);
+        strcpy(tor_grupo, l_tor_grupo.arr);
+       }
+
+    /*
+     * Busca la persona referenciada por
+     * el suministro y contador (contrato).
+     * del ordenativo.
+     *
+     * Primero intenta obtener la direccion
+     * detallada, si no existe, la entera
+     * (cnt_direccion_pago).
+     */
+    ClearVarchar(l_prs_razon_social);
+    ClearVarchar(l_prs_direccion);
+    ClearVarchar(l_cfc_codigo);
+    ClearVarchar(l_cll_nombre);
+    ClearVarchar(l_cnt_nro_pago);
+    ClearVarchar(l_cnt_bis);
+    ClearVarchar(l_cnt_piso_pago);
+    ClearVarchar(l_cnt_depto_pago);
+    ClearVarchar(l_cnt_c_postal_pago);
+    ClearVarchar(l_cnt_agf_nombre);
+    ClearVarchar(ll_prs_calle);
+    ClearVarchar(ll_prs_nro);
+    ClearVarchar(ll_prs_piso);
+    ClearVarchar(ll_prs_depto);
+    ClearVarchar(ll_prs_torre);
+    ClearVarchar(ll_prs_c_postal);
+    ClearVarchar(ll_prs_agf_nombre);
+    /* Depurar (1, "busco en personas\n"); */
+    if(l_srv_codigo==0)
+     {
+/*
+   Cambio del 22-12-2003: czero
+   Para que imprima el domicilio de la persona
+*/
+      exec sql
+       select personas.prs_numero,
+              substr(personas.prs_razon_social,1,25),
+              nvl(personas.prs_direccion, ' '),
+              personas.cfc_codigo,
+              substr(calles.cll_nombre,1,18),
+              substr(nvl(personas.prs_nro, '    '),1,4),
+              substr(nvl(personas.prs_piso, '  '),1,2),
+              substr(nvl(personas.prs_depto, '   '),1,3),
+              nvl(personas.prs_torre, ' '),
+              nvl(personas.prs_c_postal, ' '),
+              nvl(areas_geograficas.agf_nombre, ' ')
+       into :l_prs_numero,
+            :l_prs_razon_social,
+            :l_prs_direccion,
+            :l_cfc_codigo,
+            :ll_prs_calle,
+            :ll_prs_nro,
+            :ll_prs_piso,
+            :ll_prs_depto,
+            :ll_prs_torre,
+            :ll_prs_c_postal,
+            :ll_prs_agf_nombre
+       from areas_geograficas, personas, calles
+       where areas_geograficas.agf_codigo = personas.agf_codigo
+         and calles.cll_codigo = personas.cll_codigo
+         and calles.agf_codigo = personas.agf_codigo
+         and personas.prs_numero = :l_o_prs_numero;
+     }
+    else
+     {
+      exec sql
+       select personas.prs_numero,
+              substr(personas.prs_razon_social,1,25),
+              nvl(personas.prs_direccion, ' '),
+              personas.cfc_codigo,
+              substr(calles.cll_nombre,1,18),
+              substr(contratos.cnt_nro_pago,1,4),
+              contratos.cnt_bis,
+              substr(contratos.cnt_piso_pago,1,2),
+              substr(contratos.cnt_depto_pago,1,3),
+              nvl(contratos.cnt_c_postal_pago, ' '),
+              nvl(areas_geograficas.agf_nombre, ' ')
+       into :l_prs_numero,
+            :l_prs_razon_social,
+            :l_prs_direccion,
+            :l_cfc_codigo,
+            :l_cll_nombre:s_cll_nombre,
+            :l_cnt_nro_pago:s_cnt_nro_pago,
+            :l_cnt_bis:s_cnt_bis,
+            :l_cnt_piso_pago:s_cnt_piso_pago,
+            :l_cnt_depto_pago:s_cnt_depto_pago,
+            :l_cnt_c_postal_pago:s_cnt_c_postal_pago,
+            :l_cnt_agf_nombre:s_cnt_agf_nombre
+       from areas_geograficas,
+            contratos,
+            personas,
+            calles
+       where areas_geograficas.agf_codigo =
+             contratos.agf_codigo and
+             contratos.srv_codigo = :l_srv_codigo and
+             contratos.cnt_numero = :l_cnt_numero and
+             personas.prs_numero = contratos.prs_numero and
+             calles.agf_codigo = contratos.agf_codigo and
+             calles.cll_codigo = contratos.cll_codigo;
+     }
+    if(SQLCODE==1403)
+    {
+      exec sql
+         select personas.prs_numero,
+                substr(personas.prs_razon_social,1,25),
+                nvl(personas.prs_direccion, ' '),
+                personas.cfc_codigo,
+                substr(nvl(contratos.cnt_direccion_pago, ' '),1,27)
+         into :l_prs_numero,
+              :l_prs_razon_social,
+              :l_prs_direccion,
+              :l_cfc_codigo,
+              :l_cll_nombre_completo:s_cll_nombre_completo
+         from contratos,
+              personas
+         where contratos.srv_codigo = :l_srv_codigo and
+               contratos.cnt_numero = :l_cnt_numero and
+               personas.prs_numero = contratos.prs_numero;
+      if(SQLCODE==1403)
+       {
+        Depurar (0, "no encontre la persona\n");
+        l_prs_numero=0;
+       }
+      else
+       {
+        if(s_cll_nombre_completo==-1)
+          l_cll_nombre_completo.arr[0]=l_cll_nombre_completo.len=0;
+        else
+         {
+          psal=0;
+          if(strlen(l_cll_nombre_completo.arr)!=0)
+           {
+            for(pent=0; pent<strlen(l_cll_nombre_completo.arr); pent++)
+              if((l_cll_nombre_completo.arr[pent]==' ')&&(l_cll_nombre_completo.arr[pent+1]==' '))
+                pent=pent;
+              else
+                psalida[psal++]=l_cll_nombre_completo.arr[pent];
+           }
+          psalida[psal]=0;
+          psalida[27]=0;
+          ClearVarchar(l_cll_nombre_completo);
+          Str2Varchar(psalida, l_cll_nombre_completo);
+          AddNullVarchar(l_cll_nombre_completo);
+         }
+       }
+     }
+	AddNullVarchar(l_cfc_codigo);
+    if(s_cll_nombre==-1)
+      l_cll_nombre.arr[0]=l_cll_nombre.len=0;
+    else
+     {
+      AddNullVarchar(l_cll_nombre);
+     }
+    if(s_cnt_nro_pago==-1)
+      l_cnt_nro_pago.arr[0]=l_cnt_nro_pago.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_nro_pago);
+     }
+    if(s_cnt_bis==-1)
+      l_cnt_bis.arr[0]=l_cnt_bis.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_bis);
+     }
+    if(s_cnt_piso_pago==-1)
+      l_cnt_piso_pago.arr[0]=l_cnt_piso_pago.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_piso_pago);
+     }
+    if(s_cnt_depto_pago==-1)
+      l_cnt_depto_pago.arr[0]=l_cnt_depto_pago.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_depto_pago);
+     }
+    if(s_cnt_c_postal_pago==-1)
+      l_cnt_c_postal_pago.arr[0]=l_cnt_c_postal_pago.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_c_postal_pago);
+     }
+    if(s_cnt_agf_nombre==-1)
+      l_cnt_agf_nombre.arr[0]=l_cnt_agf_nombre.len=0;
+    else
+     {
+      AddNullVarchar(l_cnt_agf_nombre);
+     }
+
+    ClearVarchar(l_not_codigo);
+
+    /* Depurar (1, "busco en combinaciones habilitadas\n");*/
+    exec sql
+       select not_codigo
+       into :l_not_codigo
+       from combinaciones_habilitadas_noti
+       where tor_codigo = :l_tor_codigo and
+             cfc_codigo = :l_cfc_codigo;
+	AddNullVarchar(l_not_codigo);
+    /* Depurar (2, "tor_codigo=%s cfc_codigo=%s not_codigo=%s\n",
+                    l_tor_codigo.arr, l_cfc_codigo.arr, l_not_codigo.arr); */
+    if(SQLCODE==1403)
+     {
+      Depurar (0, "No se encontro tipo de intimacion para persona # %d\n",
+                      l_prs_numero);
+     }
+    else
+     {
+      ClearVarchar(l_buffer);
+      l_bar_code[0]=0;
+      ImporteDelAviso=0;
+      CantidadDeFacturas=0;
+      Notifi((char *)l_not_codigo.arr,
+             l_prs_numero,
+             l_srv_codigo,
+             l_cnt_numero,
+             l_trt_numero,
+             l_ord_numero,
+             (char *)l_buffer.arr,
+             (char *)l_tim_codigo.arr,
+             l_bar_code);
+
+      /* En l_buffer.arr esta TODA la notificacion, correctamente
+       * formateada. Ahora vamos a imprimirla.
+       */
+
+
+/* DAM 05-11-2002 req.1285  imprimir solo cuando tiene doc.    */
+
+/*
+fprintf(stderr, "--[SRV:%ld - fact:%d]--\n", l_srv_codigo, CantidadDeFacturas );  
+*/
+
+/* FAB 6/4/09 - Req. 2823
+Agrego la condición para que no emita la intimación si el saldo total de la deuda (t_doc_saldo) es menor que el parámetro MININT
+*/
+      /* FAB 30/04/2015 - Req. 3463
+      if(CantidadDeFacturas>0 && t_doc_saldo >= p_minint)
+      */
+
+      if(CantidadDeFacturas>0)      
+       {
+
+ 	      l_buffer.len=strlen(l_buffer.arr);
+          fprintf(out_file, "%s", (char *)l_buffer.arr);
+          Escribi++;
+
+          GeneraArchivo();
+          Depurar (1, "Genere archivo\n");
+          Depurar (1, "l_tor_grupo=(%s)\n", l_tor_grupo.arr);
+
+
+          if(strcmp(l_tor_grupo.arr, "CD")==0)
+           {
+            Depurar (2, "antes del update\n");
+            exec sql update ordenativos
+                 set cpr_numero = :l_cpr_numero
+                  where rowid = :l_rowid;
+           }
+          else
+           {
+             Depurar (2, "antes del update I\n");
+             exec sql update ordenativos
+             set ord_situacion = 'I',
+                 cpr_numero = :l_cpr_numero
+                 where rowid = :l_rowid;
+           }
+
+        }
+       else
+        {
+         if(Imputacion_Incobrables!=1)
+          {
+             Depurar (2, "antes de anulacion ordenativo update I\n");
+             exec sql update ordenativos
+             set ord_estado = 'A',
+                 cpr_numero = :l_cpr_numero,
+                 ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  '
+                 where rowid = :l_rowid;
+          }
+        }
+
+
+/* DAM 05-11-2002 req.1285 hasta aqui  imprimir solo cuando tiene doc.    */
+
+
+      Depurar (2, "antes del commit\n");
+      exec sql commit;
+      Depurar (2, "despues del commit\n");
+     }
+  }
+  /* --                                                                 --
+   * -------------------- Fin del bucle principal ------------------------
+   */
+
+TratamientoDelError:
+  exec sql close MiCursor;
+  fclose(lote);
+  fclose(out_file);
+
+  if(Escribi!=0)
+   {
+    bzero(Cmd, sizeof Cmd);
+    sprintf(Cmd, "Imprime %s list=%s est=\"*HLD\" id=%s dest=%s desc=\"P%d_Notificaciones_%s\"", l_out_file, Rep_codigo, l_usr_codigo.arr, l_Impr.arr, l_cpr_numero, l_not_codigo.arr);
+    Depurar (0, "Ejecutando: %s\n", Cmd);
+    system(Cmd);
+    sprintf(Cmd, "rm %s", l_out_file);
+    Depurar (0, "Ejecutando: %s\n", Cmd);
+    system(Cmd);
+   }
+  ClearVarchar(l_prox_est_codigo);
+  Depurar (0, "Ejecuto PL/SQL fun_proximo_estado\n");
+  exec sql execute
+     begin
+       :l_prox_est_codigo:=fun_proximo_estado('IN', :l_est_codigo, 'IM');
+     end;
+  end-exec;
+  Depurar (0, "Fin de PL/SQL fun_proximo_estado\n");
+  AddNullVarchar(l_prox_est_codigo);
+
+  Depurar (0, "Antes del update control_procesos\n");
+  exec sql update control_procesos
+       set est_codigo = :l_prox_est_codigo
+       where cpr_numero = :l_cpr_numero;
+  exec sql commit;
+  Depurar (0, "Despues del commit\n");
+
+
+  /*
+    Cambios del 24-9-2003: jinfante/cjazmin
+  */
+/* 25/10/2006 kalave - czero se generan siempre los archivos - planillas (decision d.molinari)
+  if(Imputacion_Incobrables==0)
+   { */
+    /*
+       S - Planilla ; N - Archivo ; A - Ambos
+    */
+
+    if(l_crr_genera_planilla.arr[0]=='S')
+      GrabaEnReportes();
+    else
+      if(l_crr_genera_planilla.arr[0]=='A')
+       {
+        GrabaEnReportes();
+        bzero(Cmd, sizeof Cmd);
+          sprintf(Cmd, "Imprime %s list=IMPINT id=%s dest=%s desc=\"P%d_IMPINT_%s\"", l_out_lote, l_usr_codigo.arr, l_Impr.arr, l_cpr_numero, l_not_codigo.arr);
+        Depurar (0, "Ejecutando: %s\n", Cmd);
+        system(Cmd);
+       }
+      else
+       {
+         bzero(Cmd, sizeof Cmd);
+         sprintf(Cmd, "Imprime %s list=IMPINT id=%s dest=%s desc=\"P%d_IMPINT_%s\"", l_out_lote, l_usr_codigo.arr, l_Impr.arr, l_cpr_numero, l_not_codigo.arr);
+         Depurar (0, "Ejecutando: %s\n", Cmd);
+         system(Cmd);
+        }
+ /* } */
+/*
+  if(strcmp(l_tor_grupo.arr, "CD")==0)
+   {
+*/
+    fprintf(stderr, "l_tor_grupo=(%s)\n", l_tor_grupo.arr);
+
+    bzero(UsuarioContra, sizeof UsuarioContra);
+    sprintf (UsuarioContra, "CONTRA%02ld", l_scf_codigo) ;
+    fprintf (stderr, "UsuarioContra: {%s}\n", UsuarioContra) ;
+    bzero(MiTerminal, sizeof MiTerminal);
+    /* sprintf(MiTerminal, "TERM=%s", getenv("TERM")); */
+    sprintf(MiTerminal, " ");
+    bzero(Cmd, sizeof Cmd);
+    sprintf(Cmd, "$ALAMO_BIN/print r25run $ALAMO_RDF/ORD_0004.rdf userid=%s %s destype=file desname=$ALAMO_LST/ORD_0004_%s batch=yes formulario=ORD_0004 copias=1 cantidad=1 cuadrante=GAS desde=%d hasta=%d usr=%s sec_codigo_origen=%s tipo=%s impresora=%s crr_tipo=%s crr_codigo=%s", userid, MiTerminal, l_HoraDelDia.arr, OrdenDesde, OrdenHasta, UsuarioContra, "%", l_Tor_codigo.arr, l_Impr.arr,l_TipoCorreo.arr,l_Correo.arr);
+    Depurar (0, "Ejecutando: %s\n", Cmd);
+    system(Cmd);
+/*
+  } */
+ exit(0);
+}
+
+
+void GeneraArchivo(void)
+{
+  /* BF: -
+   * DF: Genera el archivo para entregar al correo que distribuye las intimaciones.
+   *
+   *     El formato del archivo generado para correo es:
+   *
+   *     Campo        Descripcion                                 Longitud    Inicio
+   *    -----------------------------------------------------------------------------
+   *     TIPREG       Tipo de Registro (1=aviso)                      1          1
+   *     CODTREA      A=aviso simple    B=carta documento             1          2
+   *     ORD_NUMERO   Numero de Ordenativo                            8          3
+   *     SUC          Sucursal                                        2         11
+   *     CPR_NUMERO   Numero de Proceso                               6         13
+   *     IPTE         Importe del aviso                               9         19
+   *     CPR_FECHA    Fecha de Proceso ("YYYYMMDD")                   8         28
+   *     AYN          Apellido y Nombre del Titular del servicio     25         36
+   *     NOMCLL       Nombre Calle                                   18         61
+   *     PTA          Numero de Puerta                                4         79
+   *     PISO         Piso                                            2         83
+   *     DTO          Departamento                                    3         85
+   *     CRR_TIPO     Tipo de Correo                                  2         88
+   *     CRR_CODIGO   Codigo de Correo                                8         90
+   *     FILLER                                                       8         98
+   *     CANFAC       Cantidad de Facturas                            5        106
+   *     TITTREA      Titulo de Aviso                                30        111
+   *     ZNACA        Cod. de zona (uso del distribuidor)             3        141
+   *     INCIDENCIA   Codigo de Incidencia (uso del distribuidor)     2        144
+   *                  Codigo postal                                   7        144
+   *                  Descripcion de la localidad                    30        144
+   *
+   * EF: -
+   */
+
+  fprintf(lote, "1");                            /* Tipo de registro */
+  fprintf(lote, "A");                            /* A=Aviso simple */
+  fprintf(lote, "%08d", l_ord_numero);           /* Numero de ordenativo */
+  fprintf(lote, "%02d", l_scf_codigo);           /* Sucursal */
+  fprintf(lote, "%06d", l_cpr_numero);           /* Numero de proceso */
+  fprintf(lote, "%09.0f", ImporteDelAviso*100);  /* Importe del aviso */
+  fprintf(lote, "%c%c%c%c", l_ord_fecha_generacion.arr[6],
+                            l_ord_fecha_generacion.arr[7],
+                            l_ord_fecha_generacion.arr[8],
+                            l_ord_fecha_generacion.arr[9]);
+  fprintf(lote, "%c%c", l_ord_fecha_generacion.arr[3],
+                        l_ord_fecha_generacion.arr[4]);
+  fprintf(lote, "%c%c", l_ord_fecha_generacion.arr[0],
+                        l_ord_fecha_generacion.arr[1]);
+  fprintf(lote, "%-25s", l_prs_razon_social.arr);/* Razon social */
+
+/*
+  Modificacion del 22-12-2003: czero
+  Si no hay un domicilio, imprimo el domicilio de la persona
+*/
+  if(ll_prs_calle.arr[0]!=0)
+   {
+    fprintf(lote, "%-18s", ll_prs_calle.arr);
+    fprintf(lote, "%-4s", ll_prs_nro.arr);
+    fprintf(lote, "%-2s", ll_prs_piso.arr);
+    fprintf(lote, "%-3s", ll_prs_depto.arr);
+    /* fprintf(lote, "%-3s", ll_prs_torre.arr);    */
+   }
+  else
+    if(l_cll_nombre.arr[0]==0)
+      fprintf(lote, "%-27s", l_cll_nombre_completo.arr);
+    else
+     {
+      fprintf(lote, "%-18s", l_cll_nombre.arr);      /* Nombre de la calle */
+      fprintf(lote, "%-4s", l_cnt_nro_pago.arr);     /* Numero de puerta */
+      fprintf(lote, "%-2s", l_cnt_piso_pago.arr);    /* Piso */
+      fprintf(lote, "%-3s", l_cnt_depto_pago.arr);   /* Departamento */
+     }
+  fprintf(lote, "%-2s", l_TipoCorreo.arr);       /* Tipo de correo */
+  fprintf(lote, "%-8s", l_Correo.arr);           /* Codigo de correo */
+  fprintf(lote, "%-8s", " ");
+  fprintf(lote, "%05d", CantidadDeFacturas);     /* Cantidad de facturas */
+  fprintf(lote, "%-30s", " ");                   /* Titulo del aviso */
+  fprintf(lote, "%-3s", " ");                    /* Codigo de zona */
+  fprintf(lote, "%-2s", "00");                   /* Codigo de incidencia */
+  if(ll_prs_calle.arr[0]!=0)
+   {
+    fprintf(lote, "%-7s", ll_prs_c_postal.arr); /* Codigo postal */
+    fprintf(lote, "%-30s", ll_prs_agf_nombre.arr);  /* Localidad */
+   }
+  else
+   {
+    fprintf(lote, "%-7s", l_cnt_c_postal_pago.arr); /* Codigo postal */
+    fprintf(lote, "%-30s", l_cnt_agf_nombre.arr);  /* Localidad */
+   }
+  fprintf(lote, "%c%c", 13, 10);
+}
+
+GrabaEnReportes()
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+  exec sql begin declare section;
+       varchar l_FechaDelDia[17];
+       varchar l_rep_codigo[9];
+       varchar l_rep_descripcion[31];
+       long l_rep_prioridad;
+       varchar l_rep_borra_archivo[2];
+       varchar l_rep_condicion_impresion[2];
+       varchar l_rep_comando[51];
+       varchar l_cnr_comando[401];
+       varchar l_rep_tipo_comando[4];
+       varchar l_rep_orientacion[10];
+       varchar l_rep_destino[16];
+       varchar l_rep_archivo_default[101];
+       varchar l_prt_uname[31];
+       varchar l_cnr_uname[31];
+       varchar l_cnr_archivo[61];
+       varchar l_cnr_salida[2];
+       varchar l_prt_codigo[16];
+       long l_cnr_numero;
+  exec sql end declare section;
+
+  long SQLCODE=0;
+
+  ClearVarchar(l_FechaDelDia);
+  ClearVarchar(l_HoraDelDia);
+  Depurar (0, "Antes del select de sysdate\n");
+  exec sql select to_char(sysdate,'dd/mm/yyyy'),
+                  to_char(sysdate,'hhmiss')
+  	into :l_FechaDelDia,
+         :l_HoraDelDia
+  	from sys.dual;
+  AddNullVarchar(l_FechaDelDia);
+  AddNullVarchar(l_HoraDelDia);
+
+  Depurar (0, "Antes del select de cnr_numero\n");
+  exec sql
+     select cnr_numero.nextval
+     into :l_cnr_numero
+     from sys.dual;
+
+  Str2Varchar("I", l_cnr_salida);
+
+  Depurar (0, "Antes del sprintf a l_cnr_archivo\n");
+  sprintf(l_cnr_archivo.arr, "IMPINT_%s", l_HoraDelDia.arr);
+  l_cnr_archivo.len=strlen(l_cnr_archivo.arr);
+  sprintf(l_cnr_comando.arr, "%s/imp2 id=%s User=%s Tipo=%s Correo=%s Tramite=%d impr=%s file=%s",
+  getenv("ALAMO_BIN"), userid, l_usr_codigo.arr, l_TipoCorreo.arr, l_Correo.arr,
+  l_cpr_numero, Impr, l_cnr_archivo.arr);
+  l_cnr_comando.len=strlen(l_cnr_comando.arr);
+
+  Depurar (0, "l_cnr_comando=%s\n", l_cnr_comando.arr);
+  system(l_cnr_comando.arr);
+}
+
+char *Notifi(char   *noti,
+             long   prs_num,
+             long   srv_cod,
+             int    cnt_num,
+             long   trt_num,
+             long   nro_ord,
+             char   *salida,
+             char   *tim_codigo,
+             char   *bar_code)
+{
+
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      varchar v_noti[4];
+      varchar v_doc_tipo[3];
+      varchar v_not_codigo[4];
+      varchar v_not_descripcion[61];
+      int     v_eno_orden;
+      varchar v_eno_tipo[2];
+      varchar v_eno_texto[3072];
+      short s_eno_texto;
+      varchar v_eno_var_nombre[21];
+      short s_eno_var_nombre;
+      varchar v_eno_var_tipo[2];
+      short s_eno_var_tipo;
+      int     v_eno_var_longitud;short s_eno_var_longitud;
+      double  v_eno_col;short s_eno_col;
+      varchar v_eno_tipo_campo[2];
+      short s_eno_tipo_campo;
+      varchar v_tabla[31];
+      varchar v_columna[31];
+   EXEC SQL END DECLARE SECTION;
+   long scf_cod;
+   long agf_cod;
+   int  ivv_cod;
+   char ord_fec[11];
+   char tcl_cod[5];
+   char columnas[20][31];
+   int largos[20];
+   char tabla[31];
+   int i, q;
+   int ban;
+   long srv_cod_ori;
+   long cnt_num_ori;
+   long trt_num_ori;
+   long prs_num_ori;
+   int aux,r;
+   char tim_codigo_control_1[31];
+   char tim_codigo_control_2[31];
+   char tim_codigo_control_3[31];
+   char tim_codigo_control_4[31];
+   char tim_codigo_control_5[31];
+   char tim_codigo_control_6[31];
+   char tim_codigo_control_7[31];
+   char tim_codigo_control_8[31];
+   char tim_codigo_control_9[31];
+   char tim_codigo_control_10[31];
+   char tim_codigo_control_11[31];
+   char tim_codigo_control_12[31];
+   char tim_codigo_control_13[31];
+   char tim_codigo_control_14[31];
+   char tim_codigo_control_15[31];
+   char campo[5120];
+   char p_barras[255],nrobarra[512];
+   char campito[80];
+
+   tabla[0]='\0';
+   v_tabla.arr[0]=v_tabla.len=0;
+   v_columna.arr[0]=v_columna.len=0;
+   
+   EXEC SQL DECLARE TEXTO CURSOR FOR
+      SELECT ENO.ENO_ORDEN,
+             ENO.ENO_TIPO,
+             ENO.ENO_TEXTO,
+             ENO.ENO_VAR_NOMBRE,
+             ENO.ENO_VAR_TIPO,
+             ENO.ENO_VAR_LONGITUD,
+             ENO.ENO_COL#,
+             ENO.ENO_TIPO_CAMPO
+      FROM   ESTRUCTURA_NOTIFICACION ENO,
+             SERVICIOS SRV
+      WHERE  ENO.NOT_CODIGO = :v_not_codigo
+      	AND  SRV.SRV_CODIGO = :srv_cod
+        AND  NVL(ENO.SCF_CODIGO, SRV.SCF_CODIGO) = SRV.SCF_CODIGO
+        AND  ENO.ENO_ORDEN NOT IN (
+        	SELECT DISTINCT NVL(ENO_SUB_ORDEN, 0)
+        	FROM ESTRUCTURA_NOTIFICACION 
+        	WHERE NOT_CODIGO = :v_not_codigo
+        	AND SCF_CODIGO = SRV.SCF_CODIGO
+        )
+      ORDER BY ENO.ENO_ORDEN;
+
+   Str2Varchar(noti,v_noti);
+   salida[0]=0;
+   campo[0]=0;
+/*
+   Buscar_Codigos_Control(tim_codigo_control_1,
+                          tim_codigo_control_2,
+                          tim_codigo_control_3,
+                          tim_codigo_control_4,
+                          tim_codigo_control_5,
+                          tim_codigo_control_6,
+                          tim_codigo_control_7,
+                          tim_codigo_control_8,
+                          tim_codigo_control_9,
+                          tim_codigo_control_10,
+                          tim_codigo_control_11,
+                          tim_codigo_control_12,
+                          tim_codigo_control_13,
+                          tim_codigo_control_14,
+                          tim_codigo_control_15,
+                          tim_codigo);
+*/
+/* Selecciono orientacion e impresion en una cara */
+   sprintf(campito, "%c&l0O%c&l0S", 27, 27);
+   strcat(salida, campito);
+   SelectCodigoBarras(srv_cod,cnt_num,nro_ord,p_barras,nrobarra);
+   if((!strcmp(noti, "I1"))||(!strcmp(noti, "I4"))||(!strcmp(noti, "IP")))
+    {
+     strcat(salida,p_barras);
+     strcat(salida,"\n");
+    }
+   else
+     strcat(salida,"\n");
+
+/* Selecciono el font para el resto de la hoja */
+/* sprintf(campito, "\n%c(19U%c(s0p12h9v0s0b0T%c&a15L\n\n", 27, 27, 27);
+   strcat(salida, campito);
+   strcpy(bar_code,nrobarra);
+*/
+
+
+/* Selecciono el font para el resto de la hoja */
+   if(strcmp(noti, "I7")!=0)
+     sprintf(campito, "\n%c(19U%c(s0p12h9v0s0b0T%c&a15L\n\n", 27, 27, 27);
+   else
+     sprintf(campito, "\n%c(19U%c(s0p12h9v0s0b0T%c&a0L\n\n", 27, 27, 27);
+
+   strcat(salida, campito);
+   strcpy(bar_code,nrobarra);
+
+
+/* Depurar (2, "SELECT FROM TIPOS_NOTIFICACION\n"); */
+   EXEC SQL SELECT NOT_CODIGO,
+                   NOT_DESCRIPCION
+   INTO           :v_not_codigo,
+                  :v_not_descripcion
+   FROM            TIPOS_NOTIFICACION
+   WHERE           NOT_CODIGO=:v_noti;
+
+   if(COUNTHITS==0)
+      Abortar("Tipo de notificacion inexistente.","Error: ");
+
+   AddNullVarchar(v_not_codigo);
+   AddNullVarchar(v_not_descripcion);
+/*
+   Depurar (3, "v_not_codigo=%s\n", v_not_codigo.arr);
+   Depurar (3, "v_noti=%s\n", v_noti.arr);
+*/
+   EXEC SQL OPEN TEXTO;
+
+   r=0;
+   i=0;ban=0;aux=0;
+   do{
+      r=aux;
+      /* Depurar (2, "FETCH TEXTO\n"); */
+      EXEC SQL FETCH TEXTO INTO
+         :v_eno_orden,
+         :v_eno_tipo,
+         :v_eno_texto:s_eno_texto,
+         :v_eno_var_nombre:s_eno_var_nombre,
+         :v_eno_var_tipo:s_eno_var_tipo,
+         :v_eno_var_longitud:s_eno_var_longitud,
+         :v_eno_col:s_eno_col,
+         :v_eno_tipo_campo:s_eno_tipo_campo;
+
+      AddNullVarchar(v_eno_var_nombre);
+      /*
+       * Depurar (2,"v_eno_var_nombre=%s len=%ld\n", v_eno_var_nombre.arr, v_eno_var_longitud);
+       * Depurar (2,"COUNTHITS=%d\n", COUNTHITS);
+       * Depurar (2,"r=%d\n", r);
+       */
+
+      aux=COUNTHITS;
+      AddNullVarchar(v_eno_tipo);
+      if(s_eno_texto!=-1) AddNullVarchar(v_eno_texto);
+      if(s_eno_var_nombre!=-1) AddNullVarchar(v_eno_var_nombre);
+      if(s_eno_var_tipo!=-1) AddNullVarchar(v_eno_var_tipo);
+      if(s_eno_var_longitud==-1) v_eno_var_longitud=0;
+      if(s_eno_col==-1) v_eno_col=0;
+      if(s_eno_tipo_campo!=-1) AddNullVarchar(v_eno_tipo_campo);
+
+      if(strcmp(tabla, "DOCUMENTOS")!=0)
+        largos[0]=v_eno_var_longitud;
+
+      if(aux!=r)
+      {
+         if(v_eno_tipo.arr[0]=='T')
+         {
+         /*
+          * Leyenda de texto fijo.
+          */
+              /*
+			  fprintf (stderr, "Fixed {%d}: {%s}{%s}\n", ban,
+                                   v_tabla.arr, (char *)v_columna.arr) ;
+              */
+
+            if(ban==1){
+               v_eno_texto.arr[0]=v_eno_texto.len=0;
+               if((strcmp(tabla,"DOCUMENTOS"))==0){
+                  /*
+                     Cambio del 10-9-2003. Paso numero de ordenativo, para
+                     la nueva consulta en documentos
+                  */
+                  Documentos(largos,&columnas[0][0],campo,srv_cod,
+                             cnt_num,trt_num,i,31, nro_ord);
+               }else if((strcmp(tabla,"DOCUMENTOS_GAR"))==0){
+                  Ordenativos(largos,(char*)v_columna.arr,campo,nro_ord,&srv_cod_ori,
+                              &cnt_num_ori,&trt_num_ori,ord_fec);
+                  /*
+                     Cambio del 10-9-2003. Paso numero de ordenativo, para
+                     la nueva consulta en documentos
+                  */
+                  Documentos(largos,&columnas[0][0],campo,srv_cod_ori,
+                             cnt_num_ori,
+                             trt_num_ori,i,31, nro_ord);
+
+               }
+               strcat(salida,campo);
+               i=0;
+               ban=0;
+               campo[0]=0;
+            }
+            strcat(salida,(char *)v_eno_texto.arr);
+         }
+         else
+         {
+         /*
+          * Campo de texto variable.
+          */
+            /* Depurar (2, "SELECT FROM COL_NOTIFICACION\n"); */
+            EXEC SQL SELECT TABLA,
+                            COLUMNA
+            INTO           :v_tabla,
+                           :v_columna
+            FROM COL_NOTIFICACION
+            WHERE COL#=:v_eno_col;
+		
+            campo[0]=0;
+            if(COUNTHITS>0){
+               AddNullVarchar(v_tabla);
+               AddNullVarchar(v_columna);
+
+				/*
+				fprintf (stderr, "Variable {%d}: {%s}{%s}\n", ban,
+								   v_tabla.arr, (char *)v_columna.arr) ;
+				*/
+
+               if(v_eno_tipo_campo.arr[0]=='F'){
+                  if(ban==1)
+                  {
+                     v_eno_texto.arr[0]=v_eno_texto.len=0;
+                     if((strcmp(tabla,"DOCUMENTOS"))==0){
+                     /*
+                        Cambio del 10-9-2003. Paso numero de ordenativo, para
+                        la nueva consulta en documentos
+                     */
+                        Documentos(largos,&columnas[0][0],campo,
+                                   srv_cod,cnt_num,
+                                   trt_num,i,31, nro_ord);
+
+                     }else if((strcmp(tabla,"DOCUMENTOS_GAR"))==0){
+                        Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                    &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     /*
+                        Cambio del 10-9-2003. Paso numero de ordenativo, para
+                        la nueva consulta en documentos
+                     */
+                        Documentos(largos,&columnas[0][0],campo,srv_cod_ori,
+                                   cnt_num_ori,trt_num_ori,i,31, nro_ord);
+                     }
+                     strcat(salida,campo);
+                     i=0;
+                     ban=0;
+                     campo[0]=0;
+                  }
+
+                  /* Por las dudas, otra vez.    (d.molina - 31/ago/1999)  */
+                  largos[0]=v_eno_var_longitud;
+
+				  /*
+                  fprintf (stderr, "Checkpoint: {%s}{%s}\n",
+                                   v_tabla.arr, (char *)v_columna.arr) ;
+				  */
+								   
+                  if((strcmp((char*)v_tabla.arr,"PERSONAS"))==0){
+                     Personas(largos,(char*)v_columna.arr,campo,prs_num);
+                  }else if((strcmp((char*)v_tabla.arr,"PERSONAS_GAR"))==0){
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Prs_Num_Ori(srv_cod_ori,cnt_num_ori,&prs_num_ori);
+                     Personas(largos,(char*)v_columna.arr,campo,prs_num_ori);
+                  }else if((strcmp((char *)v_tabla.arr,"CONTRATOS"))==0){
+                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num,
+                               &ivv_cod,tcl_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"CONTRATOS_GAR"))==0){
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Contratos(largos,(char *)v_columna.arr,campo,srv_cod_ori,
+				cnt_num_ori,&ivv_cod,tcl_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"SERVICIOS"))==0){
+                     Servicios(largos,(char *)v_columna.arr,campo,srv_cod,&scf_cod,&agf_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"SERVICIOS_GAR"))==0){
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Servicios(largos,(char *)v_columna.arr,campo,srv_cod_ori,
+                               &scf_cod,&agf_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"LECTURAS"))==0){
+                     Lecturas(largos,(char *)v_columna.arr,campo,srv_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"ORDENATIVOS"))==0){
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                  }else if((strcmp((char *)v_tabla.arr,"TIPOS_ORDENATIVO"))==0){
+                     TiposOrdenativo(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num);
+                  }else if((strcmp((char *)v_tabla.arr,"POTENCIAS"))==0){
+                     Potencias(largos,(char *)v_columna.arr,campo,srv_cod,cnt_num);
+                  }else if((strcmp((char *)v_tabla.arr,"STOCK_EQUIPOS"))==0){
+                     Stock_Equipos(largos,(char *)v_columna.arr,campo,srv_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"SUCURSALES"))==0){
+                     Sucursales(largos,(char *)v_columna.arr,campo,scf_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"CARGOS"))==0){
+                     Cargos(largos,(char *)v_columna.arr,campo,ord_fec);
+                  }else if((strcmp((char *)v_tabla.arr,"BANCOS"))==0){
+                     Bancos(largos,(char *)v_columna.arr,campo,agf_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"TIPOS_IVA"))==0){
+                     Tipos_IVA(largos,(char *)v_columna.arr,campo,ivv_cod);
+                  }else if((strcmp((char *)v_tabla.arr,
+                                "TIPOS_NOTIFICACION"))==0){
+                     strcat(campo,(char *)v_not_descripcion.arr);
+                  }else if((strcmp((char *)v_tabla.arr,"TARIFAS"))==0){
+                     Tarifas(largos,(char *)v_columna.arr,campo,tcl_cod);
+                  }else if((strcmp((char *)v_tabla.arr,"TOTALES_TRAMITE"))==0){
+                     Totales_Tramite(largos,(char *)v_columna.arr,campo,trt_num);
+                  }else if((strcmp((char *)v_tabla.arr,"TOTALES_TRAMITE_GAR"))==0){
+                     Ordenativos(largos,(char *)v_columna.arr,campo,nro_ord,
+                                 &srv_cod_ori,&cnt_num_ori,&trt_num_ori,ord_fec);
+                     Totales_Tramite(largos,(char *)v_columna.arr,campo,trt_num_ori);
+                  }else if((strcmp((char *)v_tabla.arr,"USUARIOS"))==0){
+                     Usuarios(largos,(char *)v_columna.arr,campo);
+                  }
+               }else{
+                  if(ban==0){
+                     Varchar2Str(v_tabla,tabla);
+                     ban=1;
+                  }
+                  if((strcmp((char *)v_tabla.arr,"DOCUMENTOS"))==0
+                      || (strcmp((char *)v_tabla.arr,"DOCUMENTOS_GAR"))==0){
+                     Varchar2Str(v_columna,columnas[i]);
+                     largos[i]=v_eno_var_longitud;
+                     i++;
+                  }
+               }
+               if((strcmp((char *)v_tabla.arr,"BANCOS"))==0)
+                {
+                 if(Tiene_Comprobantes_Financiaciones!=0)
+                   if(Tiene_Otros_Comprobantes!=0)
+                    {
+                     for(q=strlen(campo); q<110; q++)
+                       strcat(campo, " ");
+                     campo[110]=0;
+                     strcat(campo, "Cuotas vencidas financ. instalaciones internas unicamen-te podran abonarse en Of.Comerciales Litoral Gas.");
+                    }
+                   else
+                     bzero(campo, sizeof campo);
+                }
+               strcat(salida,campo);
+               campo[0]=0;
+            }
+         }
+      }
+   }while(aux!=r);
+   EXEC SQL CLOSE TEXTO;
+/*
+   if(strcmp(tim_codigo,"LASER")==0 || strcmp(tim_codigo,"LAS2")==0){
+      strcat(salida,"\n");
+      strcat(salida,tim_codigo_control_13);
+   }
+*/
+   /* Depurar (3, "(%s)\n", salida); */
+   strcat(salida,"\n");
+   strcat(salida,"");
+   return salida;
+}
+
+char *Personas(int largos[],char *v_columna,char *campo,long prs_num)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long    v_prs_numero=-1;
+      static varchar v_prs_razon_social[31];
+      static double  v_prs_cuit;
+      static short   s_prs_cuit;
+      static varchar v_tipo_doc[4];
+      static short   s_tipo_doc;
+      static double  v_prs_documento;
+      static short   s_prs_documento;
+      static varchar v_prs_direccion[46];
+      static short   s_prs_direccion;
+      static varchar v_prs_nro[6];
+      static short   s_prs_nro;
+      static varchar v_prs_depto[3];
+      static short   s_prs_depto;
+
+   /* Esto puede ser peligroso          */
+   /* static double  v_agf_codigo[7];   */
+      static double  v_agf_codigo;
+
+      static varchar v_prs_categoria[4];
+      static short   s_prs_categoria;
+      static varchar v_prs_calle[26];
+      static short   s_prs_calle;
+/*
+   Modificacion del 14-11-2001. jinfante. El codigo postal es varchar
+      static double  v_prs_c_postal;
+*/
+      static varchar v_prs_c_postal[9];
+      static short   s_prs_c_postal;
+      static varchar v_prs_telefonos[41];
+      static short   s_prs_telefonos;
+      static varchar v_prs_fax[11];
+      static short   s_prs_fax;
+      static varchar v_prs_estado[2];
+      static short   s_prs_estado;
+      static varchar v_prs_piso[3];
+      static short   s_prs_piso;
+      static double  v_prs_numero_registro;
+      static short   s_prs_numero_registro;
+      static varchar v_agf_nombre[31];
+/* bbbb */
+      /* static double  v_agf_codigo; */
+
+   EXEC SQL END DECLARE SECTION;
+
+   char campo1[60];
+
+   /* Depurar (1, "Busco en PERSONAS por %s\n", v_columna); */
+   if(v_prs_numero!=prs_num){
+      v_prs_numero=prs_num;
+      EXEC SQL SELECT P.PRS_NUMERO,
+                      P.PRS_RAZON_SOCIAL,
+                      NVL(P.PRS_CUIT,0),
+                      NVL(P.PRS_TIPO_DOC,''),
+                      NVL(P.PRS_DOCUMENTO,0),
+                      NVL(P.PRS_NRO,0),
+                      NVL(P.PRS_DEPTO,''),
+                      NVL(P.AGF_CODIGO,0),
+                      NVL(P.PRS_C_POSTAL,''),
+                      NVL(P.PRS_TELEFONOS,0),
+                      NVL(P.PRS_FAX,0),
+                      NVL(P.PRS_ESTADO,''),
+                      NVL(P.PRS_PISO,0),
+                      NVL(C.CLL_NOMBRE,''),
+                      NVL(DECODE(P.PRS_BIS, 'N', ' ', P.PRS_BIS), ' '),
+                      NVL(P.PRS_TORRE, ' ')
+      INTO           :v_prs_numero,
+                     :v_prs_razon_social,
+                     :v_prs_cuit:s_prs_cuit,
+                     :v_tipo_doc:s_tipo_doc,
+                     :v_prs_documento:s_prs_documento,
+                     :v_prs_nro:s_prs_nro,
+                     :v_prs_depto:s_prs_depto,
+                     :v_agf_codigo,
+                     :v_prs_c_postal:s_prs_c_postal,
+                     :v_prs_telefonos:s_prs_telefonos,
+                     :v_prs_fax:s_prs_fax,
+                     :v_prs_estado:s_prs_estado,
+                     :v_prs_piso:s_prs_piso,
+                     :v_prs_direccion:s_prs_direccion,
+                     :v_prs_bis:s_prs_bis,
+                     :v_prs_torre:s_prs_torre
+      FROM PERSONAS P, CALLES C
+      WHERE P.PRS_NUMERO=:prs_num AND
+        C.AGF_CODIGO = P.AGF_CODIGO AND
+        C.CLL_CODIGO = P.CLL_CODIGO;
+
+      /* if(COUNTHITS==0)
+         Abortar("No hay datos personales.","Error: "); */
+      if(s_prs_cuit==-1) v_prs_cuit=0;
+      if(s_tipo_doc==-1) v_tipo_doc.arr[0]=v_tipo_doc.len=0;
+      if(s_prs_documento==-1) v_prs_documento=0;
+      if(s_prs_direccion==-1) v_prs_direccion.arr[0]=v_prs_direccion.len=0;
+      if(s_prs_nro==-1) v_prs_nro.arr[0]=v_prs_nro.len=0;
+      if(s_prs_depto==-1) v_prs_depto.arr[0]=v_prs_depto.len=0;
+      if(s_prs_categoria==-1) v_prs_categoria.arr[0]=v_prs_categoria.len=0;
+      if(s_prs_calle==-1) v_prs_calle.arr[0]=v_prs_calle.len=0;
+      if(s_prs_c_postal==-1) v_prs_c_postal.arr[0]=v_prs_c_postal.len=0;
+      if(s_prs_telefonos==-1) v_prs_telefonos.arr[0]=v_prs_telefonos.len=0;
+      if(s_prs_fax==-1) v_prs_fax.arr[0]=v_prs_fax.len=0;
+      if(s_prs_estado==-1) v_prs_estado.arr[0]=v_prs_estado.len=0;
+      if(s_prs_piso==-1) v_prs_piso.arr[0]=v_prs_piso.len=0;
+      if(s_prs_numero_registro==-1) v_prs_numero_registro=0;
+   }
+
+   if((strcmp(v_columna,"PRS_NUMERO")==0)){
+      if(v_prs_numero>0){sprintf(campo,"%ld",v_prs_numero);}
+   }else if((strcmp(v_columna,"PRS_RAZON_SOCIAL")==0)){
+      Varchar2Str(v_prs_razon_social,campo);
+   }else if((strcmp(v_columna,"PRS_CUIT")==0)){
+      if(v_prs_cuit>0){sprintf(campo,"%.0lf",v_prs_cuit);}
+   }else if((strcmp(v_columna,"PRS_TIPO_DOC")==0)){
+      Varchar2Str(v_tipo_doc,campo);
+   }else if((strcmp(v_columna,"PRS_DOCUMENTO")==0)){
+      if(v_prs_documento>0){sprintf(campo,"%.0lf",v_prs_documento);}
+   }else if((strcmp(v_columna,"PRS_NRO")==0)){
+      Varchar2Str(v_prs_nro,campo);
+   }else if((strcmp(v_columna,"PRS_DEPTO")==0)){
+      Varchar2Str(v_prs_depto,campo);
+   }else if((strcmp(v_columna,"AGF_CODIGO")==0)){
+/*    if(strlen(v_agf_codigo)>0){sprintf(campo,"%.0lf",v_agf_codigo);}  */
+      if(v_agf_codigo>0){sprintf(campo,"%.0lf",v_agf_codigo);}
+   }else if((strcmp(v_columna,"PRS_CATEGORIA")==0)){
+      Varchar2Str(v_prs_categoria,campo);
+   }else if((strcmp(v_columna,"CLL_NOMBRE")==0)){
+      Varchar2Str(v_prs_direccion,campo);
+   }else if((strcmp(v_columna,"PRS_C_POSTAL")==0)){
+/* Modificacion del cpostal jinfante
+      if(v_prs_c_postal>0){sprintf(campo,"%.0lf",v_prs_c_postal);}
+*/
+      if(v_prs_c_postal.len>0){sprintf(campo,"%s",v_prs_c_postal.arr);}
+   }else if((strcmp(v_columna,"PRS_TELEFONOS")==0)){
+      Varchar2Str(v_prs_telefonos,campo);
+   }else if((strcmp(v_columna,"PRS_FAX")==0)){
+      Varchar2Str(v_prs_fax,campo);
+   }else if((strcmp(v_columna,"PRS_ESTADO")==0)){
+      Varchar2Str(v_prs_estado,campo);
+   }else if((strcmp(v_columna,"PRS_PISO")==0)){
+      Varchar2Str(v_prs_piso,campo);
+   }else if((strcmp(v_columna,"PRS_NUMERO_REGISTRO")==0)){
+      if(v_prs_numero_registro>0){sprintf(campo,"%.0lf",v_prs_numero_registro);}
+   }else if((strcmp(v_columna,"PRS_LOCALIDAD")==0)){
+      EXEC SQL SELECT AGF_NOMBRE
+           INTO :v_agf_nombre
+           FROM AREAS_GEOGRAFICAS
+           WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :v_agf_codigo;
+      Varchar2Str(v_agf_nombre,campo);
+   }else if((strcmp(v_columna,"PRS_DIRECCION")==0)){
+    Varchar2Str(v_prs_direccion, campo1);
+    if(strlen(campo1)!=0)
+      for(;campo1[strlen(campo1)-1]==' ';)
+       {
+        if(strlen(campo1)==0)
+          break;
+        else
+         {
+          campo1[strlen(campo1)-1]=0;
+          Depurar (3, "(%s)\n", campo1);
+         }
+       }
+    strcpy(campo, campo1);
+    if((v_prs_bis.len>0)&&(v_prs_bis.arr[0]!='N'))
+     {
+      AddNullVarchar(v_prs_bis);
+      strcat(campo, " ");
+      strcat(campo, v_prs_bis.arr);
+     }
+    if(v_prs_nro.len>0)
+     {
+      AddNullVarchar(v_prs_nro);
+      strcat(campo, " ");
+      strcat(campo, v_prs_nro.arr);
+     }
+    if(v_prs_torre.len>0)
+     {
+      AddNullVarchar(v_prs_torre);
+      strcat(campo, " ");
+      strcat(campo, v_prs_torre.arr);
+     }
+    if(v_prs_piso.len>0)
+     {
+      AddNullVarchar(v_prs_piso);
+      strcat(campo, " ");
+      strcat(campo, v_prs_piso.arr);
+     }
+    if(v_prs_depto.len>0)
+     {
+      AddNullVarchar(v_prs_depto);
+      strcat(campo, " ");
+      strcat(campo, v_prs_depto.arr);
+     }
+/* modificacion del cpostal - jinfante
+    if(v_prs_c_postal>0)
+*/
+    if(v_prs_c_postal.len>0)
+     {
+      bzero(campo1, sizeof(campo1));
+/*
+      sprintf(campo1, " %04d ", v_prs_c_postal);
+*/
+      sprintf(campo1, " %s ", v_prs_c_postal.arr);
+      strcat(campo, campo1);
+      EXEC SQL SELECT AGF_NOMBRE
+           INTO :v_agf_nombre
+           FROM AREAS_GEOGRAFICAS
+           WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :v_agf_codigo;
+      AddNullVarchar(v_agf_nombre);
+      strcat(campo, v_agf_nombre.arr);
+     }
+   }
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Contratos(int largos[],
+                char *v_columna,
+                char *campo,
+                long srv_cod,
+                int cnt_num,
+                int *ivv_codigo,
+                char *tcl_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long    v_srv_cod=-1;
+      static long    v_prs_numero;
+      static double  v_prs_numero_apoderado;
+      static short   s_prs_numero_apoderado;
+      static varchar v_tcl_codigo[5];
+      static varchar v_cla_codigo[11]; /* kalave 23/10/2008 de 4 a 11 */
+      static varchar v_ten_codigo[6];
+      static varchar v_cat_codigo[4];
+      static varchar v_cnt_propietario[2];
+      static short   s_cnt_propietario;
+      static varchar v_cnt_fecha_inicio[9];
+      static int     v_ivv_codigo;
+      static varchar v_cnt_fecha_fin[9];
+      static short   s_cnt_fecha_fin;
+      static double  v_cnt_tension;
+      static short   s_cnt_tension;
+      static varchar v_cnt_tipo[3];
+      static varchar v_cnt_cond_corte[2];
+      static varchar v_cnt_cond_intimacion[2];
+      static varchar v_cnt_cond_retiro[2];
+      static varchar v_cnt_direccion_pago[61];
+      static short   s_cnt_direccion_pago;
+      static varchar v_cnt_calle_pago[31];
+      static short   s_cnt_calle_pago;
+      static varchar v_cnt_nro_pago[5];
+      static short   s_cnt_nro_pago;
+      static varchar v_cnt_piso_pago[9];
+      static short   s_cnt_piso_pago;
+      static varchar v_cnt_depto_pago[9];
+      static short   s_cnt_depto_pago;
+      static varchar v_cnt_c_postal_pago[8];
+      static short   s_cnt_c_postal_pago;
+      static double  v_agf_codigo_pago;
+      static varchar v_min_codigo[4];
+      static short   s_min_codigo;
+      static int     v_cnt_anio;
+      static short   s_cnt_anio;
+      static int     v_cnt_periodo;
+      static short   s_cnt_periodo;
+      static varchar v_cnt_tasa[2];
+      static short   s_cnt_tasa;
+      static double  v_cnt_consumo_promedio_anual;
+      static short   s_consumo_promedio_anual;
+      static varchar v_cnt_numero_sobre[6];
+      static short   s_cnt_numero_sobre;
+      static double  v_cnt_consumo_promedio_verano;
+      static short   s_consumo_promedio_verano;
+      static varchar v_cnt_numero_reparto[5];
+      static short   s_cnt_numero_reparto;
+      static double  v_cnt_consumo_promedio_invierno;
+      static short   s_consumo_promedio_invierno;
+      static varchar v_cnt_legajo[16];
+      static short   s_cnt_legajo;
+      static double  v_cnt_consumo_maximo;
+      static short   s_cnt_consumo_maximo;
+      static varchar v_cnt_contribucion[2];
+      static short   s_cnt_contribucion;
+      static int     v_cnt_ciiu;
+      static short   s_cnt_ciiu;
+      static double  v_urc_codigo;
+      static short   s_urc_codigo;
+      static varchar v_mpa_tipo_medio_pago[5];
+      static short   s_mpa_tipo_medio_pago;
+      static varchar v_cnt_numero_cuenta[21];
+      static short   s_cnt_numero_cuenta;
+      static varchar v_cnt_observaciones[251];
+      static short   s_cnt_observaciones;
+      static varchar v_oim_tipo[4];
+      static varchar v_cnt_estado[5];
+      static varchar v_cll_nombre[60];short s_cll_nombre;
+      static long v_cnt_agf_codigo;
+      static varchar v_cnt_agf_nombre[31];short s_cnt_agf_nombre;
+
+      static short s_prs_numero;
+      static short s_cnt_tipo;
+      static short s_ivv_codigo;
+      static short s_cnt_fecha_inicio;
+      static short s_tcl_codigo;
+      static short s_cla_codigo;
+      static short s_ten_codigo;
+      static short s_cat_codigo;
+      static short s_oim_tipo;
+      static short s_cnt_estado;
+      static short s_cnt_agf_codigo;
+
+      static varchar v_cnt_bis[2];
+      static varchar v_cnt_torre_pago[2];
+      static short s_cnt_bis;
+      static short s_cnt_torre_pago;
+
+      static varchar v_srv_agf_nombre[31];
+      static short   s_srv_agf_nombre;
+      static double  v_agf_codigo;
+      static int     v_srv_c_postal;
+      static short   s_srv_c_postal;
+
+   EXEC SQL END DECLARE SECTION;
+
+   char campo1[60];
+
+   /* Depurar (1, "Busco en CONTRATOS por %s\n", v_columna); */
+   if(v_srv_cod!=srv_cod){
+      v_srv_cod=srv_cod;
+      EXEC SQL SELECT T.PRS_NUMERO,
+                      T.PRS_NUMERO_APODERADO,
+                      T.TCL_CODIGO,
+                      T.CLA_CODIGO,
+                      T.TEN_CODIGO,
+                      T.CAT_CODIGO,
+                      T.CNT_PROPIETARIO,
+                      to_char(T.CNT_FECHA_INICIO,'dd/mm/yy'),
+                      T.IVV_CODIGO,
+                      to_char(T.CNT_FECHA_FIN,'dd/mm/yy'),
+                      T.CNT_TIPO,
+                      T.CNT_DIRECCION_PAGO,
+                      T.CNT_NRO_PAGO,
+                      T.CNT_PISO_PAGO,
+                      T.CNT_DEPTO_PAGO,
+                      T.CNT_C_POSTAL_PAGO,
+                      T.MIN_CODIGO,
+                      T.CNT_ANIO,
+                      T.CNT_PERIODO,
+                      T.CNT_LEGAJO,
+                      T.CNT_CIIU,
+                      T.URC_CODIGO,
+                      T.MPA_TIPO_MEDIO_PAGO,
+                      T.CNT_NUMERO_CUENTA,
+                      T.CNT_OBSERVACIONES,
+                      T.OIM_TIPO,
+                      T.CNT_ESTADO,
+                      T.AGF_CODIGO,
+                      C.CLL_NOMBRE,
+                      T.CNT_BIS,
+                      T.CNT_TORRE_PAGO
+      INTO           :v_prs_numero:s_prs_numero,
+                     :v_prs_numero_apoderado:s_prs_numero_apoderado,
+                     :v_tcl_codigo:s_tcl_codigo,
+                     :v_cla_codigo:s_cla_codigo,
+                     :v_ten_codigo:s_ten_codigo,
+                     :v_cat_codigo:s_cat_codigo,
+                     :v_cnt_propietario:s_cnt_propietario,
+                     :v_cnt_fecha_inicio:s_cnt_fecha_inicio,
+                     :v_ivv_codigo:s_ivv_codigo,
+                     :v_cnt_fecha_fin:s_cnt_fecha_fin,
+                     :v_cnt_tipo:s_cnt_tipo,
+                     :v_cnt_direccion_pago:s_cnt_direccion_pago,
+                     :v_cnt_nro_pago:s_cnt_nro_pago,
+                     :v_cnt_piso_pago:s_cnt_piso_pago,
+                     :v_cnt_depto_pago:s_cnt_depto_pago,
+                     :v_cnt_c_postal_pago:s_cnt_c_postal_pago,
+                     :v_min_codigo:s_min_codigo,
+                     :v_cnt_anio:s_cnt_anio,
+                     :v_cnt_periodo:s_cnt_periodo,
+                     :v_cnt_legajo:s_cnt_legajo,
+                     :v_cnt_ciiu:s_cnt_ciiu,
+                     :v_urc_codigo:s_urc_codigo,
+                     :v_mpa_tipo_medio_pago:s_mpa_tipo_medio_pago,
+                     :v_cnt_numero_cuenta:s_cnt_numero_cuenta,
+                     :v_cnt_observaciones:s_cnt_observaciones,
+                     :v_oim_tipo:s_oim_tipo,
+                     :v_cnt_estado:s_cnt_estado,
+                     :v_cnt_agf_codigo:s_cnt_agf_codigo,
+                     :v_cll_nombre:s_cll_nombre,
+                     :v_cnt_bis:s_cnt_bis,
+                     :v_cnt_torre_pago:s_cnt_torre_pago
+      FROM CONTRATOS T, CALLES C
+      WHERE SRV_CODIGO=:srv_cod
+      AND   CNT_NUMERO=:cnt_num
+      AND   T.AGF_CODIGO=C.AGF_CODIGO (+)
+      AND   T.CLL_CODIGO=C.CLL_CODIGO (+);
+
+      if(COUNTHITS==0)
+         Abortar("No hay datos del contrato.","Error: ");
+
+      if(s_cnt_bis==-1)
+        v_cnt_bis.arr[0]=v_cnt_bis.len=0;
+      else
+        AddNullVarchar(v_cnt_bis);
+
+      if(s_cnt_torre_pago==-1)
+        v_cnt_torre_pago.arr[0]=v_cnt_torre_pago.len=0;
+      else
+        AddNullVarchar(v_cnt_torre_pago);
+
+      *ivv_codigo=v_ivv_codigo;
+      Varchar2Str(v_tcl_codigo,tcl_cod);
+      if(s_prs_numero_apoderado==-1) v_prs_numero_apoderado=0;
+      if(s_cnt_propietario==-1)
+                     v_cnt_propietario.arr[0]=v_cnt_propietario.len=0;
+      if(s_cnt_fecha_fin==-1) v_cnt_fecha_fin.arr[0]=v_cnt_fecha_fin.len=0;
+      if(s_cnt_tension==-1) v_cnt_tension=0;
+      if(s_cnt_direccion_pago==-1)
+                     v_cnt_direccion_pago.arr[0]=v_cnt_direccion_pago.len=0;
+      if(s_cll_nombre==-1)
+        v_cll_nombre.arr[0]=v_cll_nombre.len=0;
+      else
+        AddNullVarchar(v_cll_nombre);
+      if(s_cnt_calle_pago==-1) v_cnt_calle_pago.arr[0]=v_cnt_calle_pago.len=0;
+      if(s_cnt_nro_pago==-1) v_cnt_nro_pago.arr[0]=v_cnt_nro_pago.len=0;
+      if(s_cnt_piso_pago==-1) v_cnt_piso_pago.arr[0]=v_cnt_piso_pago.len=0;
+      if(s_cnt_depto_pago==-1) v_cnt_depto_pago.arr[0]=v_cnt_depto_pago.len=0;
+      if(s_cnt_c_postal_pago==-1) v_cnt_c_postal_pago.arr[0]=v_cnt_c_postal_pago.len=0;
+      if(s_min_codigo==-1) v_min_codigo.arr[0]=v_min_codigo.len=0;
+      if(s_cnt_anio==-1) v_cnt_anio=0;
+      if(s_cnt_periodo==-1) v_cnt_periodo=0;
+      if(s_cnt_tasa==-1) v_cnt_tasa.arr[0]=v_cnt_tasa.len=0;
+      if(s_consumo_promedio_anual==-1) v_cnt_consumo_promedio_anual=0;
+      if(s_cnt_numero_sobre==-1)
+                     v_cnt_numero_sobre.arr[0]=v_cnt_numero_sobre.len=0;
+      if(s_consumo_promedio_verano==-1) v_cnt_consumo_promedio_verano=0;
+      if(s_cnt_numero_reparto==-1)
+                     v_cnt_numero_reparto.arr[0]=v_cnt_numero_reparto.len=0;
+      if(s_consumo_promedio_invierno==-1) v_cnt_consumo_promedio_invierno=0;
+      if(s_cnt_legajo==-1) v_cnt_legajo.arr[0]=v_cnt_legajo.len=0;
+      if(s_cnt_consumo_maximo==-1) v_cnt_consumo_maximo=0;
+      if(s_cnt_contribucion==-1)
+                     v_cnt_contribucion.arr[0]=v_cnt_contribucion.len=0;
+      if(s_cnt_ciiu==-1) v_cnt_ciiu=0;
+      if(s_urc_codigo==-1) v_urc_codigo=0;
+      if(s_mpa_tipo_medio_pago==-1)
+                     v_mpa_tipo_medio_pago.arr[0]=v_mpa_tipo_medio_pago.len=0;
+      if(s_cnt_numero_cuenta==-1)
+                     v_cnt_numero_cuenta.arr[0]=v_cnt_numero_cuenta.len=0;
+      if(s_cnt_observaciones==-1)
+                     v_cnt_observaciones.arr[0]=v_cnt_observaciones.len=0;
+   }
+
+   if((strcmp(v_columna,"SRV_CODIGO")==0)){
+      if(srv_cod>0){sprintf(campo,"%ld",srv_cod);}
+   }else if((strcmp(v_columna,"CNT_NUMERO")==0)){
+      if(cnt_num>0){sprintf(campo,"%d",cnt_num);}
+   }else if((strcmp(v_columna,"PRS_NUMERO")==0)){
+      if(v_prs_numero>0){sprintf(campo,"%ld",v_prs_numero);}
+   }else if((strcmp(v_columna,"PRS_NUMERO_APODERADO")==0)){
+      if(v_prs_numero_apoderado>0){sprintf(campo,"%.0lf",v_prs_numero_apoderado);}
+   }else if((strcmp(v_columna,"TCL_CODIGO")==0)){
+      Varchar2Str(v_tcl_codigo,campo);
+   }else if((strcmp(v_columna,"CLA_CODIGO")==0)){
+      Varchar2Str(v_cla_codigo,campo);
+   }else if((strcmp(v_columna,"TEN_CODIGO")==0)){
+      Varchar2Str(v_ten_codigo,campo);
+   }else if((strcmp(v_columna,"CAT_CODIGO")==0)){
+      Varchar2Str(v_cat_codigo,campo);
+   }else if((strcmp(v_columna,"OBT_PROPIETARIO")==0)){
+      Varchar2Str(v_cnt_propietario,campo);
+   }else if((strcmp(v_columna,"CNT_FECHA_INICIO")==0)){
+      Varchar2Str(v_cnt_fecha_inicio,campo);
+   }else if((strcmp(v_columna,"IVV_CODIGO")==0)){
+      if(v_ivv_codigo>0){sprintf(campo,"%.0lf",v_ivv_codigo);}
+   }else if((strcmp(v_columna,"CNT_FECHA_FIN")==0)){
+      Varchar2Str(v_cnt_fecha_fin,campo);
+   }else if((strcmp(v_columna,"CNT_TENSION")==0)){
+      if(v_cnt_tension>0){sprintf(campo,"%.0lf",v_cnt_tension);}
+   }else if((strcmp(v_columna,"CNT_TIPO")==0)){
+      Varchar2Str(v_cnt_tipo,campo);
+   }else if((strcmp(v_columna,"CNT_COND_CORTE")==0)){
+      Varchar2Str(v_cnt_cond_corte,campo);
+   }else if((strcmp(v_columna,"CNT_COND_INTIMACION")==0)){
+      Varchar2Str(v_cnt_cond_intimacion,campo);
+   }else if((strcmp(v_columna,"CNT_COND_RETIRO")==0)){
+      Varchar2Str(v_cnt_cond_retiro,campo);
+   }else if((strcmp(v_columna,"CNT_DIRECCION_PAGO")==0))
+    {
+     /*
+      * Estan pidiendo el domicilio postal.
+      *
+      * Vieja logica: si no hay nombre de calle, dar
+      *               cnt_direccion_pago
+      * Nueva logica: si cnt_direccion_pago no esta
+      *               vacio, darla.
+      */
+     /* if(s_cll_nombre==-1) */
+     if(srv_cod==0)
+      {
+        ClearVarchar(l_prs_razon_social);
+        ClearVarchar(l_prs_direccion);
+        ClearVarchar(l_cfc_codigo);
+        ClearVarchar(ll_prs_calle);
+        ClearVarchar(ll_prs_nro);
+        ClearVarchar(ll_prs_piso);
+        ClearVarchar(ll_prs_depto);
+        ClearVarchar(ll_prs_torre);
+        ClearVarchar(ll_prs_c_postal);
+        exec sql
+          select personas.prs_numero,
+              substr(personas.prs_razon_social,1,25),
+              nvl(personas.prs_direccion, ' '),
+              personas.cfc_codigo,
+              substr(calles.cll_nombre,1,18),
+              substr(nvl(personas.prs_nro, '    '),1,4),
+              substr(nvl(personas.prs_piso, '  '),1,2),
+              substr(nvl(personas.prs_depto, '   '),1,3),
+              nvl(personas.prs_torre, ' '),
+              nvl(personas.prs_c_postal, ' '),
+              personas.agf_codigo
+          into :l_prs_numero,
+              :l_prs_razon_social,
+              :l_prs_direccion,
+              :l_cfc_codigo,
+              :ll_prs_calle,
+              :ll_prs_nro,
+              :ll_prs_piso,
+              :ll_prs_depto,
+              :ll_prs_torre,
+              :ll_prs_c_postal,
+              :ll_prs_agf_codigo
+         from personas, calles
+         where calles.cll_codigo = personas.cll_codigo
+           and calles.agf_codigo = personas.agf_codigo
+           and personas.prs_numero = :l_o_prs_numero;
+         bzero(campo, sizeof(campo));
+         sprintf(campo, "%-18s%-4s%-2s%-3s%-3s", ll_prs_calle.arr,
+           ll_prs_nro.arr, ll_prs_piso.arr, ll_prs_depto.arr,
+           ll_prs_torre.arr);
+         if(ll_prs_c_postal.arr[0]!=0)
+          {
+           bzero(campo1, sizeof(campo1));
+           sprintf(campo1, " %s ", ll_prs_c_postal.arr);
+           strcat(campo, campo1);
+           EXEC SQL SELECT AGF_NOMBRE
+             INTO :v_srv_agf_nombre:s_srv_agf_nombre
+             FROM AREAS_GEOGRAFICAS
+             WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :ll_prs_agf_codigo;
+           if(s_srv_agf_nombre!=-1)
+            {
+             AddNullVarchar(v_srv_agf_nombre);
+             strcat(campo, v_srv_agf_nombre.arr);
+            }
+          }
+      }
+     else
+     if(strlen(v_cnt_direccion_pago.arr)!=0)
+     {
+       psal=0;
+       /* Con la nueva logica, este if es redundante... (d.molina 24/ago/99) */
+       /* if(strlen(v_cnt_direccion_pago.arr)!=0) */
+       {
+         for(pent=0; pent<strlen(v_cnt_direccion_pago.arr); pent++)
+           if((v_cnt_direccion_pago.arr[pent]==' ')
+           &&(v_cnt_direccion_pago.arr[pent+1]==' '))
+             pent=pent;
+           else
+             psalida[psal++]=v_cnt_direccion_pago.arr[pent];
+       }
+       psalida[psal]=0;
+       strcpy(campo, psalida);
+     }
+     else
+     {
+       Depurar (3, "Antes del Varchar2Str\n");
+       Varchar2Str(v_cll_nombre, campo1);
+       Depurar (3, "Despues del Varchar2Str\n");
+       if(strlen(campo1)!=0)
+         for(;campo1[strlen(campo1)-1]==' ';)
+         {
+           if(strlen(campo1)==0)
+             break;
+           else
+           {
+             campo1[strlen(campo1)-1]=0;
+             Depurar (3, "(%s)\n", campo1);
+           }
+         }
+       strcpy(campo, campo1);
+       if((v_cnt_bis.len>0)&&(v_cnt_bis.arr[0]!='N'))
+        {
+         AddNullVarchar(v_cnt_bis);
+         strcat(campo, " ");
+         strcat(campo, v_cnt_bis.arr);
+        }
+       if(v_cnt_nro_pago.len>0)
+        {
+         AddNullVarchar(v_cnt_nro_pago);
+         strcat(campo, " ");
+         strcat(campo, v_cnt_nro_pago.arr);
+        }
+       if(v_cnt_torre_pago.len>0)
+        {
+         AddNullVarchar(v_cnt_torre_pago);
+         strcat(campo, " ");
+         strcat(campo, v_cnt_torre_pago.arr);
+        }
+       if(v_cnt_piso_pago.len>0)
+        {
+         AddNullVarchar(v_cnt_piso_pago);
+         strcat(campo, " ");
+         strcat(campo, v_cnt_piso_pago.arr);
+        }
+       if(v_cnt_depto_pago.len>0)
+        {
+         AddNullVarchar(v_cnt_depto_pago);
+         strcat(campo, " ");
+         strcat(campo, v_cnt_depto_pago.arr);
+        }
+       if(v_cnt_c_postal_pago.len>0)
+        {
+         bzero(campo1, sizeof(campo1));
+         sprintf(campo1, " (%s) ", v_cnt_c_postal_pago.arr);
+         strcat(campo, campo1);
+         EXEC SQL SELECT AGF_NOMBRE
+           INTO :v_cnt_agf_nombre:s_cnt_agf_nombre
+           FROM AREAS_GEOGRAFICAS
+           WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :v_cnt_agf_codigo;
+         if(s_cnt_agf_nombre!=-1)
+          {
+           AddNullVarchar(v_cnt_agf_nombre);
+           strcat(campo, v_cnt_agf_nombre.arr);
+          }
+        }
+      }
+   }else if((strcmp(v_columna,"CNT_CALLE_PAGO")==0)){
+      Varchar2Str(v_cnt_calle_pago,campo);
+   }else if((strcmp(v_columna,"CNT_NRO_PAGO")==0)){
+      Varchar2Str(v_cnt_nro_pago,campo);
+   }else if((strcmp(v_columna,"CNT_PISO_PAGO")==0)){
+      Varchar2Str(v_cnt_piso_pago,campo);
+   }else if((strcmp(v_columna,"CNT_DEPTO_PAGO")==0)){
+      Varchar2Str(v_cnt_depto_pago,campo);
+   }else if((strcmp(v_columna,"CNT_C_POSTAL_PAGO")==0)){
+      if(v_cnt_c_postal_pago.len>0){sprintf(campo,"(%s)",v_cnt_c_postal_pago.arr);}
+   }else if((strcmp(v_columna,"AGF_CODIGO_PAGO")==0)){
+      if(v_agf_codigo_pago>0){sprintf(campo,"%.0lf",v_agf_codigo_pago);}
+   }else if((strcmp(v_columna,"MIN_CODIGO")==0)){
+      Varchar2Str(v_min_codigo,campo);
+   }else if((strcmp(v_columna,"CNT_ANIO")==0)){
+      if(v_cnt_anio>0){sprintf(campo,"%.0lf",v_cnt_anio);}
+   }else if((strcmp(v_columna,"CNT_PERIODO")==0)){
+      if(v_cnt_periodo>0){sprintf(campo,"%.0lf",v_cnt_periodo);}
+   }else if((strcmp(v_columna,"CNT_TASA")==0)){
+      Varchar2Str(v_cnt_tasa,campo);
+   }else if((strcmp(v_columna,"CNT_CONSUMO_PROMEDIO_ANUAL")==0)){
+      if(v_cnt_consumo_promedio_anual>0){sprintf(campo,"%.0lf",v_cnt_consumo_promedio_anual);}
+   }else if((strcmp(v_columna,"CNT_NUMERO_SOBRE")==0)){
+      Varchar2Str(v_cnt_numero_sobre,campo);
+   }else if((strcmp(v_columna,"CNT_CONSUMO_PROMEDIO_VERANO")==0)){
+      if(v_cnt_consumo_promedio_verano>0){sprintf(campo,"%.0lf",v_cnt_consumo_promedio_verano);}
+   }else if((strcmp(v_columna,"CNT_NUMERO_REPARTO")==0)){
+      Varchar2Str(v_cnt_numero_reparto,campo);
+   }else
+      if((strcmp(v_columna,"CNT_CONSUMO_PROMEDIO_INVIERNO")==0)){
+      if(v_cnt_consumo_promedio_invierno>0){sprintf(campo,"%.0lf",v_cnt_consumo_promedio_invierno);}
+   }else if((strcmp(v_columna,"CNT_LEGAJO")==0)){
+      Varchar2Str(v_cnt_legajo,campo);
+   }else if((strcmp(v_columna,"CNT_CONSUMO_MAXIMO")==0)){
+      if(v_cnt_consumo_maximo>0){sprintf(campo,"%.0lf",v_cnt_consumo_maximo);}
+   }else if((strcmp(v_columna,"CNT_CONTRIBUCION")==0)){
+      Varchar2Str(v_cnt_contribucion,campo);
+   }else if((strcmp(v_columna,"CNT_CIIU")==0)){
+      if(v_cnt_ciiu>0){sprintf(campo,"%.0lf",v_cnt_ciiu);}
+   }else if((strcmp(v_columna,"URC_CODIGO")==0)){
+      if(v_urc_codigo>0){sprintf(campo,"%.0lf",v_urc_codigo);}
+   } if((strcmp(v_columna,"MPA_TIPO_MEDIO_PAGO")==0)){
+      Varchar2Str(v_mpa_tipo_medio_pago,campo);
+   }else if((strcmp(v_columna,"CNT_NUMERO_CUENTA")==0)){
+      Varchar2Str(v_cnt_numero_cuenta,campo);
+   }else if((strcmp(v_columna,"CNT_OBSERVACIONES")==0)){
+      Varchar2Str(v_cnt_observaciones,campo);
+   }else if((strcmp(v_columna,"OIM_TIPO")==0)){
+      Varchar2Str(v_oim_tipo,campo);
+   }else if((strcmp(v_columna,"CNT_ESTADO")==0)){
+      Varchar2Str(v_cnt_estado,campo);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Servicios(int largos[],char *v_columna,char *campo,long srv_cod,long *scf_cod, long *agf_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   char campo1[60];
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long    v_srv_cod=-1;
+      static long    v_scf_codigo;
+      static varchar v_age_codigo[2];
+      static short   s_age_codigo;
+      static long    v_rta_codigo;
+      static long    v_srv_orden_lectura;
+      static short   s_srv_orden_lectura;
+      static varchar v_srv_direccion[61];
+      static short   s_srv_direccion;
+      static varchar v_srv_calle[31];
+      static short   s_srv_calle;
+      static varchar v_srv_bis[2];
+      static short   s_srv_bis;
+      static long    v_srv_nro;
+      static short   s_srv_nro;
+      static varchar v_srv_torre[2];
+      static short   s_srv_torre;
+      static varchar v_srv_piso[3];
+      static short   s_srv_piso;
+      static varchar v_srv_depto[4];
+      static short   s_srv_depto;
+      static int     v_srv_c_postal;
+      static short   s_srv_c_postal;
+      static long    v_agf_codigo;
+      static varchar v_srv_fecha_instal[9];
+      static short   s_srv_fecha_instal;
+      static varchar v_srv_fecha_baja[9];
+      static short   s_srv_fecha_baja;
+      static varchar v_srv_motivo_baja[3];
+      static short   s_srv_motivo_baja;
+      static int     v_srv_plan_original;
+      static short   s_srv_plan_original;
+      static int     v_srv_zona_original;
+      static short   s_srv_zona_original;
+      static int     v_srv_localidad_original;
+      static short   s_srv_localidad_original;
+      static int     v_srv_ruta_original;
+      static short   s_srv_ruta_original;
+      static int     v_srv_suministro_original;
+      static short   s_srv_suministro_original;
+      static long    v_srv_promedio_verano;
+      static short   s_srv_promedio_verano;
+      static long    v_srv_promedio_invierno;
+      static short   s_srv_promedio_invierno;
+      static long    v_srv_promedio_anual;
+      static short   s_srv_promedio_anual;
+      static varchar v_srv_tipo_suministro[3];
+      static short   s_srv_tipo_suministro;
+      static long    v_edi_numero;
+      static short   s_edi_numero;
+      static long    v_erd_codigo;
+      static short   s_erd_codigo;
+      static varchar v_srv_distrito_cat[4];
+      static short   s_srv_distrito_cat;
+      static varchar v_srv_zona_cat[4];
+      static short   s_srv_zona_cat;
+      static varchar v_srv_manzana_cat[5];
+      static short   s_srv_manzana_cat;
+      static varchar v_srv_lote_cat[5];
+      static short   s_srv_lote_cat;
+      static varchar v_srv_estado[4];
+      static varchar v_srv_observaciones[241];
+      static short   s_srv_observaciones;
+      static varchar v_cll_nombre[60];
+      static short   s_cll_nombre;
+      static varchar v_srv_agf_nombre[31];
+      static short   s_srv_agf_nombre;
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en SERVICIOS por %s\n", v_columna); */
+   if(v_srv_cod!=srv_cod){
+      v_srv_cod=srv_cod;
+      EXEC SQL SELECT S.SCF_CODIGO,
+                      S.AGE_CODIGO,
+                      S.RTA_CODIGO,
+                      S.SRV_ORDEN_LECTURA,
+                      S.SRV_DIRECCION,
+                      S.SRV_BIS,
+                      S.SRV_NRO,
+                      S.SRV_TORRE,
+                      S.SRV_PISO,
+                      S.SRV_DEPTO,
+                      S.SRV_C_POSTAL,
+                      S.AGF_CODIGO,
+                      to_char(S.SRV_FECHA_INSTAL,'dd/mm/yy'),
+                      to_char(S.SRV_FECHA_BAJA,'dd/mm/yy'),
+                      S.SRV_MOTIVO_BAJA,
+                      S.SRV_SUMINISTRO_ORIGINAL,
+                      S.EDI_NUMERO,
+                      S.SRV_ZONA_CATA,
+                      S.SRV_MANZANA_CATA,
+                      S.SRV_LOTE_CATA,
+                      S.SRV_ESTADO,
+                      S.SRV_OBSERVACIONES,
+                      C.CLL_NOMBRE
+      INTO           :v_scf_codigo,
+                     :v_age_codigo:s_age_codigo,
+                     :v_rta_codigo,
+                     :v_srv_orden_lectura:s_srv_orden_lectura,
+                     :v_srv_direccion:s_srv_direccion,
+                     :v_srv_bis:s_srv_bis,
+                     :v_srv_nro:s_srv_nro,
+                     :v_srv_torre:s_srv_torre,
+                     :v_srv_piso:s_srv_piso,
+                     :v_srv_depto:s_srv_depto,
+                     :v_srv_c_postal:s_srv_c_postal,
+                     :v_agf_codigo,
+                     :v_srv_fecha_instal:s_srv_fecha_instal,
+                     :v_srv_fecha_baja:s_srv_fecha_baja,
+                     :v_srv_motivo_baja:s_srv_motivo_baja,
+                     :v_srv_suministro_original:s_srv_suministro_original,
+                     :v_edi_numero:s_edi_numero,
+                     :v_srv_zona_cat:s_srv_zona_cat,
+                     :v_srv_manzana_cat:s_srv_manzana_cat,
+                     :v_srv_lote_cat:s_srv_lote_cat,
+                     :v_srv_estado,
+                     :v_srv_observaciones:s_srv_observaciones,
+                     :v_cll_nombre:s_cll_nombre
+      FROM SERVICIOS S, CALLES C
+      WHERE SRV_CODIGO=:srv_cod
+      -- AND   CNT_NUMERO=:cnt_num
+      AND   S.AGF_CODIGO=C.AGF_CODIGO (+)
+      AND   S.CLL_CODIGO=C.CLL_CODIGO (+);
+
+      if(COUNTHITS==0)
+         Abortar("No hay datos de servicios.","Error: ");
+
+
+      *scf_cod=v_scf_codigo;
+      *agf_cod=v_agf_codigo;
+      if(s_srv_orden_lectura==-1) v_srv_orden_lectura=0;
+      if(s_age_codigo==-1) v_age_codigo.arr[0]=v_age_codigo.len=0;
+      if(s_srv_direccion==-1) v_srv_direccion.arr[0]=v_srv_direccion.len=0;
+/*
+      Cambio a pedido de rcittadi del 6-11-2003
+*/
+      v_srv_direccion.arr[0]=0;
+      v_srv_direccion.len=0;
+/*
+      Fin del cambio
+*/
+      if(s_srv_calle==-1) v_srv_calle.arr[0]=v_srv_calle.len=0;
+      if(s_srv_bis==-1) v_srv_bis.arr[0]=v_srv_bis.len=0;
+      if(s_srv_nro==-1) v_srv_nro=0;
+      if(s_srv_torre==-1) v_srv_torre.arr[0]=v_srv_torre.len=0;
+      if(s_srv_piso==-1) v_srv_piso.arr[0]=v_srv_piso.len=0;
+      if(s_srv_depto==-1) v_srv_depto.arr[0]=v_srv_depto.len=0;
+      if(s_srv_c_postal==-1) v_srv_c_postal=0;
+      if(s_srv_fecha_instal==-1)
+                     v_srv_fecha_instal.arr[0]=v_srv_fecha_instal.len=0;
+      if(s_srv_fecha_baja==-1)
+                     v_srv_fecha_baja.arr[0]=v_srv_fecha_baja.len=0;
+      if(s_srv_motivo_baja==-1)
+                     v_srv_motivo_baja.arr[0]=v_srv_motivo_baja.len=0;
+      if(s_srv_plan_original==-1) v_srv_plan_original=0;
+      if(s_srv_zona_original==-1) v_srv_zona_original=0;
+      if(s_srv_localidad_original==-1) v_srv_localidad_original=0;
+      if(s_srv_ruta_original==-1) v_srv_ruta_original=0;
+      if(s_srv_suministro_original==-1) v_srv_suministro_original=0;
+      if(s_srv_promedio_verano==-1) v_srv_promedio_verano=0;
+      if(s_srv_promedio_invierno==-1) v_srv_promedio_invierno=0;
+      if(s_srv_promedio_anual==-1) v_srv_promedio_anual=0;
+      if(s_srv_tipo_suministro==-1)
+                     v_srv_tipo_suministro.arr[0]=v_srv_tipo_suministro.len=0;
+      if(s_edi_numero==-1) v_edi_numero=0;
+      if(s_erd_codigo==-1) v_erd_codigo=0;
+      if(s_srv_distrito_cat==-1)
+                     v_srv_distrito_cat.arr[0]=v_srv_distrito_cat.len=0;
+      if(s_srv_zona_cat==-1) v_srv_zona_cat.arr[0]=v_srv_zona_cat.len=0;
+      if(s_srv_manzana_cat==-1)
+                     v_srv_manzana_cat.arr[0]=v_srv_manzana_cat.len=0;
+      if(s_srv_lote_cat==-1) v_srv_lote_cat.arr[0]=v_srv_lote_cat.len=0;
+      if(s_srv_observaciones==-1)
+                     v_srv_observaciones.arr[0]=v_srv_observaciones.len=0;
+      if(s_cll_nombre==-1)
+                     v_cll_nombre.arr[0]=v_cll_nombre.len=0;
+   }
+   if((strcmp(v_columna,"SRV_CODIGO")==0)){
+       if(srv_cod>0){sprintf(campo,"%ld",srv_cod);}
+   }else if((strcmp(v_columna,"SCF_CODIGO")==0)){
+       if(v_scf_codigo>0){sprintf(campo,"%ld",v_scf_codigo);}
+   }else if((strcmp(v_columna,"AGE_CODIGO")==0)){
+       Varchar2Str(v_age_codigo,campo);
+   }else if((strcmp(v_columna,"RTA_CODIGO")==0)){
+       if(v_rta_codigo>0){sprintf(campo,"%ld",v_rta_codigo);}
+   }else if((strcmp(v_columna,"SRV_ORDEN_LECTURA")==0)){
+       if(v_srv_orden_lectura>0){sprintf(campo,"%ld",v_srv_orden_lectura);}
+   }else if((strcmp(v_columna,"SRV_DIRECCION")==0)){
+     /*
+      * Estan pidiendo el domicilio del suministro.
+      * Si srv_direccion no esta vacio, darlo.
+      */
+/*
+   Cambio del 22-12-2003: czero
+   Para que imprima el domicilio de la persona
+*/
+/*
+      if(srv_cod==0)
+       {
+        ClearVarchar(l_prs_razon_social);
+        ClearVarchar(l_prs_direccion);
+        ClearVarchar(l_cfc_codigo);
+        ClearVarchar(ll_prs_calle);
+        ClearVarchar(ll_prs_nro);
+        ClearVarchar(ll_prs_piso);
+        ClearVarchar(ll_prs_depto);
+        ClearVarchar(ll_prs_torre);
+        exec sql
+          select personas.prs_numero,
+              substr(personas.prs_razon_social,1,25),
+              nvl(personas.prs_direccion, ' '),
+              personas.cfc_codigo,
+              substr(calles.cll_nombre,1,18),
+              substr(personas.prs_nro,1,4),
+              substr(personas.prs_piso,1,2),
+              substr(personas.prs_depto,1,3),
+              personas.prs_torre
+          into :l_prs_numero,
+              :l_prs_razon_social,
+              :l_prs_direccion,
+              :l_cfc_codigo,
+              :ll_prs_calle,
+              :ll_prs_nro,
+              :ll_prs_piso,
+              :ll_prs_depto,
+              :ll_prs_torre
+         from personas, calles
+         where calles.cll_codigo = personas.cll_codigo
+           and calles.agf_codigo = personas.agf_codigo
+           and personas.prs_numero = :l_o_prs_numero;
+         bzero(campo, sizeof(campo));
+         sprintf(campo, "%-18s%-4s%-2s%-3s%-3s", ll_prs_calle.arr,
+           ll_prs_nro.arr, ll_prs_piso.arr, ll_prs_depto.arr,
+           ll_prs_torre.arr);
+         if(v_srv_c_postal>0)
+          {
+           bzero(campo1, sizeof(campo1));
+           sprintf(campo1, " %04d ", v_srv_c_postal);
+           strcat(campo, campo1);
+           EXEC SQL SELECT AGF_NOMBRE
+             INTO :v_srv_agf_nombre:s_srv_agf_nombre
+             FROM AREAS_GEOGRAFICAS
+             WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :v_agf_codigo;
+           if(s_srv_agf_nombre!=-1)
+            {
+             AddNullVarchar(v_srv_agf_nombre);
+             strcat(campo, v_srv_agf_nombre.arr);
+            }
+          }
+       }
+*/
+      if(srv_cod==0)
+       {
+        strcpy(campo, " ");
+       }
+     else
+       if(strlen(v_srv_direccion.arr)!=0)
+        {
+         /* Depurar (3, "Hay SRV_DIRECCION !!!\n"); */
+            psal=0;
+         for(pent=0; pent<strlen(v_srv_direccion.arr); pent++)
+           if((v_srv_direccion.arr[pent]==' ')
+           &&(v_srv_direccion.arr[pent+1]==' '))
+             pent=pent;
+           else
+             psalida[psal++]=v_srv_direccion.arr[pent];
+         psalida[psal]=0;
+         strcpy(campo, psalida);
+        }
+       else
+        {
+         /* Depurar (3, "No hay SRV_DIRECCION - Construyendo.\n"); */
+         Varchar2Str(v_cll_nombre, campo1);
+         /* Una forma rebuscada de eliminar los espacios al final */
+         if(strlen(campo1)!=0)
+           for(;campo1[strlen(campo1)-1]==' ';)
+            {
+             if(strlen(campo1)==0)
+               break;
+             else
+              {
+               campo1[strlen(campo1)-1]=0;
+               Depurar (3, "(%s)\n", campo1);
+              }
+            }
+         strcpy(campo, campo1);
+         if((v_srv_bis.len>0)&&(v_srv_bis.arr[0]!='N'))
+          {
+           AddNullVarchar(v_srv_bis);
+           strcat(campo, " ");
+           strcat(campo, v_srv_bis.arr);
+          }
+         if(v_srv_nro>0)
+          {
+           sprintf(campo1, " %ld", v_srv_nro);
+           strcat(campo, campo1);
+          }
+         /* ------------------ No es varchar!!!
+         if(v_srv_nro.len>0)
+          {
+           AddNullVarchar(v_srv_nro);
+           strcat(campo, " ");
+           strcat(campo, v_srv_nro.arr);
+          }
+         --------------------*/
+         if(v_srv_torre.len>0)
+          {
+           AddNullVarchar(v_srv_torre);
+           strcat(campo, " ");
+           strcat(campo, v_srv_torre.arr);
+          }
+         if(v_srv_piso.len>0)
+          {
+           AddNullVarchar(v_srv_piso);
+           strcat(campo, " ");
+           strcat(campo, v_srv_piso.arr);
+          }
+         if(v_srv_depto.len>0)
+          {
+           AddNullVarchar(v_srv_depto);
+           strcat(campo, " ");
+           strcat(campo, v_srv_depto.arr);
+          }
+         if(v_srv_c_postal>0)
+          {
+           bzero(campo1, sizeof(campo1));
+           sprintf(campo1, " %04d ", v_srv_c_postal);
+           strcat(campo, campo1);
+           EXEC SQL SELECT AGF_NOMBRE
+             INTO :v_srv_agf_nombre:s_srv_agf_nombre
+             FROM AREAS_GEOGRAFICAS
+             WHERE AREAS_GEOGRAFICAS.AGF_CODIGO = :v_agf_codigo;
+           if(s_srv_agf_nombre!=-1)
+            {
+             AddNullVarchar(v_srv_agf_nombre);
+             strcat(campo, v_srv_agf_nombre.arr);
+            }
+          }
+       }
+     /*  Antes: solo retornar svr_direccion ---- */
+     /*   Varchar2Str(v_srv_direccion,campo);    */
+	/* Fin de composicion del domicilio */
+   }else if((strcmp(v_columna,"SRV_CALLE")==0)){
+       Varchar2Str(v_srv_calle,campo);
+   }else if((strcmp(v_columna,"SRV_NRO")==0)){
+      if(v_srv_nro>0){sprintf(campo,"%ld",v_srv_nro);}
+   }else if((strcmp(v_columna,"SRV_PISO")==0)){
+       Varchar2Str(v_srv_piso,campo);
+   }else if((strcmp(v_columna,"SRV_DEPTO")==0)){
+       Varchar2Str(v_srv_depto,campo);
+   }else if((strcmp(v_columna,"SRV_C_POSTAL")==0)){
+       if(v_srv_c_postal>0){sprintf(campo,"%d",v_srv_c_postal);}
+   }else if((strcmp(v_columna,"AGF_CODIGO")==0)){
+       if(v_agf_codigo>0){sprintf(campo,"%ld",v_agf_codigo);}
+   }else if((strcmp(v_columna,"SRV_FECHA_INSTAL")==0)){
+       Varchar2Str(v_srv_fecha_instal,campo);
+   }else if((strcmp(v_columna,"SRV_FECHA_BAJA")==0)){
+       Varchar2Str(v_srv_fecha_baja,campo);
+   }else if((strcmp(v_columna,"SRV_MOTIVO_BAJA")==0)){
+       Varchar2Str(v_srv_motivo_baja,campo);
+   }else if((strcmp(v_columna,"SRV_PLAN_ORIGINAL")==0)){
+       if(v_srv_plan_original>0){sprintf(campo,"%d",v_srv_plan_original);}
+   }else if((strcmp(v_columna,"SRV_ZONA_ORIGINAL")==0)){
+       if(v_srv_zona_original>0){sprintf(campo,"%d",v_srv_zona_original);}
+   }else if((strcmp(v_columna,"SRV_LOCALIDAD_ORIGINAL")==0)){
+       if(v_srv_localidad_original>0){sprintf(campo,"%d",v_srv_localidad_original);}
+   }else if((strcmp(v_columna,"SRV_RUTA_ORIGINAL")==0)){
+       if(v_srv_ruta_original>0){sprintf(campo,"%d",v_srv_ruta_original);}
+   }else if((strcmp(v_columna,"SRV_SUMINISTRO_ORIGINAL")==0)){
+       if(v_srv_suministro_original>0){sprintf(campo,"%d",v_srv_suministro_original);}
+   }else if((strcmp(v_columna,"SRV_PROMEDIO_VERANO")==0)){
+       if(v_srv_promedio_verano>0){sprintf(campo,"%ld",v_srv_promedio_verano);}
+   }else if((strcmp(v_columna,"SRV_PROMEDIO_INVIERNO")==0)){
+       if(v_srv_promedio_invierno>0){sprintf(campo,"%ld",v_srv_promedio_invierno);}
+   }else if((strcmp(v_columna,"SRV_PROMEDIO_ANUAL")==0)){
+       if(v_srv_promedio_anual>0){sprintf(campo,"%ld",v_srv_promedio_anual);}
+   }else if((strcmp(v_columna,"SRV_TIPO_SUMINISTRO")==0)){
+       Varchar2Str(v_srv_tipo_suministro,campo);
+   }else if((strcmp(v_columna,"EDI_NUMERO")==0)){
+       if(v_edi_numero>0){sprintf(campo,"%ld",v_edi_numero);}
+   }else if((strcmp(v_columna,"ERD_CODIGO")==0)){
+       if(v_erd_codigo>0){sprintf(campo,"%ld",v_erd_codigo);}
+   }else if((strcmp(v_columna,"SRV_DISTRITO_CAT")==0)){
+       Varchar2Str(v_srv_distrito_cat,campo);
+   }else if((strcmp(v_columna,"SRV_ZONA_CAT")==0)){
+       Varchar2Str(v_srv_zona_cat,campo);
+   }else if((strcmp(v_columna,"SRV_MANZANA_CAT")==0)){
+       Varchar2Str(v_srv_manzana_cat,campo);
+   }else if((strcmp(v_columna,"SRV_LOTE_CAT")==0)){
+       Varchar2Str(v_srv_lote_cat,campo);
+   }else if((strcmp(v_columna,"SRV_ESTADO")==0)){
+       Varchar2Str(v_srv_estado,campo);
+   }else if((strcmp(v_columna,"SRV_OBSERVACIONES")==0)){
+       Varchar2Str(v_srv_observaciones,campo);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+
+   /* Depurar (3, "Servicios(\"%s\", %ld) -> {%s}\n", v_columna, largos[0], campo); */
+   return campo;
+}
+
+char *Lecturas(int largos[],char *v_columna,char *campo,long srv_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+     static long   v_srv_cod=-1;
+     static double v_lct_valor_leido;
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en LECTURAS por %s\n", v_columna); */
+   if(v_srv_cod!=srv_cod){
+      v_srv_cod=srv_cod;
+      EXEC SQL SELECT LCT_VALOR_LEIDO
+      INTO           :v_lct_valor_leido
+      FROM LECTURAS
+      WHERE LCT_CODIGO IN (SELECT max(LCT_CODIGO)
+                           FROM LECTURAS
+                           WHERE SRV_CODIGO=:srv_cod);
+   }
+   if((strcmp(v_columna,"LCT_VALOR_LEIDO"))==0){
+      if(v_lct_valor_leido>0){sprintf(campo,"%.3lf",v_lct_valor_leido);}
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Ordenativos(int largos[],char *v_columna,char *campo,long nro_ord,long *srv_cod_ori,
+                  long *cnt_num_ori,long *trt_num_ori, char *ord_fec)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static varchar v_ord_fecha_generacion[10];
+      static varchar v_ord_fecha_gen_habil_ant[10];
+      static varchar v_ord_fecha_vencimiento[10];
+      short  s_fecha_vencimiento;
+      static varchar v_ord_datos_adicionales[250];
+      short  s_ord_datos_adicionales;
+      static long    v_nro_ord=-1;
+      static long    v_srv_codigo_origen;short s_srv_codigo_origen;
+      static long    v_cnt_numero_origen;short s_cnt_numero_origen;
+      static long    v_trt_numero_origen;short s_trt_numero_origen;
+      static long    v_srv_codigo;
+   EXEC SQL END DECLARE SECTION;
+
+   Depurar (1, "Busco en ORDENATIVOS por %s\n", v_columna);
+   if(v_nro_ord!=nro_ord){
+      v_nro_ord=nro_ord;
+      EXEC SQL SELECT to_char(ORD_FECHA_GENERACION,'dd/mm/yyyy'),
+                      to_char(fun_habil_anterior(1,ORD_FECHA_GENERACION),'dd/mm/yyyy'),
+                      to_char(ORD_FECHA_VENCIMIENTO,'dd/mm/yyyy'),
+                      SRV_CODIGO_ORIGEN,
+                      CNT_NUMERO_ORIGEN,
+                      TRT_NUMERO_ORIGEN,
+                      ORD_DATOS_ADICIONALES,
+                      SRV_CODIGO
+      INTO           :v_ord_fecha_generacion,
+                     :v_ord_fecha_gen_habil_ant,
+                     :v_ord_fecha_vencimiento:s_fecha_vencimiento,
+                     :v_srv_codigo_origen:s_srv_codigo_origen,
+                     :v_cnt_numero_origen:s_cnt_numero_origen,
+                     :v_trt_numero_origen:s_trt_numero_origen,
+                     :v_ord_datos_adicionales:s_ord_datos_adicionales,
+                     :v_srv_codigo
+      FROM ORDENATIVOS
+      WHERE ORD_NUMERO=:nro_ord;
+
+      Varchar2Str(v_ord_fecha_generacion,ord_fec);
+      AddNullVarchar(v_ord_fecha_gen_habil_ant);
+
+      if(s_fecha_vencimiento==-1){
+         v_ord_fecha_vencimiento.arr[0]=v_ord_fecha_vencimiento.len=0;
+      }else{
+         AddNullVarchar(v_ord_fecha_vencimiento);
+      }
+
+      if(s_srv_codigo_origen==-1){
+         v_srv_codigo_origen=0;
+      }else{
+         *srv_cod_ori=v_srv_codigo_origen;
+      }
+      if(s_cnt_numero_origen==-1){
+         v_cnt_numero_origen=0;
+      }else{
+         *cnt_num_ori=v_cnt_numero_origen;
+      }
+      if(s_trt_numero_origen==-1){
+         v_trt_numero_origen=0;
+      }else{
+         *trt_num_ori=v_trt_numero_origen;
+      }
+
+      if(s_ord_datos_adicionales==-1){
+         v_ord_datos_adicionales.arr[0]=v_ord_datos_adicionales.len=0;
+      }else{
+         AddNullVarchar(v_ord_datos_adicionales);
+      }
+   }
+   if((strcmp(v_columna,"ORD_NUMERO"))==0){
+      if(nro_ord>0){sprintf(campo,"%ld",nro_ord);}
+   }else if((strcmp(v_columna,"ORD_FECHA_GENERACION"))==0){
+      /* Varchar2Str(v_ord_fecha_generacion,campo); */
+      /* Cambio de 11-04-2012. jinfante */
+      strcpy(campo, v_ord_fecha_generacion.arr);
+   }else if((strcmp(v_columna,"ORD_FECHA_GEN_HABIL_ANT"))==0){
+      Varchar2Str(v_ord_fecha_gen_habil_ant,campo);
+   }else if((strcmp(v_columna,"ORD_FECHA_VENCIMIENTO"))==0){
+      Varchar2Str(v_ord_fecha_vencimiento,campo);
+   }else if((strcmp(v_columna,"ORD_DATOS_ADICIONALES"))==0){
+      fprintf (stderr, "Piden DATOS_ADICIONALES {%d}{%s}\n",
+                        s_ord_datos_adicionales ,
+                        v_ord_datos_adicionales.arr ) ;
+      Varchar2Str(v_ord_datos_adicionales, campo);
+   }else if((strcmp(v_columna,"SRV_CODIGO"))==0){
+      if(v_srv_codigo>0){sprintf(campo,"%ld",v_srv_codigo);}
+   }else { fprintf (stderr, "ORDENATIVOS: ERROR: parametro %s no soportado\n", v_columna) ; }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *TiposOrdenativo (int largos[],char *v_columna,char *campo,long srv_cod,int cnt_num)
+{
+  /* BF:
+   * DF: Esta funcion obtiene la descripcion asociada al tipo de ordenativo
+   *     que generalmente se imprime en el encabezado.
+   *     No se hace consulta porque las columnas ya estan en el cursor
+   *     principal.
+   *
+   * EF: */
+
+   /* Depurar (1, "Busco en TIPOS_ORDENATIVO por %s\n", v_columna); */
+
+   if((strcmp(v_columna,"TOR_DESCRIPCION"))==0){
+      sprintf(campo,"%s",l_tor_descripcion.arr);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Potencias(int largos[],char *v_columna,char *campo,long srv_cod,int cnt_num)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long   v_srv_cod=-1;
+      static double v_pot_valor;
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en POTENCIAS por %s\n", v_columna); */
+   if(v_srv_cod!=srv_cod){
+      v_srv_cod=srv_cod;
+      EXEC SQL SELECT POT_VALOR
+      INTO           :v_pot_valor
+      FROM POTENCIAS
+      WHERE SRV_CODIGO=:srv_cod
+      AND CNT_NUMERO=:cnt_num
+      AND CDR_UNIDAD IN ('DA')
+      AND POT_ORIGEN IN ('C')
+      AND POT_FECHA IN (SELECT max(POT_FECHA)
+                        FROM POTENCIAS
+                        WHERE SRV_CODIGO=:srv_cod
+                        AND CNT_NUMERO=:cnt_num
+                        AND CDR_UNIDAD IN ('DA')
+                        AND POT_ORIGEN IN ('C'));
+   }
+
+   if((strcmp(v_columna,"POT_VALOR"))==0){
+      sprintf(campo,"%.2lf",v_pot_valor);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Stock_Equipos(int largos[],char *v_columna,char *campo,long srv_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long   v_srv_cod=-1;
+      static double v_ste_numero;
+      static varchar v_ste_tipo[3];
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en STOCK_EQUIPOS por %s\n", v_columna); */
+   /* Cambio del 6-6-2000: Para que no muestre ste_numero de la intimacion
+                           anterior */
+   v_ste_numero=v_ste_tipo.arr[0]=v_ste_tipo.len=0;
+   if(v_srv_cod!=srv_cod){
+      v_srv_cod=srv_cod;
+      EXEC SQL SELECT S.STE_NUMERO,
+                      S.STE_TIPO
+      INTO           :v_ste_numero,
+                     :v_ste_tipo
+      FROM STOCK_EQUIPOS S,EQUIPOS E
+      WHERE S.STE_NUMERO=E.STE_NUMERO
+      AND   S.STE_TIPO=E.STE_TIPO
+      AND   E.SRV_CODIGO=:srv_cod
+      AND   E.EQP_ESTADO IS NULL;
+   }
+
+   if((strcmp(v_columna,"STE_NUMERO"))==0){
+      if(v_ste_numero>0){sprintf(campo,"%.0lf",v_ste_numero);}
+   if((strcmp(v_columna,"STE_TIPO"))==0){
+      strcpy(campo, v_ste_tipo.arr);}
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Sucursales(int largos[],char *v_columna,char *campo,long scf_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long    v_scf_cod=-1;
+      static varchar v_scf_descripcion[41];
+      static varchar v_scf_direccion[41];
+      short s_scf_direccion;
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en SUCURSALES por %s\n", v_columna); */
+   if(v_scf_cod!=scf_cod){
+      v_scf_cod=scf_cod;
+      EXEC SQL SELECT SCF_DESCRIPCION,
+                      SCF_DIRECCION
+      INTO           :v_scf_descripcion,
+                     :v_scf_direccion:s_scf_direccion
+      FROM SUCURSALES
+      WHERE SCF_CODIGO=:scf_cod;
+   }
+
+   if(s_scf_direccion==-1) v_scf_direccion.arr[0]=v_scf_direccion.len=0;
+   if((strcmp(v_columna,"SCF_DESCRIPCION"))==0){
+      Varchar2Str(v_scf_descripcion,campo);
+   }else if((strcmp(v_columna,"SCF_DIRECCION"))==0){
+      Varchar2Str(v_scf_direccion,campo);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+/*-----------------------------------------------------------------*/
+char *Bancos(int largos[],char *v_columna,char *campo, long agf_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+ int i;
+
+  EXEC SQL BEGIN DECLARE SECTION;
+    static long    v_agf_cod=-1;
+    static varchar ha_urc_descripcion[20][41];short s_urc_descripcion[50];
+  EXEC SQL END DECLARE SECTION;
+
+  if(v_agf_cod!=agf_cod){
+      v_agf_cod=agf_cod;
+
+  	  for(i=0; i<19; i++)
+	   {
+    	ClearVarchar(ha_urc_descripcion[i]);
+	   }
+	  EXEC SQL DECLARE CURC CURSOR FOR
+	       SELECT U.URC_DESCRIPCION_ALT
+	              FROM UNIDADES_REC_COBRO C,
+	                   UNIDADES_RECAUDADORAS U
+	              WHERE C.AGF_CODIGO = :v_agf_cod
+	                AND C.UCO_TIPO = 'A'
+	                AND U.URC_CODIGO = C.URC_CODIGO;
+	  EXEC SQL OPEN CURC;
+	  EXEC SQL FETCH CURC INTO
+	           :ha_urc_descripcion:s_urc_descripcion;
+	  EXEC SQL CLOSE CURC;
+      for(i=0; i<19; i++)
+	   {
+	    AddNullVarchar(ha_urc_descripcion[i]);
+	   }
+   }
+  for(i=0; i<19; i++)
+    if((s_urc_descripcion[i]==-1)||(ha_urc_descripcion[i].len==0))
+      i=i;
+    else
+     {
+      if(strlen(campo)!=0)
+        strcat(campo, " - ");
+      strcat(campo,ha_urc_descripcion[i].arr);
+     }
+
+}
+
+/*-----------------------------------------------------------------*/
+char *Cargos(int largos[],char *v_columna,char *campo, char *ord_fec)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   int i;
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static varchar v_ord_fec[11] = {0,""};
+	  static varchar v_descripcion[3][61];
+	  varchar v_tit_clave[3][4];
+	  varchar v_txt[3][27];
+      short s_scf_direccion;
+   EXEC SQL END DECLARE SECTION;
+
+   strcpy(v_tit_clave[0].arr,"ND1");
+   strcpy(v_tit_clave[1].arr,"ND2");
+   strcpy(v_tit_clave[2].arr,"TR1");
+   v_tit_clave[0].len=v_tit_clave[1].len=v_tit_clave[2].len=3;
+
+   strcpy(v_txt[0].arr,"aviso de deuda             ");
+   strcpy(v_txt[1].arr,"carta documento o telegrama");
+   strcpy(v_txt[2].arr,"reconexión                 ");
+   v_txt[0].len=27;
+   v_txt[1].len=27;
+   v_txt[2].len=27;
+   if(strcmp(v_ord_fec.arr,ord_fec)){
+      Str2Varchar(ord_fec,v_ord_fec);
+	  for(i=0; i<3; i++)
+   	  {
+      	EXEC SQL SELECT 'Cargo por '||:v_txt[i]||': $'||TO_CHAR(PPR_PRECIO,'9990.00')||' más IVA'
+	    INTO   :v_descripcion[i]
+	    FROM PRECIOS_PRESTACION
+	    WHERE TIT_CLAVE = :v_tit_clave[i]
+	    AND PPR_FECHA_VIGENCIA = (SELECT MAX(PPR_FECHA_VIGENCIA)
+	    FROM PRECIOS_PRESTACION WHERE TIT_CLAVE = :v_tit_clave[i] AND PPR_FECHA_VIGENCIA <= TO_DATE(:v_ord_fec,'DD/MM/YYYY'));
+		AddNullVarchar(v_descripcion[i]);
+	  }
+   }
+
+   if((strcmp(v_columna,"CARGO_AVISO"))==0){
+      Varchar2Str(v_descripcion[0],campo);
+   }else if((strcmp(v_columna,"CARGO_TELEGRAMA"))==0){
+      Varchar2Str(v_descripcion[1],campo);
+   }else if((strcmp(v_columna,"CARGO_RECONEXION"))==0){
+      Varchar2Str(v_descripcion[2],campo);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+
+char *Tipos_IVA(int largos[],char *v_columna,char *campo,int ivv_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static int     v_ivv_cod=-1;
+      static varchar v_ivv_descripcion[61];
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en TIPOS_IVA por %s\n", v_columna); */
+   if(v_ivv_cod!=ivv_cod){
+      v_ivv_cod=ivv_cod;
+      EXEC SQL SELECT IVV_DESCRIPCION
+      INTO           :v_ivv_descripcion
+      FROM TIPOS_IVA
+      WHERE IVV_CODIGO=:ivv_cod;
+   }
+
+   if((strcmp(v_columna,"TCL_DESCRIPCION"))==0){
+       Varchar2Str(v_ivv_descripcion,campo);
+   }
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Tarifas(int largos[],char *v_columna,char *campo,char *tcl_cod)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static char    v_tcl_codb[5];
+      static varchar v_tcl_cod[5];
+      static varchar v_tcl_descripcion[41];
+   EXEC SQL END DECLARE SECTION;
+
+   /* Depurar (1, "Busco en TARIFAS por %s\n", v_columna); */
+   Str2Varchar(tcl_cod,v_tcl_cod);
+   if(strcmp(v_tcl_codb,tcl_cod)!=0){
+      strcpy(v_tcl_codb,tcl_cod);
+      EXEC SQL SELECT TCL_DESCRIPCION
+      INTO           :v_tcl_descripcion
+      FROM TARIFAS
+      WHERE TCL_CODIGO=:v_tcl_cod;
+   }
+
+/* Corregimos TCL_DESCRIPICION x TCL_DESCRIPCION (lsantos 24-2-2003) */
+
+   if((strcmp(v_columna,"TCL_DESCRIPCION"))==0){
+      Varchar2Str(v_tcl_descripcion,campo);
+   }
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+char *Documentos(int largos[],char *columnas,char *campo,long srv_cod,
+                 int cnt_num,
+                 long trt_num,int i,int ancho, long p_nro_ord)
+
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      double  hv_doc_numero;
+      varchar hv_doc_tipo[3];
+      varchar hv_doc_fecha_emision[12];
+      int     hv_doc_periodo;short s_doc_periodo;
+      int     hv_doc_anio;short s_doc_anio;
+      int     hv_doc_cuota;short s_doc_cuota;
+      varchar hv_doc_tipo_origen[3];
+      short s_doc_tipo_origen;
+      double  hv_doc_numero_origen;short s_doc_numero_origen;
+      long    hv_doc_consumo;short s_doc_consumo;
+      double  hv_doc_potencia;short s_doc_potencia;
+      long    hv_tab_numero;short s_tab_numero;
+      long    hv_ord_numero;short s_ord_numero;
+      long    hv_urc_codigo;short s_urc_codigo;
+      long    hv_asi_numero;short s_asi_numero;
+      double  hv_doc_importe;
+      double  hv_doc_importe_basico;short s_doc_importe_basico;
+      double  hv_doc_saldo;
+      varchar hv_doc_fecha_venc[12];
+      short s_doc_fecha_venc;
+      varchar hv_doc_fecha_venc_1[12];
+      short s_doc_fecha_venc_1;
+      varchar hv_doc_fecha_venc_2[12];
+      short s_doc_fecha_venc_2;
+      double  hv_doc_recargo_venc_2;short s_doc_recargo_venc_2;
+      varchar hv_doc_fecha_venc_3[12];
+      short s_doc_fecha_venc_3;
+      double  hv_doc_recargo_venc_3;short s_doc_recargo_venc_3;
+      varchar hv_doc_estado[5];
+      /* fab 21.10.2009 req.2927 */
+      varchar hv_llamada_sit_x[4];
+   EXEC SQL END DECLARE SECTION;
+   int r,aux;
+   int f,sumar=0;
+   char campoaux[1024];
+
+   /* Depurar (1, "Busco en DOCUMENTOS\n");
+    * Depurar (2, "Busco todos los documentos cuyo tramite sea %d\n", trt_num);
+    * Depurar (3, "i=%d ancho=%d\n", i, ancho);
+    * Depurar (3, "campo=%s\n", campo);
+    */
+
+   /*
+      Cambio del 10-9-2003, para que se acceda a la nueva vista
+      documentos_estadistica_view, donde esta la relacion ordenativos/docs
+      a partir de ahora, no se accede a los documentos via el numero de
+      tramite
+
+
+      KALAVE - 20/10/2003 a pedido de C.Zero / Leticia Santos porque las notificaciones D2
+                          no se generan por no tener documentos_estadistica_extra */
+
+   EXEC SQL DECLARE DOC_D2 CURSOR FOR
+      SELECT DOC_NUMERO,
+             DOC_TIPO,
+             to_char(DOC_FECHA_EMISION,'dd/mm/yyyy'),
+             DOC_PERIODO,
+             DOC_ANIO,
+             DOC_CUOTA,
+             DOC_TIPO_ORIGEN,
+             DOC_NUMERO_ORIGEN,
+             DOC_CONSUMO,
+             -- TAB_NUMERO,
+             ORD_NUMERO,
+             URC_CODIGO,
+             ASI_NUMERO,
+             DOC_IMPORTE,
+             DOC_IMPORTE_BASICO,
+             -- A pedido de leticia: si existe el saldo, debe aparecer
+             -- donde aparecia el importe total.  (d.molina - 25/ago/99)
+             -- DOC_SALDO,
+             nvl(DOC_SALDO, DOC_IMPORTE),
+             to_char(DOC_FECHA_VENC,'dd/mm/yy'),
+             to_char(DOC_FECHA_VENC_1,'dd/mm/yyyy'),
+             to_char(DOC_FECHA_VENC_2,'dd/mm/yyyy'),
+             DOC_RECARGO_VENC_2,
+             to_char(DOC_FECHA_VENC_3,'dd/mm/yyyy'),
+             DOC_RECARGO_VENC_3,
+             DOC_ESTADO,
+             /* fab 21.10.2009 req.2927 */
+             decode(doc_situacion, 
+                'X', '(*)', 
+                'C1', '(*)', 
+                'C2', '(*)', 
+                'C3', '(*)', 
+                '   ') LLAMADA_SIT_X
+      FROM DOCUMENTOS
+      WHERE TRT_NUMERO=:trt_num
+        AND nvl(nvl(DOC_SALDO, DOC_IMPORTE),0) > 0
+		AND doc_situacion <> 'X'
+     ORDER BY DOC_FECHA_VENC_1;
+
+
+   EXEC SQL DECLARE DOC CURSOR FOR
+   SELECT d.DOC_NUMERO,
+       d.DOC_TIPO,
+       to_char(d.DOC_FECHA_EMISION,'dd/mm/yyyy'),
+       d.DOC_PERIODO,
+       d.DOC_ANIO,
+       d.DOC_CUOTA,
+       d.DOC_TIPO_ORIGEN,
+       d.DOC_NUMERO_ORIGEN,
+       d.DOC_CONSUMO,
+       -- TAB_NUMERO,
+       d.ORD_NUMERO,
+       d.URC_CODIGO,
+       d.ASI_NUMERO,
+       d.DOC_IMPORTE,
+       d.DOC_IMPORTE_BASICO,
+       -- A pedido de leticia: si existe el saldo, debe aparecer
+       -- donde aparecia el importe total.  (d.molina - 25/ago/99)
+       -- DOC_SALDO,
+       nvl(d.DOC_SALDO, d.DOC_IMPORTE),
+       to_char(d.DOC_FECHA_VENC,'dd/mm/yy'),
+       to_char(d.DOC_FECHA_VENC_1,'dd/mm/yyyy'),
+       to_char(d.DOC_FECHA_VENC_2,'dd/mm/yyyy'),
+       d.DOC_RECARGO_VENC_2,
+       to_char(d.DOC_FECHA_VENC_3,'dd/mm/yyyy'),
+	   d.DOC_RECARGO_VENC_3,
+       d.DOC_ESTADO,
+       /* fab 21.10.2009 req.2927 */
+       decode(d.doc_situacion, 'X', '(*)', '   ') LLAMADA_SIT_X
+   from documentos d, documentos_estadistica_view de
+   where nvl(nvl(d.DOC_SALDO, d.DOC_IMPORTE),0) > 0 and
+   d.doc_tipo = de.doc_tipo and
+   d.doc_numero = de.doc_numero and
+   de.ord_numero = :p_nro_ord and
+   d.doc_situacion <> 'X'
+   ORDER BY DOC_FECHA_VENC_1;
+
+
+
+   if(!strcmp(Tor_codigo, "D2"))
+     EXEC SQL OPEN DOC_D2;
+   else
+     EXEC SQL OPEN DOC;
+
+/*
+FAB 6/4/09 - Req. 2823
+inicio la variable global t_doc_saldo
+*/
+   t_doc_saldo=0.0;
+
+   aux=0;
+   do{
+      r=aux;
+
+
+      if(!strcmp(Tor_codigo, "D2"))
+        EXEC SQL FETCH DOC_D2 INTO
+           :hv_doc_numero,
+           :hv_doc_tipo,
+           :hv_doc_fecha_emision,
+           :hv_doc_periodo:s_doc_periodo,
+           :hv_doc_anio:s_doc_anio,
+           :hv_doc_cuota:s_doc_cuota,
+           :hv_doc_tipo_origen:s_doc_tipo_origen,
+           :hv_doc_numero_origen:s_doc_numero_origen,
+           :hv_doc_consumo:s_doc_consumo,
+           -- :hv_tab_numero:s_tab_numero,
+           :hv_ord_numero:s_ord_numero,
+           :hv_urc_codigo:s_urc_codigo,
+           :hv_asi_numero:s_asi_numero,
+           :hv_doc_importe,
+           :hv_doc_importe_basico:s_doc_importe_basico,
+           :hv_doc_saldo,
+           :hv_doc_fecha_venc:s_doc_fecha_venc,
+           :hv_doc_fecha_venc_1:s_doc_fecha_venc_1,
+           :hv_doc_fecha_venc_2:s_doc_fecha_venc_2,
+           :hv_doc_recargo_venc_2:s_doc_recargo_venc_2,
+           :hv_doc_fecha_venc_3:s_doc_fecha_venc_3,
+           :hv_doc_recargo_venc_3:s_doc_recargo_venc_3,
+           :hv_doc_estado,
+           /* fab 21.10.2009 req.2927 */
+           :hv_llamada_sit_x;
+      else
+        EXEC SQL FETCH DOC INTO
+           :hv_doc_numero,
+           :hv_doc_tipo,
+           :hv_doc_fecha_emision,
+           :hv_doc_periodo:s_doc_periodo,
+           :hv_doc_anio:s_doc_anio,
+           :hv_doc_cuota:s_doc_cuota,
+           :hv_doc_tipo_origen:s_doc_tipo_origen,
+           :hv_doc_numero_origen:s_doc_numero_origen,
+           :hv_doc_consumo:s_doc_consumo,
+           -- :hv_tab_numero:s_tab_numero,
+           :hv_ord_numero:s_ord_numero,
+           :hv_urc_codigo:s_urc_codigo,
+           :hv_asi_numero:s_asi_numero,
+           :hv_doc_importe,
+           :hv_doc_importe_basico:s_doc_importe_basico,
+           :hv_doc_saldo,
+           :hv_doc_fecha_venc:s_doc_fecha_venc,
+           :hv_doc_fecha_venc_1:s_doc_fecha_venc_1,
+           :hv_doc_fecha_venc_2:s_doc_fecha_venc_2,
+           :hv_doc_recargo_venc_2:s_doc_recargo_venc_2,
+           :hv_doc_fecha_venc_3:s_doc_fecha_venc_3,
+           :hv_doc_recargo_venc_3:s_doc_recargo_venc_3,
+           :hv_doc_estado,
+           /* fab 21.10.2009 req.2927 */
+           :hv_llamada_sit_x;
+
+      /*
+      FAB 6/4/09 - Req. 2823
+      sumo el saldo de los documentos en la variable global t_doc_saldo
+      */
+      t_doc_saldo += hv_doc_saldo;
+
+      aux=COUNTHITS;
+      if(aux!=r){
+         AddNullVarchar(hv_doc_tipo);
+         AddNullVarchar(hv_doc_fecha_emision);
+         if(s_doc_periodo==-1) hv_doc_periodo=0;
+         if(s_doc_anio==-1) hv_doc_anio=0;
+         if(s_doc_cuota==-1) hv_doc_cuota=0;
+         if(s_doc_tipo_origen==-1)
+            hv_doc_tipo_origen.arr[0]=hv_doc_tipo_origen.len=0;
+         else AddNullVarchar(hv_doc_tipo_origen);
+         if(s_doc_numero_origen==-1) hv_doc_numero_origen=0;
+         if(s_doc_consumo==-1) hv_doc_consumo=0;
+         if(s_doc_potencia==-1) hv_doc_potencia=0;
+         /* if(s_tab_numero==-1) hv_tab_numero=0; */
+         hv_tab_numero=0;
+         if(s_ord_numero==-1) hv_ord_numero=0;
+         if(s_urc_codigo==-1) hv_urc_codigo=0;
+         if(s_asi_numero==-1) hv_asi_numero=0;
+         if(s_doc_importe_basico==-1) hv_doc_importe_basico=0;
+         if(s_doc_fecha_venc==-1)
+            hv_doc_fecha_venc.arr[0]=hv_doc_fecha_venc.len=0;
+         if(s_doc_fecha_venc_1==-1)
+            hv_doc_fecha_venc_1.arr[0]=hv_doc_fecha_venc.len=0;
+         if(s_doc_fecha_venc_2==-1)
+            hv_doc_fecha_venc_2.arr[0]=hv_doc_fecha_venc.len=0;
+         if(s_doc_recargo_venc_2==-1) hv_doc_recargo_venc_2=0;
+         if(s_doc_fecha_venc_3==-1)
+            hv_doc_fecha_venc_3.arr[0]=hv_doc_fecha_venc.len=0;
+         if(s_doc_recargo_venc_3==-1) hv_doc_recargo_venc_3=0;
+         AddNullVarchar(hv_doc_estado);
+         /* fab 21.10.2009 req.2927 */
+         AddNullVarchar(hv_llamada_sit_x);
+      }
+
+      f=0;
+      campoaux[0]=0;
+      while(f<i && aux!=r){
+         /* Es asi: *(columnas+(f*ancho)+c) */
+         /* Depurar (3, "[%s]\n", *(columnas+(f*ancho))); */
+         if((strcmp((columnas+(f*ancho)),"SRV_CODIGO"))==0){
+            if(srv_cod>0){sprintf(campoaux,"%ld",srv_cod);}
+         }else if((strcmp((columnas+(f*ancho)),"CNT_NUMERO"))==0){
+            if(cnt_num>0){sprintf(campoaux,"%d",cnt_num);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_TIPO"))==0){
+            sprintf(campoaux,"%-5s",hv_doc_tipo.arr);
+            if(!strcmp(hv_doc_tipo.arr, "FN")||
+               !strcmp(hv_doc_tipo.arr, "DN"))
+              Tiene_Comprobantes_Financiaciones++;
+            else
+              Tiene_Otros_Comprobantes++;
+         }else if((strcmp((columnas+(f*ancho)),"DOC_NUMERO"))==0){
+            if(hv_doc_numero>0){sprintf(campoaux,"%.0lf",hv_doc_numero);
+                                                   CantidadDeFacturas++;
+                                                                  }
+         }else if((strcmp((columnas+(f*ancho)),"DOC_FECHA_EMISION"))==0){
+            Varchar2Str(hv_doc_fecha_emision,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_PERIODO"))==0){
+            if(hv_doc_periodo>0){sprintf(campoaux,"%02d/%04d",hv_doc_periodo,
+                                                              hv_doc_anio);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_ANIO"))==0){
+            if(hv_doc_anio>0){sprintf(campoaux,"%d",hv_doc_anio);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_CUOTA"))==0){
+            if(hv_doc_cuota>0){sprintf(campoaux,"%d",hv_doc_cuota);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_TIPO_ORIGEN"))==0){
+            Varchar2Str(hv_doc_tipo_origen,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_NUMERO_ORIGEN"))==0){
+            if(hv_doc_numero_origen>0){sprintf(campoaux,"%-12.0lf",hv_doc_numero_origen);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_CONSUMO"))==0){
+            if(hv_doc_consumo>0){sprintf(campoaux,"%ld",hv_doc_consumo);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_POTENCIA"))==0){
+            sprintf(campoaux,"%.0lf",hv_doc_potencia);
+         }else if((strcmp((columnas+(f*ancho)),"TAB_NUMERO"))==0){
+            if(hv_tab_numero>0){sprintf(campoaux,"%ld",hv_tab_numero);}
+         }else if((strcmp((columnas+(f*ancho)),"ORD_NUMERO"))==0){
+            if(hv_ord_numero>0){sprintf(campoaux,"%ld",hv_ord_numero);}
+         }else if((strcmp((columnas+(f*ancho)),"URC_CODIGO"))==0){
+            sprintf(campoaux,"%ld",hv_urc_codigo);
+         }else if((strcmp((columnas+(f*ancho)),"ASI_NUMERO"))==0){
+            if(hv_asi_numero>0){sprintf(campoaux,"%ld",hv_asi_numero);}
+         }else if((strcmp((columnas+(f*ancho)),"DOC_IMPORTE"))==0){
+            sprintf(campoaux,"%12.2lf",hv_doc_importe);
+            ImporteDelAviso+=hv_doc_importe_basico;
+/*            CantidadDeFacturas++;  pasada esta sentencia al if del doc_numero aca no funca por parametriz  */
+         }else if((strcmp((columnas+(f*ancho)),"DOC_IMPORTE_BASICO"))==0)
+          {
+           sprintf(campoaux,"%12.2lf",hv_doc_importe_basico);
+          }
+          else if((strcmp((columnas+(f*ancho)),"DOC_SALDO"))==0){
+            sprintf(campoaux,"%12.2lf",hv_doc_saldo);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_FECHA_VENC"))==0){
+            Varchar2Str(hv_doc_fecha_venc,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_FECHA_VENC_1"))==0){
+            Varchar2Str(hv_doc_fecha_venc_1,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_FECHA_VENC_2"))==0){
+            Varchar2Str(hv_doc_fecha_venc_2,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_RECARGO_VENC_2"))==0){
+            sprintf(campoaux,"%.2lf",hv_doc_recargo_venc_2);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_FECHA_VENC_3"))==0){
+            Varchar2Str(hv_doc_fecha_venc_3,campoaux);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_RECARGO_VENC_3"))==0){
+            sprintf(campoaux,"%.2lf",hv_doc_recargo_venc_3);
+         }else if((strcmp((columnas+(f*ancho)),"DOC_ESTADO"))==0){
+            Varchar2Str(hv_doc_estado,campoaux);
+         /* fab 21.10.2009 req.2927 */
+         }else if((strcmp((columnas+(f*ancho)),"LLAMADA_SIT_X"))==0){
+            Varchar2Str(hv_llamada_sit_x,campoaux);
+         }
+         
+         for(;strlen(campoaux)<largos[f];)
+           strcat(campoaux," ");
+         campoaux[largos[f]]=0;
+         strcat(campo,campoaux);
+         f++;
+         campoaux[0]=0;
+      }
+      if(f>0) sumar++;
+      strcat(campo,"\n");
+   /* }while(aux!=r && sumar<9); */
+   /*
+      Cambio del 21-1-2003 (czero/jinfante)
+      Para que imprima 18 lineas en lugar de 8/9
+   */
+   }while(aux!=r && sumar<19);
+
+   if(!strcmp(Tor_codigo, "D2"))
+     EXEC SQL CLOSE DOC_D2;
+   else
+     EXEC SQL CLOSE DOC;
+   if(sumar<19){
+      while(sumar<=19){
+         strcat(campo,"\n");
+         sumar++;
+      }
+   }else{
+      strcat(campo,"...\n");
+   }
+   /* Depurar (3, "documentos(): Campo=%s\n", campo); */
+   return campo;
+}
+
+char *Totales_Tramite(int largos[],char *v_columna,char *campo,long trt_num)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static long   v_trt_num=-1;
+      static double v_cant_doc;
+      static double v_suma_doc;
+      static double v_suma_dec;
+   EXEC SQL END DECLARE SECTION;
+
+   if(v_trt_num!=trt_num){
+      v_trt_num=trt_num;
+      EXEC SQL SELECT TTR_CANT_DOC,
+                      TTR_SUMA_DOC,
+                      TTR_SUMA_DEC
+      INTO           :v_cant_doc,
+                     :v_suma_doc,
+                     :v_suma_dec
+      FROM TOTALES_TRAMITE
+      WHERE TRT_NUMERO=:trt_num;
+   }
+
+   if((strcmp(v_columna,"TTR_CANT_DOC"))==0){
+      sprintf(campo,"%.0lf",v_cant_doc);
+   }else if((strcmp(v_columna,"TTR_SUMA_DOC"))==0){
+      sprintf(campo,"%.2lf",v_suma_doc);
+   }else if((strcmp(v_columna,"TTR_SUMA_DEC"))==0){
+      if(v_suma_dec!=0) {
+		sprintf(campo,"Deuda Cargo Decreto Nº. 2067/08: %.2lf (*)\n", v_suma_dec);
+		largos[0]=strlen(campo);
+	  } else {
+		sprintf(campo,"\n");
+		largos[0]=strlen(campo);	  
+	  }
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+
+char *Usuarios(int largos[],char *v_columna,char *campo)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      static varchar v_scf_descripcion[41];
+   EXEC SQL END DECLARE SECTION;
+
+   EXEC SQL SELECT S.SCF_DESCRIPCION
+   INTO           :v_scf_descripcion
+   FROM SUCURSALES S, USUARIOS U
+   WHERE U.USR_CODIGO=USER
+   AND   U.SCF_CODIGO=S.SCF_CODIGO;
+
+   AddNullVarchar(v_scf_descripcion);
+   if((strcmp(v_columna,"SCF_CODIGO"))==0){
+      sprintf(campo,"%s",v_scf_descripcion.arr);
+   }
+
+   for(;strlen(campo)<largos[0];)
+     strcat(campo, " ");
+   campo[largos[0]]=0;
+   return campo;
+}
+
+void Prs_Num_Ori(long srv_cod_ori,long cnt_num_ori,long *prs_num_ori)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      long v_prs_num_ori;
+   EXEC SQL END DECLARE SECTION;
+
+   EXEC SQL SELECT PRS_NUMERO
+   INTO    :v_prs_num_ori
+   FROM CONTRATOS
+   WHERE CNT_NUMERO=:cnt_num_ori
+   AND SRV_CODIGO=:srv_cod_ori;
+
+   *prs_num_ori=v_prs_num_ori;
+}
+
+void SelectCodigoBarras(long srv_cod,
+                        int  cnt_num,
+                        long nro_ord,
+			char *p_barras,
+			char *nrobarra)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   int i=0;
+   char barras[512],string_barras[255];
+   char digito_verific[3];
+   while(i<512){barras[i]=0;i++;}
+/*
+   sprintf(string_barras,"%1d%09ld%02d%012ld",
+            2,srv_cod,cnt_num,nro_ord);
+   GenerarDigitoVerificador(string_barras,digito_verific);
+   sprintf(string_barras,"%s%s",string_barras,digito_verific);
+*/
+   sprintf(string_barras,"%010d", nro_ord);
+   num2bar(string_barras,barras,sizeof(barras));
+   sprintf(p_barras,"%c%s%c",'<',barras,'>');
+   strcpy(nrobarra,string_barras);
+}
+
+void Buscar_Codigos_Control(char *tim_codigo_control_1,
+                            char *tim_codigo_control_2,
+                            char *tim_codigo_control_3,
+                            char *tim_codigo_control_4,
+                            char *tim_codigo_control_5,
+                            char *tim_codigo_control_6,
+                            char *tim_codigo_control_7,
+                            char *tim_codigo_control_8,
+                            char *tim_codigo_control_9,
+                            char *tim_codigo_control_10,
+                            char *tim_codigo_control_11,
+                            char *tim_codigo_control_12,
+                            char *tim_codigo_control_13,
+                            char *tim_codigo_control_14,
+                            char *tim_codigo_control_15,
+                            char *tim_codigo)
+{
+  /* BF:
+   * DF:
+   * EF: */
+
+   EXEC SQL BEGIN DECLARE SECTION;
+      varchar v_codigo_control_1[31];short s_1;
+      varchar v_codigo_control_2[31];short s_2;
+      varchar v_codigo_control_3[31];short s_3;
+      varchar v_codigo_control_4[31];short s_4;
+      varchar v_codigo_control_5[31];short s_5;
+      varchar v_codigo_control_6[31];short s_6;
+      varchar v_codigo_control_7[31];short s_7;
+      varchar v_codigo_control_8[31];short s_8;
+      varchar v_codigo_control_9[31];short s_9;
+      varchar v_codigo_control_10[31];short s_10;
+      varchar v_codigo_control_11[31];short s_11;
+      varchar v_codigo_control_12[31];short s_12;
+      varchar v_codigo_control_13[31];short s_13;
+      varchar v_codigo_control_14[31];short s_14;
+      varchar v_codigo_control_15[31];short s_15;
+      varchar v_tim_codigo[6];
+   EXEC SQL END DECLARE SECTION;
+
+   Str2Varchar(tim_codigo,v_tim_codigo);
+
+   EXEC SQL SELECT TIM_CODIGO_CONTROL_1,
+                   TIM_CODIGO_CONTROL_2,
+                   TIM_CODIGO_CONTROL_3,
+                   TIM_CODIGO_CONTROL_4,
+                   TIM_CODIGO_CONTROL_5,
+                   TIM_CODIGO_CONTROL_6,
+                   TIM_CODIGO_CONTROL_7,
+                   TIM_CODIGO_CONTROL_8,
+                   TIM_CODIGO_CONTROL_9,
+                   TIM_CODIGO_CONTROL_10,
+                   TIM_CODIGO_CONTROL_11,
+                   TIM_CODIGO_CONTROL_12,
+                   TIM_CODIGO_CONTROL_13,
+                   TIM_CODIGO_CONTROL_14,
+                   TIM_CODIGO_CONTROL_15
+            INTO  :v_codigo_control_1:s_1,
+                  :v_codigo_control_2:s_2,
+                  :v_codigo_control_3:s_3,
+                  :v_codigo_control_4:s_4,
+                  :v_codigo_control_5:s_5,
+                  :v_codigo_control_6:s_6,
+                  :v_codigo_control_7:s_7,
+                  :v_codigo_control_8:s_8,
+                  :v_codigo_control_9:s_9,
+                  :v_codigo_control_10:s_10,
+                  :v_codigo_control_11:s_11,
+                  :v_codigo_control_12:s_12,
+                  :v_codigo_control_13:s_13,
+                  :v_codigo_control_14:s_14,
+                  :v_codigo_control_15:s_15
+            FROM TIPOS_IMPRESORA
+            WHERE TIM_CODIGO=:v_tim_codigo;
+
+   if(s_1==-1) tim_codigo_control_1[0]=0;
+   else Varchar2Str(v_codigo_control_1,tim_codigo_control_1);
+   if(s_2==-1) tim_codigo_control_2[0]=0;
+   else Varchar2Str(v_codigo_control_2,tim_codigo_control_2);
+   if(s_3==-1) tim_codigo_control_3[0]=0;
+   else Varchar2Str(v_codigo_control_3,tim_codigo_control_3);
+   if(s_4==-1) tim_codigo_control_4[0]=0;
+   else Varchar2Str(v_codigo_control_4,tim_codigo_control_4);
+   if(s_5==-1) tim_codigo_control_5[0]=0;
+   else Varchar2Str(v_codigo_control_5,tim_codigo_control_5);
+   if(s_6==-1) tim_codigo_control_6[0]=0;
+   else Varchar2Str(v_codigo_control_6,tim_codigo_control_6);
+   if(s_7==-1) tim_codigo_control_7[0]=0;
+   else Varchar2Str(v_codigo_control_7,tim_codigo_control_7);
+   if(s_8==-1) tim_codigo_control_8[0]=0;
+   else Varchar2Str(v_codigo_control_8,tim_codigo_control_8);
+   if(s_9==-1) tim_codigo_control_9[0]=0;
+   else Varchar2Str(v_codigo_control_9,tim_codigo_control_9);
+   if(s_10==-1) tim_codigo_control_10[0]=0;
+   else Varchar2Str(v_codigo_control_10,tim_codigo_control_10);
+   if(s_9==-1) tim_codigo_control_11[0]=0;
+   else Varchar2Str(v_codigo_control_11,tim_codigo_control_11);
+   if(s_12==-1) tim_codigo_control_12[0]=0;
+   else Varchar2Str(v_codigo_control_12,tim_codigo_control_12);
+   if(s_13==-1) tim_codigo_control_13[0]=0;
+   else Varchar2Str(v_codigo_control_13,tim_codigo_control_13);
+   if(s_14==-1) tim_codigo_control_14[0]=0;
+   else Varchar2Str(v_codigo_control_14,tim_codigo_control_14);
+   if(s_15==-1) tim_codigo_control_15[0]=0;
+   else Varchar2Str(v_codigo_control_15,tim_codigo_control_15);
+}

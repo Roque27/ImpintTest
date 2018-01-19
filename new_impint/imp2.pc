@@ -1,0 +1,610 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <olib.h>
+#include <clib.h>
+#include <oratype.h>
+#include <rwwccnts.h>
+#include <generic.h>
+#include "gen_txt.h"
+
+exec sql include sqlca;
+exec sql include oraca;
+exec sql whenever sqlerror do ErrorSql(__FILE__, __LINE__);
+exec sql whenever notfound continue;
+exec sql whenever sqlwarning continue;
+exec oracle option (oraca=yes);
+
+exec sql begin declare section;
+     long    l_cpr_numero;
+     long    l_ord_numero;
+     long    l_srv_codigo;
+     long    l_cnt_numero;
+     long    l_prs_numero;
+     varchar l_tor_codigo[3];
+     varchar l_rowid[26];
+     varchar l_usr_codigo[9];
+     varchar l_TipoCorreo[3];
+     varchar l_Correo[9];
+     varchar l_Impr[16];
+     varchar l_File[61];
+     varchar l_crr_genera_planilla[2];
+     varchar l_prs_razon_social[61];
+     varchar l_FechaDelDia[17];
+     varchar l_not_codigo[4];
+     varchar l_cfc_codigo[3];
+     varchar l_ord_fecha_generacion[11];
+     long    l_cpr_numero;
+     varchar l_cll_nombre[31];short s_cll_nombre;
+     varchar l_cnt_direccion_pago[61]; short s_cnt_direccion_pago;
+     varchar l_cnt_nro_pago[6];short s_cnt_nro_pago;
+     varchar l_cnt_bis[2];short s_cnt_bis;
+     varchar l_cnt_piso_pago[3];short s_cnt_piso_pago;
+     varchar l_cnt_depto_pago[4];short s_cnt_depto_pago;
+     varchar l_agf_nombre[31];short s_agf_nombre;
+exec sql end declare section;
+
+char *userid;
+char *User;
+char *TipoCorreo;
+char *Correo;
+char *Impr;
+char *File;
+char *Tramite;
+int  CntLineas, CntHojas;
+char l_out_file[199];
+char l_direccion[61];
+char Resg_agf_nombre[31];
+int  pent, psal;
+char psalida[128];
+FILE *out_file;
+
+char *Direccion_Contrato (long srv_cod, int cnt_num);
+char *Direccion_Servicio (long srv_cod);
+
+char *Subraya(char LineaASubrayar[])
+{
+  int i;
+  static char Linea[512];
+
+  bzero(Linea, sizeof Linea);
+  for(i=0; i<strlen(LineaASubrayar); i++)
+    if(LineaASubrayar[i]!=' ')
+      Linea[i]='-';
+    else
+      Linea[i]=' ';
+  return((char *)Linea);
+}
+
+void CabeceraDelListado()
+{
+  char LineaDeTitulo[512];
+  int i;
+
+  CntHojas++;
+  if(CntHojas>1)
+    fprintf(out_file, "\f");
+  fprintf(out_file, "%30s %30s\n", "Oracle*Utilities Version 2.0.0", "LITORAL GAS S.A.");
+  fprintf(out_file, "Fecha: %s   Usuario: %-50s   Pagina: %03d\n", 
+         l_FechaDelDia.arr, User, CntHojas); 
+  sprintf(LineaDeTitulo, "%47sINTIMACIONES A ENTREGAR", " ");
+  fprintf(out_file, "%s\n", LineaDeTitulo);
+  fprintf(out_file, "%s\n\n", Subraya(LineaDeTitulo));
+  fprintf(out_file, "Tipo de correo: %s             Proceso numero: %d\n", l_TipoCorreo.arr, l_cpr_numero);
+  fprintf(out_file, "Correo: %s\n", l_Correo.arr);
+  fprintf(out_file, "Localidad: %s\n\n", Resg_agf_nombre);
+
+  fprintf(out_file, "Ordenativo   Fecha\n");
+  sprintf(LineaDeTitulo, "Tipo Numero  emision    Sum/Contrato %-30s %-30s Incidencia", "Razon Social", "Domicilio");
+  fprintf(out_file, "%s\n", LineaDeTitulo);
+  fprintf(out_file, "%s\n", Subraya(LineaDeTitulo));
+  CntLineas=12;
+}
+
+main(int argc, char **argv)
+{
+  long SQLCODE=0;
+  int i;
+  char Cmd[128];
+
+  oraca.orastxtf=ORASTFERR;
+
+  GetParamString(argc,argv,"id",&userid);
+  GetParamString(argc,argv,"User",&User);
+  Str2Varchar(User, l_usr_codigo);
+  GetParamString(argc,argv,"Tipo",&TipoCorreo);
+  Str2Varchar(TipoCorreo, l_TipoCorreo);
+  GetParamString(argc,argv,"Correo",&Correo);
+  Str2Varchar(Correo, l_Correo);
+  GetParamString(argc,argv,"impr",&Impr);
+  Str2Varchar(Impr, l_Impr);
+  GetParamString(argc,argv,"file",&File);
+  Str2Varchar(File, l_File);
+  GetParamString(argc,argv,"Tramite",&Tramite);
+  l_cpr_numero=atoi(Tramite);
+
+  sprintf(l_out_file, "%s/%s", getenv("ALAMO_LST"), File);
+  out_file=fopen(l_out_file, "w");
+
+  printf("id=%s\n", userid);
+  printf("l_TipoCorreo=%s\n", l_TipoCorreo.arr);
+  printf("Correo=%s\n", l_Correo.arr);
+  printf("l_out_file=%s\n", l_out_file);
+
+  Connect(userid,DISPCONNECT);
+
+  exec sql select to_char(sysdate,'dd/mm/yyyy hh:mi')
+  	into :l_FechaDelDia
+  	from sys.dual;
+  AddNullVarchar(l_FechaDelDia);
+
+  CntLineas=72;
+  CntHojas=0;
+  exec sql declare MiCursor cursor for
+       select o.cpr_numero,
+              o.ord_numero,
+              nvl(o.srv_codigo,0),
+              nvl(o.cnt_numero,0),
+              nvl(o.prs_numero,0),
+              o.tor_codigo,
+              to_char(o.ord_fecha_generacion,'dd/mm/yyyy') 
+       from ordenativos o 
+       where o.cpr_numero = :l_cpr_numero;
+
+  
+  /*
+   * -- Inicio del bucle principal --------------------------------------------
+   */
+  exec sql open MiCursor;
+  for(;;)
+  {
+    ClearVarchar(l_tor_codigo);
+    exec sql whenever sqlerror do ErrorSql(__FILE__, __LINE__);
+    exec sql fetch MiCursor into :l_cpr_numero,
+                                 :l_ord_numero,
+                                 :l_srv_codigo,
+                                 :l_cnt_numero,
+                                 :l_prs_numero,
+                                 :l_tor_codigo,
+                                 :l_ord_fecha_generacion;
+	AddNullVarchar(l_tor_codigo);
+
+    if (SQLCODE==1403) 
+      break;
+
+    ClearVarchar(l_prs_razon_social);
+    ClearVarchar(l_cfc_codigo);
+    ClearVarchar(l_cll_nombre);
+    ClearVarchar(l_cnt_nro_pago);
+    ClearVarchar(l_cnt_bis);
+    ClearVarchar(l_cnt_piso_pago);
+    ClearVarchar(l_cnt_depto_pago);
+    ClearVarchar(l_agf_nombre);
+
+    if(l_srv_codigo==0) 
+    {
+       exec sql 
+       select p.prs_numero,
+              substr(p.prs_razon_social,1,25),
+              p.cfc_codigo,
+              substr(l.cll_nombre,1,18),
+              substr(p.prs_nro,1,4),
+              p.prs_bis,
+              substr(p.prs_piso,1,2),
+              substr(p.prs_depto,1,3),
+              a.agf_nombre,
+              null 
+       into :l_prs_numero,
+            :l_prs_razon_social,
+            :l_cfc_codigo,
+            :l_cll_nombre:s_cll_nombre,
+            :l_cnt_nro_pago:s_cnt_nro_pago,
+            :l_cnt_bis:s_cnt_bis,
+            :l_cnt_piso_pago:s_cnt_piso_pago,
+            :l_cnt_depto_pago:s_cnt_depto_pago,
+            :l_agf_nombre:s_agf_nombre,
+            :l_cnt_direccion_pago:s_cnt_direccion_pago
+       from personas p,
+            calles l,
+            areas_geograficas a
+       where p.prs_numero = :l_prs_numero and
+             a.agf_codigo = p.agf_codigo and
+             p.agf_codigo = l.agf_codigo (+) and
+             p.cll_codigo = l.cll_codigo (+);
+    } 
+    else 
+    {
+       exec sql 
+       select p.prs_numero,
+              substr(p.prs_razon_social,1,25),
+              p.cfc_codigo,
+              substr(l.cll_nombre,1,18),
+              substr(c.cnt_nro_pago,1,4),
+              c.cnt_bis,
+              substr(c.cnt_piso_pago,1,2),
+              substr(c.cnt_depto_pago,1,3),
+              a.agf_nombre,
+              c.cnt_direccion_pago
+       into :l_prs_numero,
+            :l_prs_razon_social,
+            :l_cfc_codigo,
+            :l_cll_nombre:s_cll_nombre,
+            :l_cnt_nro_pago:s_cnt_nro_pago,
+            :l_cnt_bis:s_cnt_bis,
+            :l_cnt_piso_pago:s_cnt_piso_pago,
+            :l_cnt_depto_pago:s_cnt_depto_pago,
+            :l_agf_nombre:s_agf_nombre,
+            :l_cnt_direccion_pago:s_cnt_direccion_pago
+       from contratos c,
+            personas p,
+            calles l,
+            areas_geograficas a
+       where c.srv_codigo = :l_srv_codigo and 
+             c.cnt_numero = :l_cnt_numero and
+             p.prs_numero = c.prs_numero and
+             a.agf_codigo = p.agf_codigo and
+             c.agf_codigo = l.agf_codigo (+) and
+             c.cll_codigo = l.cll_codigo (+);
+    }
+
+    if(SQLCODE==1403)
+      l_prs_numero=0;
+
+	AddNullVarchar(l_cfc_codigo);
+
+    if(s_cll_nombre==-1)
+      l_cll_nombre.arr[0]=l_cll_nombre.len=0;
+    else
+      AddNullVarchar(l_cll_nombre);
+    if(s_cnt_nro_pago==-1)
+      l_cnt_nro_pago.arr[0]=l_cnt_nro_pago.len=0;
+    else
+      AddNullVarchar(l_cnt_nro_pago);
+    if(s_cnt_bis==-1)
+      l_cnt_bis.arr[0]=l_cnt_bis.len=0;
+    else
+      AddNullVarchar(l_cnt_bis);
+    if(s_cnt_piso_pago==-1)
+      l_cnt_piso_pago.arr[0]=l_cnt_piso_pago.len=0;
+    else
+      AddNullVarchar(l_cnt_piso_pago);
+    if(s_cnt_depto_pago==-1)
+      l_cnt_depto_pago.arr[0]=l_cnt_depto_pago.len=0;
+    else
+      AddNullVarchar(l_cnt_depto_pago);
+    if(s_agf_nombre==-1)
+      l_agf_nombre.arr[0]=l_agf_nombre.len=0;
+    else
+      AddNullVarchar(l_agf_nombre);
+
+    ClearVarchar(l_not_codigo);
+    exec sql 
+       select not_codigo
+       into :l_not_codigo
+       from combinaciones_habilitadas_noti
+       where tor_codigo = :l_tor_codigo and
+             cfc_codigo = :l_cfc_codigo;
+	AddNullVarchar(l_not_codigo);
+
+    if(SQLCODE==1403)
+    {
+      fprintf(stderr, "No se encontro tipo de intimacion para persona # %d\n", 
+                      l_prs_numero);
+    }
+    else
+    {
+      /* -- Corte por localidad -- */
+      if(strcmp(l_agf_nombre.arr, Resg_agf_nombre)!=0)
+      {
+        strcpy(Resg_agf_nombre, l_agf_nombre.arr);
+        CabeceraDelListado();
+      }
+
+      if(CntLineas>56)
+        CabeceraDelListado();
+
+      /* ------------------------
+       * if(s_cll_nombre==-1)
+       * {
+       *   strcpy(l_direccion, l_cnt_direccion_pago.arr);
+       *   psal=0;
+       *   if(strlen(l_direccion)!=0)
+       *   {
+       *     for(pent=0; pent<strlen(l_direccion); pent++)
+       *       if((l_direccion[pent]==' ')&&(l_direccion[pent+1]==' '))
+       *         pent=pent;
+       *       else
+       *         psalida[psal++]=l_direccion[pent];
+       *   }
+       *   psalida[psal]=0;
+       *   psalida[30]=0;
+       *   strcpy(l_direccion, psalida);
+       * }
+       * else 
+       * {
+       *   sprintf(l_direccion, "%s %s %s %s", l_cll_nombre.arr, 
+       *                                       l_cnt_nro_pago.arr,
+       *                                       l_cnt_piso_pago.arr, 
+       *                                       l_cnt_depto_pago.arr);
+       * }
+       * -----------------------------*/
+
+      /* Si es intimacion, enviar a la direccion del contrato. *
+       * si es corte, enviar a la del suministro               */
+      if(l_srv_codigo==0) 
+      {
+          sprintf(l_direccion, "%s %s %s %s", l_cll_nombre.arr, 
+                                              l_cnt_nro_pago.arr,
+                                              l_cnt_piso_pago.arr, 
+                                              l_cnt_depto_pago.arr);
+      }
+      else
+      {
+         if (strcmp(l_tor_codigo.arr, "NT")==0)
+           strcpy(l_direccion, Direccion_Contrato(l_srv_codigo, l_cnt_numero));
+         else
+           strcpy(l_direccion, Direccion_Servicio(l_srv_codigo));
+      }
+      l_direccion[30]= '\0';
+
+      fprintf(out_file, "\n\n %-2s %7d  %s  %8d/%02d %-30s %-30s ..................................................................\n", 
+             l_tor_codigo.arr,
+             l_ord_numero,
+             l_ord_fecha_generacion.arr,
+             l_srv_codigo,
+             l_cnt_numero,
+             l_prs_razon_social.arr, 
+             l_direccion);
+      CntLineas=CntLineas+3;
+    }
+  }
+  /*
+   * ----- Fin del bucle principal --------------------------------------------
+   */
+
+TratamientoDelError:
+  exec sql close MiCursor;
+  fclose(out_file);
+  sprintf(Cmd, "Imprime dest=%s %s list=IMP2 id=%s", Impr, l_out_file, l_usr_codigo.arr); 
+  fflush(stderr);    /* Evita que el log salga desordenado */
+  system(Cmd);
+}
+
+
+
+void CondensarEspacios(char *texto)
+{
+  /*
+   * Elimina los espacios consecutivos en la
+   * cadena pasada como parametro.
+   */ 
+  char *s, *d;
+  for (s=d=texto; *s!='\0'; s++)
+    if ((*s != ' ') || (*(s+1) != ' '))
+      *(d++)= *s; 
+  *d= '\0';
+}
+
+
+char *Direccion_Contrato (long srv_cod, int cnt_num)
+{
+  /* BF: Pide el numero de suministro y contrato.
+   *
+   * DF: Entrega la direccion asociada al contrato.
+   *     Si existe CNT_DIRECCION_PAGO, la entrega;
+   *     si es null construye una direccion
+   *     con calle, numero, piso, etc.
+   *
+   * EF: Devuelve un puntero al buffer static con la direccion.
+   */
+
+  static char campo[200];
+
+  EXEC SQL BEGIN DECLARE SECTION;
+     varchar v_cnt_direccion_pago[61];    short s_cnt_direccion_pago;
+     varchar v_cnt_nro_pago[5];           short s_cnt_nro_pago;
+     varchar v_cnt_piso_pago[9];          short s_cnt_piso_pago;
+     varchar v_cnt_depto_pago[9];         short s_cnt_depto_pago;
+     varchar v_cnt_bis[2];                short s_cnt_bis;
+     varchar v_cnt_torre_pago[2];         short s_cnt_torre_pago;
+     varchar v_cll_nombre[60];            short s_cll_nombre;
+     varchar v_cnt_c_postal_pago[8];      short s_cnt_c_postal_pago;
+     varchar v_agf_nombre[31];            short s_agf_nombre;
+  EXEC SQL END DECLARE SECTION; 
+
+  EXEC SQL SELECT   T.CNT_DIRECCION_PAGO,
+                    T.CNT_NRO_PAGO,
+                    T.CNT_PISO_PAGO,
+                    T.CNT_DEPTO_PAGO,
+                    T.CNT_BIS,
+                    T.CNT_TORRE_PAGO,
+                    C.CLL_NOMBRE,
+                    T.CNT_C_POSTAL_PAGO,
+                    A.AGF_NOMBRE
+  INTO             :v_cnt_direccion_pago:s_cnt_direccion_pago,
+                   :v_cnt_nro_pago:s_cnt_nro_pago,
+                   :v_cnt_piso_pago:s_cnt_piso_pago,
+                   :v_cnt_depto_pago:s_cnt_depto_pago,
+                   :v_cnt_bis:s_cnt_bis,
+                   :v_cnt_torre_pago:s_cnt_torre_pago,
+                   :v_cll_nombre:s_cll_nombre,
+                   :v_cnt_c_postal_pago:s_cnt_c_postal_pago,
+                   :v_agf_nombre:s_agf_nombre
+  FROM CONTRATOS T, CALLES C, AREAS_GEOGRAFICAS A
+  WHERE SRV_CODIGO=:srv_cod
+  AND   CNT_NUMERO=:cnt_num 
+  AND   T.AGF_CODIGO=C.AGF_CODIGO (+) 
+  AND   T.CLL_CODIGO=C.CLL_CODIGO (+)
+  AND   A.AGF_CODIGO=C.AGF_CODIGO; 
+
+  if(COUNTHITS==0)
+    Abortar("No hay datos del contrato.","Error: ");
+
+  if (s_cnt_direccion_pago==-1) v_cnt_direccion_pago.len= 0;
+  AddNullVarchar(v_cnt_direccion_pago);
+  if (s_cnt_nro_pago==-1) v_cnt_nro_pago.len= 0;
+  AddNullVarchar(v_cnt_nro_pago);
+  if (s_cnt_piso_pago==-1) v_cnt_piso_pago.len= 0;
+  AddNullVarchar(v_cnt_piso_pago);
+  if (s_cnt_depto_pago==-1) v_cnt_depto_pago.len= 0;
+  AddNullVarchar(v_cnt_depto_pago);
+  if (s_cnt_bis==-1) v_cnt_bis.len= 0;
+  AddNullVarchar(v_cnt_bis);
+  if (s_cnt_torre_pago==-1) v_cnt_torre_pago.len= 0;
+  AddNullVarchar(v_cnt_torre_pago);
+  if (s_cll_nombre==-1) v_cll_nombre.len= 0;
+  AddNullVarchar(v_cll_nombre);
+  if (s_cnt_c_postal_pago==-1) v_cnt_c_postal_pago.len= 0;
+  AddNullVarchar(v_cnt_c_postal_pago);
+  if (s_agf_nombre==-1) v_agf_nombre.len= 0;
+  AddNullVarchar(v_agf_nombre);
+
+
+  /*
+   * Existe CNT_DIRECCION_PAGO ?
+   */
+  if(strlen(v_cnt_direccion_pago.arr)!=0)
+  {
+    /* SI, existe: devolver CNT_DIRECCION_PAGO */
+    strcpy(campo, v_cnt_direccion_pago.arr);
+  }
+  else
+  {
+    /* NO existe, construir la direccion */
+    Varchar2Str(v_cll_nombre, campo);
+    if((v_cnt_bis.len>0)&&(v_cnt_bis.arr[0]!='N'))
+      { strcat(campo, " "); strcat(campo, v_cnt_bis.arr); }
+    if(v_cnt_nro_pago.len>0)
+      { strcat(campo, " "); strcat(campo, v_cnt_nro_pago.arr); }
+    if(v_cnt_torre_pago.len>0)
+      { strcat(campo, " "); strcat(campo, v_cnt_torre_pago.arr); }
+    if(v_cnt_piso_pago.len>0)
+      { strcat(campo, " "); strcat(campo, v_cnt_piso_pago.arr); }
+    if(v_cnt_depto_pago.len>0)
+      { strcat(campo, " "); strcat(campo, v_cnt_depto_pago.arr); }
+    if(v_cnt_c_postal_pago.len>0)
+      { strcat(campo, " "); strcat(campo, v_cnt_c_postal_pago.arr); }	
+    if(s_agf_nombre!=-1)
+     { strcat (campo, " "); strcat(campo, v_agf_nombre.arr); }
+  }
+
+  CondensarEspacios(campo);
+  fprintf(stderr, "Direccion_Contrato(%ld, %d) = {%s}\n", srv_cod, cnt_num, campo);
+  return campo;
+}
+
+
+char *Direccion_Servicio (long srv_cod)
+{
+  /* BF: Pide el numero de suministro.
+   *
+   * DF: Entrega la direccion asociada al servicio.
+   *     Si existe SRV_DIRECCION, la entrega;
+   *     si es null construye una direccion
+   *     con calle, numero, piso, etc.
+   *
+   * EF: Devuelve un puntero al buffer static con la direccion.
+   */
+
+  static char campo[200];
+
+  EXEC SQL BEGIN DECLARE SECTION;
+     varchar v_srv_direccion[61];    short s_srv_direccion;
+     int     v_srv_nro;              short s_srv_nro;
+     varchar v_srv_piso[9];          short s_srv_piso;
+     varchar v_srv_depto[9];         short s_srv_depto;
+     varchar v_srv_bis[2];           short s_srv_bis;
+     varchar v_srv_torre[2];         short s_srv_torre;
+     varchar v_cll_nombre[60];       short s_cll_nombre;
+     varchar v_srv_c_postal[9];      short s_srv_c_postal;
+     varchar v_agf_nombre[31];       short s_agf_nombre;
+  EXEC SQL END DECLARE SECTION; 
+
+  EXEC SQL SELECT   S.SRV_DIRECCION,
+                    S.SRV_NRO,
+                    S.SRV_PISO,
+                    S.SRV_DEPTO,
+                    S.SRV_BIS,
+                    S.SRV_TORRE,
+                    C.CLL_NOMBRE,
+                    S.SRV_C_POSTAL,
+                    A.AGF_NOMBRE
+  INTO             :v_srv_direccion:s_srv_direccion,
+                   :v_srv_nro:s_srv_nro,
+                   :v_srv_piso:s_srv_piso,
+                   :v_srv_depto:s_srv_depto,
+                   :v_srv_bis:s_srv_bis,
+                   :v_srv_torre:s_srv_torre,
+                   :v_cll_nombre:s_cll_nombre,
+                   :v_srv_c_postal:s_srv_c_postal,
+                   :v_agf_nombre:s_agf_nombre
+  FROM SERVICIOS S, CALLES C, AREAS_GEOGRAFICAS A
+  WHERE SRV_CODIGO=:srv_cod
+  AND   S.AGF_CODIGO=C.AGF_CODIGO (+) 
+  AND   S.CLL_CODIGO=C.CLL_CODIGO (+)
+  AND   S.AGF_CODIGO=A.AGF_CODIGO; 
+
+  if(COUNTHITS==0)
+    Abortar("No hay datos del servicio.","Error: ");
+
+  if (s_srv_direccion==-1) v_srv_direccion.len= 0;
+  AddNullVarchar(v_srv_direccion);
+  if (s_srv_nro==-1) v_srv_nro= 0L;
+  if (s_srv_piso==-1) v_srv_piso.len= 0;
+  AddNullVarchar(v_srv_piso);
+  if (s_srv_depto==-1) v_srv_depto.len= 0;
+  AddNullVarchar(v_srv_depto);
+  if (s_srv_bis==-1) v_srv_bis.len= 0;
+  AddNullVarchar(v_srv_bis);
+  if (s_srv_torre==-1) v_srv_torre.len= 0;
+  AddNullVarchar(v_srv_torre);
+  if (s_cll_nombre==-1) v_cll_nombre.len= 0;
+  AddNullVarchar(v_cll_nombre);
+  if (s_srv_c_postal==-1) v_srv_c_postal.len= 0;
+  AddNullVarchar(v_srv_c_postal);
+  if (s_agf_nombre==-1) v_agf_nombre.len= 0;
+  AddNullVarchar(v_agf_nombre);
+
+
+  /*
+   * Existe SRV_DIRECCION ?
+   */
+
+/*
+  Por pedido de rcittadi que no quiere que salga la direccion en
+  el campo srv_direccion
+  7-11-2003
+*/
+  v_srv_direccion.arr[0]=0;
+  v_srv_direccion.len=0;
+
+  if(strlen(v_srv_direccion.arr)!=0)
+  {
+    /* SI, existe: devolver CNT_DIRECCION_PAGO */
+    strcpy(campo, v_srv_direccion.arr);
+  }
+  else
+  {
+    /* NO existe, construir la direccion */
+    Varchar2Str(v_cll_nombre, campo);
+    if((v_srv_bis.len>0)&&(v_srv_bis.arr[0]!='N'))
+      { strcat(campo, " "); strcat(campo, v_srv_bis.arr); }
+    if(v_srv_nro>0)
+     { sprintf(campo+strlen(campo), " %5d", v_srv_nro); }
+    if(v_srv_torre.len>0)
+      { strcat(campo, " "); strcat(campo, v_srv_torre.arr); }
+    if(v_srv_piso.len>0)
+      { strcat(campo, " "); strcat(campo, v_srv_piso.arr); }
+    if(v_srv_depto.len>0)
+      { strcat(campo, " "); strcat(campo, v_srv_depto.arr); }
+    if(v_srv_c_postal.len>0)
+      { strcat(campo, " "); strcat(campo, v_srv_c_postal.arr); }
+    if(s_agf_nombre!=-1)
+     { strcat (campo, " "); strcat(campo, v_agf_nombre.arr); }
+  }
+  
+  CondensarEspacios(campo);
+ /*  fprintf(stderr, "Direccion_Servicio(%ld) = {%s}\n", srv_cod, campo); */
+  return campo;
+}
+
