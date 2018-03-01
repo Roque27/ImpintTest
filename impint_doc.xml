@@ -1502,9 +1502,14 @@
             	,TRIM(COALESCE(C.CLL_NOMBRE, '0')) AS CLL_NOMBRE
             	,COALESCE(T.CNT_BIS, '0') AS CNT_BIS 
             	,COALESCE(T.CNT_TORRE_PAGO, '0') AS CNT_TORRE_PAGO
+				,decode(T.cnt_direccion_pago,null,C.cll_nombre||' '||decode(T.cnt_bis,'N',null,T.cnt_bis)||' '||T.cnt_torre_pago||' '||T.cnt_piso_pago||' '||T.cnt_depto_pago,substr(T.cnt_direccion_pago,1,30)) direccion ,decode(T.cnt_direccion_pago,null,'('|| decode(T.srv_codigo,0,P.prs_c_postal,T.cnt_c_postal_pago)|| ') '|| agf.agf_nombre,substr(T.cnt_direccion_pago,31,60)) AS LOCALIDAD
             FROM CONTRATOS T
+            INNER JOIN areas_geograficas agf
+                ON agf.agf_codigo = T.agf_codigo
             LEFT JOIN CALLES C
             	ON (C.AGF_CODIGO = T.AGF_CODIGO AND C.CLL_CODIGO = T.CLL_CODIGO)
+            INNER JOIN PERSONAS P
+                ON (C.cll_codigo = P.cll_codigo AND C.agf_codigo = P.agf_codigo)
             WHERE SRV_CODIGO = {$srv_cod}
             	AND CNT_NUMERO = {$cnt_num}
         </qry:select>
