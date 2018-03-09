@@ -13,11 +13,15 @@
         <qry:variable name="not_codigo" type="string" value="0"/>
         <qry:variable name="nro_ord" type="integer" value="0"/>
         <qry:variable name="CantidadDeFacturas" type="integer" value="0"/>
+        <qry:variable name="parametro_vencimiento" type="integer" value="0"/>
 
         <qry:variable name="Tor_codigo" type="string"/>
         <qry:variable name="s_srv_agf_nombre" type="string"/>
         <qry:variable name="sysdate" type="string"/>
         <qry:variable name="sysdate_insert" type="string"/>
+        <qry:variable name="sysdate_limite" type="string"/>
+        <qry:variable name="sysdate_total" type="string"/>
+        <qry:variable name="sysdate_total_insert" type="string"/>
         
         <qry:variable name="l_usr_numero" type="integer"/>
         <qry:variable name="l_tim_codigo" type="string"/>
@@ -61,6 +65,7 @@
         <qry:variable name="cnt_c_postal_pago" type="string"/>
         <qry:variable name="cnt_agf_nombre" type="string"/>
         <qry:variable name="cll_nombre_completo" type="string" value="0"/>
+        <qry:variable name="nro_aviso" type="string"/>
 
         <!-- Estructuras llenas -->
 
@@ -82,13 +87,19 @@
         <!-- Banderas estructuras llenas -->
 
         <qry:variable name="actual_prs_numero" type="integer"/>
-        <qry:variable name="actual_srv_cod" type="integer"/>
+        <qry:variable name="actual_srv_cod_servicios" type="integer"/>
+        <qry:variable name="actual_srv_cod_stock_equipos" type="integer"/>
+        <qry:variable name="actual_srv_cod_contratos" type="integer"/>
+        <qry:variable name="actual_srv_cod_lecturas" type="integer"/>
+        <qry:variable name="actual_srv_cod_potencias" type="integer"/>
         <qry:variable name="actual_scf_cod" type="integer"/>
-        <qry:variable name="actual_nro_ord" type="integer"/>
+        <qry:variable name="actual_nro_ord_ordenativos" type="integer"/>
+        <qry:variable name="actual_nro_ord_documentos" type="integer"/>
         <qry:variable name="actual_agf_cod" type="integer"/>
         <qry:variable name="actual_ivv_cod" type="integer"/>
         <qry:variable name="actual_tcl_cod" type="integer"/>
-        <qry:variable name="actual_trt_num" type="integer"/>
+        <qry:variable name="actual_trt_num_documentos" type="integer"/>
+        <qry:variable name="actual_trt_num_tramites" type="integer"/>
 
         <qry:variable name="isEmpty_documentos_doc" type="integer" value="0"/>
         <qry:variable name="isEmpty_documentos_ori" type="integer" value="0"/>
@@ -122,6 +133,8 @@
 
         <qry:variable name="v_tabla" type="string"/>
         <qry:variable name="v_columna" type="string"/>
+
+        <qry:variable name="id_queryes" type="integer" value="1"/>
 
         <!-- Personas -->
 
@@ -182,7 +195,6 @@
     <qry:main>
          <!-- No posee select propio -->
         <qry:out>
-            
             <qry:element name="Impint">
             <!--
             <qry:print output="stdout" value="PARAMETROS"/>
@@ -234,7 +246,7 @@
               AND o.ord_numero BETWEEN {#PARAM:/IMPINT_PARAM/ORD_DESDE/@PARAMORDDSD} AND {#PARAM:/IMPINT_PARAM/ORD_HASTA/@PARAMORDHST}
               AND o.crr_tipo = {#PARAM:/IMPINT_PARAM/TIPOCORREO/@PARAMCODTIPOCORREO}
               AND o.crr_codigo = {#PARAM:/IMPINT_PARAM/CORREO/@PARAMCODCORREO}
-              
+              AND o.ord_situacion = 'P'
               <!-- AND o.ord_situacion = 'P'-->
               AND o.ord_estado = 'D'
             ORDER BY o.ord_numero
@@ -250,12 +262,13 @@
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="0" type="string">
                 <qry:set-variable name="l_crr_genera_planilla" value="N"/>
             </qry:if>
+            <qry:insert-query name="SeleccionaParametroDeVencimiento"/>
             <qry:insert-query name="SeleccionaFechaActual"/>
             <qry:insert-query name="SeleccionaEstadoInicial"/>
             <!-- INSERT Control de procesos salida-->
             <qry:element name="SqlCommand">
                 <qry:attribute name="type" value="INSERT"/>
-                <qry:attribute name="id" value="1"/>
+                <qry:attribute name="id" value="{$id_queryes}"/>
                 <qry:text value="INSERT INTO control_procesos (cpr_numero,cpr_tipo_proceso,usr_numero_incorpora,prc_codigo,est_codigo,cpr_fecha_inicio) VALUES({$l_cpr_numero}, 'IN', {$l_usr_numero}, 'IN', '{$l_est_codigo}', TO_DATE('{$sysdate_insert}', 'MM/DD/YYYY')); "/>
                 <!--<qry:element name="control_procesos">
                     <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
@@ -268,9 +281,9 @@
             </qry:element>
 
             <qry:for-each-row>
-                
                 <qry:set-variable name="TESTmain" value="1" operation="+"/>
-                <qry:print output="stdout" value="INICIO BUCLE - Main nro {$TESTmain} "/>
+                <qry:set-variable name="id_queryes" value="1" operation="+"/>
+                <!--<qry:print output="stdout" value="INICIO BUCLE - Main nro {$TESTmain} "/>-->
                 <qry:set-variable name="srv_cod" value="#ROW:/ROW/@SRV_CODIGO"/>
                 <qry:set-variable name="cnt_num" value="#ROW:/ROW/@CNT_NUMERO"/>
                 <qry:set-variable name="scf_cod" value="#ROW:/ROW/@SCF_CODIGO"/>
@@ -280,8 +293,11 @@
                 <qry:set-variable name="hay_datos_geograficos" value="0"/>
 
                 <qry:element name="Reporte">
+                    <qry:set-variable name="Tor_codigo" value="#ROW:/ROW/@TOR_CODIGO"/>
+                    <qry:insert-query name="SeleccionarNroAviso"/>
                     <qry:attribute name="tipo" value="#ROW:/ROW/@TOR_CODIGO"/>
                     <qry:attribute name="fecha_emision" value="{#PARAM:/IMPINT_PARAM/FECHA_EMISION/@PARAMFECEMI}"/>
+                    <qry:attribute name="nro_proceso" value="{$l_cpr_numero}"/>
                     <qry:set-variable name="Tiene_Comprobantes_Financiaciones" value="0"/>
                     <qry:set-variable name="Tiene_Otros_Comprobantes" value="0"/>
                     <qry:if left="{#ROW:/ROW/@ORD_NUMERO}" operator="less" right="{$OrdenDesde}" type="integer">
@@ -304,11 +320,14 @@
 
                     <qry:if left="{#ROW:/ROW/@SRV_CODIGO}" operator="equal" right="0" type="integer">
                         <qry:insert-query name="ObtenerDatosSinContrato" doc-param="#ROW:"/>
+                        <qry:attribute name="datos" value="DatosSinContrato"/>
                     <qry:else/>
                         <qry:insert-query name="ObtenerDatosConContrato" doc-param="#ROW:"/>
+                        <qry:attribute name="datos" value="DatosConContrato"/>
                     </qry:if>
                     <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
                         <qry:insert-query name="ObtenerDatosSiNoHayDatos" doc-param="#ROW:"/>
+                        <qry:attribute name="datos" value="DatosSiNoHayDatos"/>
                         <qry:if left="{$hay_datos_geograficos}" operator="equal" right="0" type="integer">
                             <qry:set-variable name="prs_num" value="0"/>
                         </qry:if>
@@ -317,38 +336,37 @@
                     <qry:if left="{$not_codigo}" operator="not-equal" right="0" type="string">
                         <qry:set-variable name="ImporteDelAviso" value="0"/>
                         <qry:set-variable name="CantidadDeFacturas" value="0"/>
-
+                        
                         <!-- Proceso Principal -->
                         <qry:insert-query name="Notifi"/>
+                        <qry:set-variable name="id_queryes" value="1" operation="+"/>
                         <qry:attribute name="CantidadDeFacturas" value="{$CantidadDeFacturas}"/>
                         <qry:if left="{$CantidadDeFacturas}" operator="greater" right="0" type="integer">
                             <qry:set-variable name="Escribi" value="1" operation="+"/>
 
-                            <!--  
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_NUMERO}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@SCF_CODIGO}"/>
-                            <qry:print output="stdout" value="TEEST : {$l_cpr_numero}"/>
-                            <qry:print output="stdout" value="TEEST : {$ImporteDelAviso}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_razon_social}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_calle}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_nro}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_piso}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_depto}"/>
-                            <qry:print output="stdout" value="TEEST : {$cll_nombre_completo}"/>
-                            <qry:print output="stdout" value="TEEST : {$cll_nombre}"/>
-                            <qry:print output="stdout" value="TEEST : {$cnt_nro_pago}"/>
-                            <qry:print output="stdout" value="TEEST : {$cnt_piso_pago}"/>
-                            <qry:print output="stdout" value="TEEST : {$cnt_depto_pago}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@CRR_TIPO}"/>
-                            <qry:print output="stdout" value="TEEST : {#ROW:/ROW/@CRR_CODIGO}"/>
-                            <qry:print output="stdout" value="TEEST : {$CantidadDeFacturas}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_c_postal}"/>
-                            <qry:print output="stdout" value="TEEST : {$prs_agf_nombre}"/>
-                            <qry:print output="stdout" value="TEEST : {$cnt_c_postal_pago}"/>
-                            <qry:print output="stdout" value="TEEST : {$cnt_agf_nombre}"/>
+                            <!-- 
+                            <qry:print output="stdout" value="TEST Ord Numero: {#ROW:/ROW/@ORD_NUMERO}"/>
+                            <qry:print output="stdout" value="TEST Scf Codigo: {#ROW:/ROW/@SCF_CODIGO}"/>
+                            <qry:print output="stdout" value="TEST Cpr Numero: {$l_cpr_numero}"/>
+                            <qry:print output="stdout" value="TEST Importe: {$ImporteDelAviso}"/>
+                            <qry:print output="stdout" value="TEST Fecha Generacion: {#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
+                            <qry:print output="stdout" value="TEST Razon Social: {$prs_razon_social}"/>
+                            <qry:print output="stdout" value="TEST Calle: {$prs_calle}"/>
+                            <qry:print output="stdout" value="TEST Numero: {$prs_nro}"/>
+                            <qry:print output="stdout" value="TEST Piso: {$prs_piso}"/>
+                            <qry:print output="stdout" value="TEST Departamento: {$prs_depto}"/>
+                            <qry:print output="stdout" value="TEST Nombre: {$cll_nombre_completo}"/>
+                            <qry:print output="stdout" value="TEST Calle pago: {$cll_nombre}"/>
+                            <qry:print output="stdout" value="TEST Numero pago: {$cnt_nro_pago}"/>
+                            <qry:print output="stdout" value="TEST Piso pago: {$cnt_piso_pago}"/>
+                            <qry:print output="stdout" value="TEST Departamento pago: {$cnt_depto_pago}"/>
+                            <qry:print output="stdout" value="TEST Tipo correo: {#ROW:/ROW/@CRR_TIPO}"/>
+                            <qry:print output="stdout" value="TEST Codigo correo: {#ROW:/ROW/@CRR_CODIGO}"/>
+                            <qry:print output="stdout" value="TEST Cantidad facturas: {$CantidadDeFacturas}"/>
+                            <qry:print output="stdout" value="TEST Codigo postal: {$prs_c_postal}"/>
+                            <qry:print output="stdout" value="TEST Nombre: {$prs_agf_nombre}"/>
+                            <qry:print output="stdout" value="TEST Codigo postal pago: {$cnt_c_postal_pago}"/>
+                            <qry:print output="stdout" value="TEST Nombre pago: {$cnt_agf_nombre}"/>
                             -->
                             
                             <qry:set-variable name="ImporteDelAviso" value="100" operation="*"/>
@@ -359,8 +377,8 @@
                             <qry:if left="{#ROW:/ROW/@TOR_GRUPO}" operator="equal" right="CD" type="string">
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
-                                    <qry:attribute name="id" value="2"/>
-                                    <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
+                                    <qry:attribute name="id" value="{$id_queryes}"/>
+                                    <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
@@ -371,8 +389,8 @@
                             <qry:else/>
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
-                                    <qry:attribute name="id" value="3"/>
-                                    <qry:text value="UPDATE ordenativos SET cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
+                                    <qry:attribute name="id" value="{$id_queryes}"/>
+                                    <qry:text value="UPDATE ordenativos SET ord_situacion = 'I' ,cpr_numero = {$l_cpr_numero} WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="cpr_numero" value="{$l_cpr_numero}"/>
                                         <qry:element name="WHERE">
@@ -387,7 +405,7 @@
                             <qry:if left="{$Imputacion_Incobrables}" operator="not-equal" right="1" type="integer">
                                 <qry:element name="SqlCommand">
                                     <qry:attribute name="type" value="UPDATE"/>
-                                    <qry:attribute name="id" value="4"/>
+                                    <qry:attribute name="id" value="{$id_queryes}"/>
                                     <qry:text value="UPDATE ordenativos SET ord_estado = 'A' ,cpr_numero = {$l_cpr_numero} ,ord_datos_anula = 'Anulado Documentos ya pagados - Saldo 0 - No se imprime  ' WHERE rowid = '{#ROW:/ROW/@ROWID}'; "/>
                                     <!--<qry:element name="ordenativos">
                                         <qry:attribute name="ord_estado" value="A"/>
@@ -401,6 +419,9 @@
                             </qry:if>
                         </qry:if>
                     </qry:if>
+
+                    
+
                 </qry:element>
             </qry:for-each-row>
 
@@ -416,9 +437,10 @@
             <qry:insert-query name="SeleccionaProxEstado"/>
 
             <!-- UPDATE Control de procesos salida-->
+            <qry:set-variable name="id_queryes" value="1" operation="+"/>
             <qry:element name="SqlCommand">
                 <qry:attribute name="type" value="UPDATE"/>
-                <qry:attribute name="id" value="5"/>
+                <qry:attribute name="id" value="{$id_queryes}"/>
                 <qry:text value="UPDATE control_procesos SET est_codigo = '{$l_prox_est_codigo}' WHERE cpr_numero = {$l_cpr_numero}; "/>     
                 <!--<qry:element name="control_procesos">
                     <qry:attribute name="est_codigo" value="{$l_prox_est_codigo}"/>
@@ -428,6 +450,7 @@
                 </qry:element>-->
             </qry:element>
 
+            <!-- GENERACION DE DOCUMENTO PARA EL CORREO -->
             <qry:if left="{$l_crr_genera_planilla}" operator="equal" right="S" type="string">
                 <qry:insert-query name="GrabaEnReportes"/>
             <qry:else/>
@@ -442,10 +465,38 @@
                 </qry:if>
             </qry:if>
 
+            <qry:set-variable name="id_queryes" value="1" operation="+"/>
             <qry:element name="SqlCommand">
                 <qry:attribute name="type" value="EXECUTESQL"/>
-                <qry:attribute name="id" value="6"/>
+                <qry:attribute name="id" value="{$id_queryes}"/>
             </qry:element>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="SeleccionaParametroDeVencimiento" > 
+        <qry:select>
+             SELECT TO_NUMBER(varios.valor_parametro('BERAVI')) AS VENC
+             FROM DUAL
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="parametro_vencimiento" value="#ROW:/ROW/@VENC"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="SeleccionarNroAviso" > 
+        <qry:select>
+            SELECT NVL(max(cad_numero) + 1, {$nro_ord} || '0') AS NUMERO
+  			FROM cancel_deuda
+ 			WHERE cad_tipo = {$Tor_codigo}
+   			AND aviso_nro = {$nro_ord}
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="nro_aviso" value="#ROW:/ROW/@NUMERO"/>
+                <qry:attribute name="nro_aviso" value="{#ROW:/ROW/@NUMERO}"/>
+            </qry:for-each-row>
         </qry:out>
     </qry:query>
 
@@ -456,9 +507,32 @@
             FROM DUAL
         </qry:select>
         <qry:out>
+            
             <qry:for-each-row>
                 <qry:set-variable name="sysdate" value="#ROW:/ROW/@FECHA"/>
                 <qry:set-variable name="sysdate_insert" value="#ROW:/ROW/@FECHA_INSERT"/>
+            </qry:for-each-row>
+        </qry:out>
+    </qry:query>
+
+    <qry:query name="SeleccionaFechaHabilAnterior" > 
+        <qry:select>
+            SELECT TO_CHAR(Fun_Proximo_Habil(
+                (SELECT AGF_CODIGO FROM SERVICIOS WHERE SRV_CODIGO={$srv_cod})
+                , -1, trunc(sysdate)), 'dd/mm/yyyy') AS FECHA_LIMITE_EMISION
+                , TO_CHAR(Fun_Proximo_Habil(
+                (SELECT AGF_CODIGO FROM SERVICIOS WHERE SRV_CODIGO={$srv_cod})
+                , {$parametro_vencimiento}, trunc(sysdate)), 'dd/mm/yyyy') AS FECHA_LIMITE_TOTAL
+                , TO_CHAR(Fun_Proximo_Habil(
+                (SELECT AGF_CODIGO FROM SERVICIOS WHERE SRV_CODIGO={$srv_cod})
+                , {$parametro_vencimiento}, trunc(sysdate)), 'mm/dd/yyyy') AS FECHA_LIMITE_TOTAL_INSERT
+            FROM DUAL
+        </qry:select>
+        <qry:out>
+            <qry:for-each-row>
+                <qry:set-variable name="sysdate_limite" value="#ROW:/ROW/@FECHA_LIMITE_EMISION"/>
+                <qry:set-variable name="sysdate_total" value="#ROW:/ROW/@FECHA_LIMITE_TOTAL"/>
+                <qry:set-variable name="sysdate_total_insert" value="#ROW:/ROW/@FECHA_LIMITE_TOTAL_INSERT"/>
             </qry:for-each-row>
         </qry:out>
     </qry:query>
@@ -657,7 +731,7 @@
         <qry:select dump="0">
             SELECT COALESCE(not_codigo, '0') AS NOT_CODIGO
             FROM combinaciones_habilitadas_noti
-            WHERE tor_codigo = {#PARAM:/ROW/@TOR_CODIGO}
+            WHERE tor_codigo = {$Tor_codigo}
             	AND cfc_codigo = {$cfc_codigo}
         </qry:select>
         <qry:out>
@@ -669,30 +743,30 @@
 
     <qry:query name="GeneraArchivo"> 
         <qry:select dump="0">
-            SELECT LPAD({#PARAM:/ROW/@ORD_NUMERO}, 8, 0) AS ORD_NUMERO
-                ,LPAD({#PARAM:/ROW/@SCF_CODIGO}, 2, '0') AS SCF_CODIGO
-                ,LPAD({$l_cpr_numero}, 6, '0') AS CPR_NUMERO
-                ,LPAD({$ImporteDelAvisoGeneraReporte}, 9, '0') AS IMPORTE_AVISO
+            SELECT LPAD(TO_CHAR({#PARAM:/ROW/@ORD_NUMERO}), 8, '0') AS ORD_NUMERO
+                ,LPAD(TO_CHAR({#PARAM:/ROW/@SCF_CODIGO}), 2, '0') AS SCF_CODIGO
+                ,LPAD({$l_cpr_numero}, 7, '0') AS CPR_NUMERO
+                ,REPLACE(TO_CHAR(LPAD({$ImporteDelAvisoGeneraReporte}, 10, '0')),'.') AS IMPORTE_AVISO
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},7,4) AS ANIO
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},4,2) AS MES
                 ,SUBSTR({#PARAM:/ROW/@ORD_FECHA_GENERACION},1,2) AS DIA
-                ,{$prs_razon_social} AS RAZON_SOCIAL
-                ,{$prs_calle} AS CALLE
-                ,{$prs_nro} AS NRO
-                ,{$prs_piso} AS PISO
-                ,{$prs_depto} AS DEPTO
-                ,{$cll_nombre_completo} AS NOMBRE_COMPLETO
-                ,{$cll_nombre} AS NOMBRE_CALLE
-                ,{$cnt_nro_pago} AS NRO_PAGO
-                ,{$cnt_piso_pago} AS PISO_PAGO
-                ,{$cnt_depto_pago} AS DEPTO_PAGO
+                ,(CASE {$prs_razon_social} WHEN '0' THEN '' ELSE {$prs_razon_social} END) AS RAZON_SOCIAL
+                ,(CASE {$prs_calle} WHEN '0' THEN '' ELSE {$prs_calle} END) AS CALLE
+                ,(CASE {$prs_nro} WHEN '0' THEN '' ELSE {$prs_nro} END) AS NRO
+                ,(CASE {$prs_piso} WHEN '0' THEN '' ELSE {$prs_piso} END) AS PISO
+                ,(CASE {$prs_depto} WHEN '0' THEN '' ELSE {$prs_depto} END) AS DEPTO
+                ,(CASE {$cll_nombre_completo} WHEN '0' THEN '' ELSE {$cll_nombre_completo} END) AS NOMBRE_COMPLETO
+                ,(CASE {$cll_nombre} WHEN '0' THEN '' ELSE {$cll_nombre} END) AS NOMBRE_CALLE
+                ,(CASE {$cnt_nro_pago} WHEN '0' THEN '' ELSE {$cnt_nro_pago} END) AS NRO_PAGO
+                ,(CASE {$cnt_piso_pago} WHEN '0' THEN '' ELSE {$cnt_piso_pago} END) AS PISO_PAGO
+                ,(CASE {$cnt_depto_pago} WHEN '0' THEN '' ELSE {$cnt_depto_pago} END) AS DEPTO_PAGO
                 ,{#PARAM:/ROW/@CRR_TIPO} AS TIPO_CORREO
                 ,{#PARAM:/ROW/@CRR_CODIGO} AS CORREO
-                ,LPAD({$CantidadDeFacturas}, 5, '0') AS CANT_FACTURAS
-                ,{$prs_c_postal} AS CODIGO_POSTAL
-                ,{$prs_agf_nombre} AS LOCALIDAD
-                ,{$cnt_c_postal_pago} AS CODIGO_POSTAL_PAGO
-                ,{$cnt_agf_nombre} AS LOCALIDAD_PAGO
+                ,LPAD(TO_CHAR({$CantidadDeFacturas}), 5, '0') AS CANT_FACTURAS
+                ,(CASE {$prs_c_postal} WHEN '0' THEN '' ELSE {$prs_c_postal} END) AS CODIGO_POSTAL
+                ,(CASE {$prs_agf_nombre} WHEN '0' THEN '' ELSE {$prs_agf_nombre} END) AS LOCALIDAD
+                ,(CASE {$cnt_c_postal_pago} WHEN '0' THEN '' ELSE {$cnt_c_postal_pago} END) AS CODIGO_POSTAL_PAGO
+                ,(CASE {$cnt_agf_nombre} WHEN '0' THEN '' ELSE {$cnt_agf_nombre} END) AS LOCALIDAD_PAGO
             FROM DUAL
         </qry:select>
         <qry:out>
@@ -713,6 +787,7 @@
                         <qry:attribute name="calle" value="{#ROW:/ROW/@CALLE}" length="18" align="left"/>
                         <qry:attribute name="nro_puerta" value="{#ROW:/ROW/@NRO}" length="4" align="left"/>
                         <qry:attribute name="piso" value="{#ROW:/ROW/@PISO}" length="2" align="left"/>
+                        <qry:attribute name="dpto" value="{#ROW:/ROW/@DEPTO_PAGO}" length="3" align="left"/>
                         <qry:attribute name="codigo_postal" value="{#ROW:/ROW/@CODIGO_POSTAL}" length="7" align="left"/>
                         <qry:attribute name="localidad" value="{#ROW:/ROW/@LOCALIDAD}" length="30" align="left"/>
                     <qry:else/>
@@ -729,8 +804,7 @@
                     </qry:if>
                     <qry:attribute name="tipo_correo" value="{#ROW:/ROW/@TIPO_CORREO}" length="2" align="left"/>
                     <qry:attribute name="codigo_correo" value="{#ROW:/ROW/@CORREO}" length="8" align="left"/>
-                    <qry:attribute name="vacio" value=" " length="8" align="left"/>
-                    <qry:attribute name="vacio" value=" " length="8" align="left"/>
+                    <qry:attribute name="vacio1" value=" " length="8" align="left"/>
                     <qry:attribute name="cantidad_facturas" value="{#ROW:/ROW/@CANT_FACTURAS}"/>
                     <qry:attribute name="titulo_aviso" value=" " length="30" align="left"/>
                     <qry:attribute name="codigo_zona" value=" " length="3" align="left"/>
@@ -815,6 +889,10 @@
         <qry:out>
             <qry:set-variable name="TESTnotifi" value="0"/>
             <qry:element name="notificacion">
+            <qry:insert-query name="SeleccionaFechaHabilAnterior"/>
+            <qry:attribute name="fecha_limite" value="{$sysdate_limite}"/>
+            <qry:attribute name="fecha_total" value="{$sysdate_total}"/>
+
             <qry:for-each-row>
                 <qry:set-variable name="TESTnotifi" value="1" operation="+"/>
                 
@@ -823,7 +901,7 @@
                     <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/> <!-- Largo del texto para la columna  -->
                 </qry:if>
                     <qry:if left="#ROW:/ROW/@ENO_TIPO" operator="equal" right="T" type="string">
-                        <qry:print output="stdout" value="Bucle-T-Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>
+                        <!--<qry:print output="stdout" value="Bucle-T-Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>-->
                         <qry:if left="{$ban}" operator="equal" right="1" type="integer">
                             <qry:if left="{$v_tabla}" operator="equal" right="DOCUMENTOS" type="string">
                                 <!-- Tipo de tabla en memoria Documentos  -->
@@ -831,10 +909,10 @@
                                 <qry:set-variable name="nro_linea" value="0"/>
                                 <qry:set-variable name="document_tbl_type" value="DOC"/>
                                 <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
-                                    <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
+                                    <!--<qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>-->
                                     <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                 <qry:else/>
-                                    <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
+                                    <!--<qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>-->
                                     <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                 </qry:if>
                             <qry:else/>
@@ -845,24 +923,24 @@
                                     <qry:set-variable name="document_tbl_type" value="ORI"/>
                                     <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
                                     <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
-                                        <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
+                                        <!--<qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>-->
                                         <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                     <qry:else/>
-                                        <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
+                                        <!--<qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>-->
                                         <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                     </qry:if>
 
-                                    <qry:print output="stdout" value="              TESToriAntes - srv_cod: {$srv_cod}"/>
-                                    <qry:print output="stdout" value="              TESToriAntes - cnt_num: {$cnt_num}"/>
-                                    <qry:print output="stdout" value="              TESToriAntes - trt_num: {$trt_num}"/>
+                                    <!--<qry:print output="stdout" value="              TESToriAntes - srv_cod: {$srv_cod}"/>-->
+                                    <!--<qry:print output="stdout" value="              TESToriAntes - cnt_num: {$cnt_num}"/>-->
+                                    <!--<qry:print output="stdout" value="              TESToriAntes - trt_num: {$trt_num}"/>-->
 
                                     <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                     <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                     <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
 
-                                    <qry:print output="stdout" value="              TESToriDespues - srv_cod: {$srv_cod}"/>
-                                    <qry:print output="stdout" value="              TESToriDespues - cnt_num: {$cnt_num}"/>
-                                    <qry:print output="stdout" value="              TESToriDespues - trt_num: {$trt_num}"/>
+                                    <!--<qry:print output="stdout" value="              TESToriDespues - srv_cod: {$srv_cod}"/>-->
+                                    <!--<qry:print output="stdout" value="              TESToriDespues - cnt_num: {$cnt_num}"/>-->
+                                    <!--<qry:print output="stdout" value="              TESToriDespues - trt_num: {$trt_num}"/>-->
                                 </qry:if>
                             </qry:if>
                             <qry:set-variable name="ban" value="0"/>
@@ -877,7 +955,7 @@
                         </qry:if>
                     <qry:else/>
                         <qry:insert-query name="NotifiCargaTablas"/>
-                        <qry:print output="stdout" value="Bucle - Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>
+                        <!--<qry:print output="stdout" value="Bucle - Notifi nro: {$TESTnotifi} Columna: {$v_tabla} / NotCodigo: {#PARAM:/ROW/@NOT_CODIGO} "/>-->
                         <qry:if left="#ROW:/ROW/@ENO_TIPO_CAMPO" operator="equal" right="F" type="string">
                             <!-- logica larga  -->
                                 <qry:if left="{$ban}" operator="equal" right="1" type="integer">
@@ -888,10 +966,10 @@
                                         <qry:set-variable name="document_tbl_type" value="DOC"/>
                                     
                                         <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
-                                            <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
+                                            <!--<qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>-->
                                             <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                         <qry:else/>
-                                            <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
+                                            <!--<qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>-->
                                             <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                         </qry:if>
                                     <qry:else/>
@@ -903,10 +981,10 @@
                                         
                                             <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
                                             <qry:if left="{$Tor_codigo}" operator="equal" right="D2" type="string">
-                                                <qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>
+                                                <!--<qry:print output="stdout" value="      DocumentosD2 - trt_num: {$trt_num} / num_rows_doc : {$num_rows_doc} "/>-->
                                                 <qry:insert-query name="DocumentosD2" doc-param="#ROW:"/>
                                             <qry:else/>
-                                                <qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>
+                                                <!--<qry:print output="stdout" value="      Documentos - nro_ord: {$nro_ord} / num_rows_doc : {$num_rows_doc} "/>-->
                                                 <qry:insert-query name="Documentos" doc-param="#ROW:"/>
                                             </qry:if>
                                             <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
@@ -920,53 +998,53 @@
                                 <qry:set-variable name="largos" value="{#ROW:/ROW/@ENO_VAR_LONGITUD}"/>
 
                                 <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS" type="string">
-                                    <qry:print output="stdout" value="      Personas - prs_num: {$prs_num}"/>
+                                    <!--<qry:print output="stdout" value="      Personas - prs_num: {$prs_num}"/>-->
                                     <qry:insert-query name="Personas" doc-param="#ROW:"/>
                                 <qry:else/>
                                     <qry:if left="{$v_tabla}" operator="equal" right="PERSONAS_GAR" type="string">
-                                        <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
+                                        <!--<qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>-->
                                         <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
-                                        <qry:print output="stdout" value="      Prs_Num_Ori - cnt_num: {$cnt_num} / srv_cod: {$srv_cod}"/>
+                                        <!--<qry:print output="stdout" value="      Prs_Num_Ori - cnt_num: {$cnt_num} / srv_cod: {$srv_cod}"/>-->
                                         <qry:insert-query name="Prs_Num_Ori" doc-param="#ROW:"/>
                                         <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                         <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                         <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
-                                        <qry:print output="stdout" value="      Personas - prs_num: {$prs_num}"/>
+                                        <!--<qry:print output="stdout" value="      Personas - prs_num: {$prs_num}"/>-->
                                         <qry:insert-query name="Personas" doc-param="#ROW:"/>
                                         <qry:set-variable name="prs_num" value="{$prs_num_temp}"/>
                                     <qry:else/>
                                         <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS" type="string">
-                                            <qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>
+                                            <!--<qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>-->
                                             <qry:insert-query name="Contratos" doc-param="#ROW:"/>
                                         <qry:else/>
                                             <qry:if left="{$v_tabla}" operator="equal" right="CONTRATOS_GAR" type="string">
-                                                <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
+                                                <!--<qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>-->
                                                 <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
-                                                <qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>
+                                                <!--<qry:print output="stdout" value="      Contratos - srv_cod: {$srv_cod}"/>-->
                                                 <qry:insert-query name="Contratos" doc-param="#ROW:"/>
                                                 <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                 <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                                 <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                             <qry:else/>
                                                 <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS" type="string">
-                                                    <qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>
+                                                    <!--<qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>-->
                                                     <qry:insert-query name="Servicios" doc-param="#ROW:"/>
                                                 <qry:else/>
                                                     <qry:if left="{$v_tabla}" operator="equal" right="SERVICIOS_GAR" type="string">
-                                                        <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
+                                                        <!--<qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>-->
                                                         <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
-                                                        <qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>
+                                                        <!--<qry:print output="stdout" value="      Servicios - srv_cod: {$srv_cod}"/>-->
                                                         <qry:insert-query name="Servicios" doc-param="#ROW:"/>
                                                         <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                         <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                                         <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                                     <qry:else/>
                                                         <qry:if left="{$v_tabla}" operator="equal" right="LECTURAS" type="string">
-                                                            <qry:print output="stdout" value="      Lecturas - srv_cod: {$srv_cod}"/>
+                                                            <!--<qry:print output="stdout" value="      Lecturas - srv_cod: {$srv_cod}"/>-->
                                                             <qry:insert-query name="Lecturas" doc-param="#ROW:"/>
                                                         <qry:else/>
                                                             <qry:if left="{$v_tabla}" operator="equal" right="ORDENATIVOS" type="string">
-                                                                <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
+                                                                <!--<qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>-->
                                                                 <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
                                                                 <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                                 <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
@@ -976,52 +1054,52 @@
                                                                     <qry:insert-query name="TiposOrdenativo" doc-param="#ROW:"/>
                                                                 <qry:else/>
                                                                     <qry:if left="{$v_tabla}" operator="equal" right="POTENCIAS" type="string">
-                                                                        <qry:print output="stdout" value="      Potencias - srv_cod / cnt_num: {$srv_cod} / {$cnt_num}"/>
+                                                                        <!--<qry:print output="stdout" value="      Potencias - srv_cod / cnt_num: {$srv_cod} / {$cnt_num}"/>-->
                                                                         <qry:insert-query name="Potencias" doc-param="#ROW:"/>
                                                                     <qry:else/>
                                                                         <qry:if left="{$v_tabla}" operator="equal" right="STOCK_EQUIPOS" type="string">
-                                                                            <qry:print output="stdout" value="      Stock_Equipos - srv_cod: {$srv_cod}"/>
+                                                                            <!--<qry:print output="stdout" value="      Stock_Equipos - srv_cod: {$srv_cod}"/>-->
                                                                             <qry:insert-query name="Stock_Equipos" doc-param="#ROW:"/>
                                                                         <qry:else/>
                                                                             <qry:if left="{$v_tabla}" operator="equal" right="SUCURSALES" type="string">
-                                                                                <qry:print output="stdout" value="      Sucursales - scf_cod: {$scf_cod}"/>
+                                                                                <!--<qry:print output="stdout" value="      Sucursales - scf_cod: {$scf_cod}"/>-->
                                                                                 <qry:insert-query name="Sucursales" doc-param="#ROW:"/>
                                                                             <qry:else/>
                                                                                 <qry:if left="{$v_tabla}" operator="equal" right="CARGOS" type="string">
-                                                                                    <qry:print output="stdout" value="      Cargos - ord_fec: {$ord_fec}"/>
+                                                                                    <!--<qry:print output="stdout" value="      Cargos - ord_fec: {$ord_fec}"/>-->
                                                                                     <qry:insert-query name="Cargos" doc-param="#ROW:"/>
                                                                                 <qry:else/>
                                                                                     <qry:if left="{$v_tabla}" operator="equal" right="BANCOS" type="string">
-                                                                                        <qry:print output="stdout" value="      Bancos - agf_cod: {$agf_cod}"/>
+                                                                                        <!--<qry:print output="stdout" value="      Bancos - agf_cod: {$agf_cod}"/>-->
                                                                                         <qry:insert-query name="Bancos" doc-param="#ROW:"/>
                                                                                     <qry:else/>
                                                                                         <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_IVA" type="string">
-                                                                                            <qry:print output="stdout" value="      Tipos IVA - ivv_cod: {$ivv_cod}"/>
+                                                                                            <!--<qry:print output="stdout" value="      Tipos IVA - ivv_cod: {$ivv_cod}"/>-->
                                                                                             <qry:insert-query name="Tipos_IVA" doc-param="#ROW:"/>
                                                                                         <qry:else/>
                                                                                             <qry:if left="{$v_tabla}" operator="equal" right="TIPOS_NOTIFICACION" type="string">
-                                                                                                <qry:print output="stdout" value="      Tipos Notificacion - tipo_notificacion: {#PARAM:/ROW/@NOT_DESCRIPCION}"/>
+                                                                                                <!--<qry:print output="stdout" value="      Tipos Notificacion - tipo_notificacion: {#PARAM:/ROW/@NOT_DESCRIPCION}"/>-->
                                                                                                 <qry:attribute name="tipo_notificacion" value="{#PARAM:/ROW/@NOT_DESCRIPCION}"/>
                                                                                             <qry:else/>
                                                                                                 <qry:if left="{$v_tabla}" operator="equal" right="TARIFAS" type="string">
-                                                                                                    <qry:print output="stdout" value="      Tarifas - tcl_cod: {$tcl_cod}"/>
+                                                                                                    <!--<qry:print output="stdout" value="      Tarifas - tcl_cod: {$tcl_cod}"/>-->
                                                                                                     <qry:insert-query name="Tarifas" doc-param="#ROW:"/>
                                                                                                 <qry:else/>
                                                                                                     <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE" type="string">
-                                                                                                        <qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>
+                                                                                                        <!--<qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>-->
                                                                                                         <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
                                                                                                     <qry:else/>
                                                                                                         <qry:if left="{$v_tabla}" operator="equal" right="TOTALES_TRAMITE_GAR" type="string">
-                                                                                                            <qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>
+                                                                                                            <!--<qry:print output="stdout" value="      Ordenativos - nro_ord: {$nro_ord}"/>-->
                                                                                                             <qry:insert-query name="Ordenativos" doc-param="#ROW:"/>
-                                                                                                            <qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>
+                                                                                                            <!--<qry:print output="stdout" value="      Totales Tramites - trt_num: {$trt_num}"/>-->
                                                                                                             <qry:insert-query name="Totales_Tramite" doc-param="#ROW:"/>
                                                                                                             <qry:set-variable name="srv_cod" value="{$srv_cod_temp}"/>
                                                                                                             <qry:set-variable name="cnt_num" value="{$cnt_num_temp}"/>
                                                                                                             <qry:set-variable name="trt_num" value="{$trt_num_temp}"/>
                                                                                                         <qry:else/>
                                                                                                             <qry:if left="{$v_tabla}" operator="equal" right="USUARIOS" type="string">
-                                                                                                                <qry:print output="stdout" value="      Usuarios"/>
+                                                                                                                <!--<qry:print output="stdout" value="      Usuarios"/>-->
                                                                                                                 <qry:insert-query name="Usuarios" doc-param="#ROW:"/>
                                                                                                             </qry:if>
                                                                                                         </qry:if>
@@ -1098,6 +1176,7 @@
             <qry:for-each-row  doc="$TBL_personas:">
                 <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                 <qry:element name="persona">
+                    <qry:attribute name="prs_num" value="{$prs_num}"/>
                     <qry:if left="{$v_columna}" operator="equal" right="PRS_NUMERO" type="string">
                         <qry:if left="#ROW:/ROW/@PRS_NUMERO" operator="greater" right="0" type="string">
                             <qry:attribute name="numero" value="#ROW:/ROW/@PRS_NUMERO" length="$largos" align="left"/>
@@ -1255,7 +1334,7 @@
             <qry:if left="{$isEmpty_contratos}" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryContratos"/>
             <qry:else/>
-                <qry:if left="{$actual_srv_cod}" operator="not-equal" right="{$srv_cod}" type="integer">
+                <qry:if left="{$actual_srv_cod_contratos}" operator="not-equal" right="{$srv_cod}" type="integer">
                     <qry:insert-query name="QueryContratos"/>
                 </qry:if>
             </qry:if>
@@ -1498,23 +1577,18 @@
             	,COALESCE(T.CNT_OBSERVACIONES, '0') AS CNT_OBSERVACIONES
             	,T.OIM_TIPO
             	,T.CNT_ESTADO
-            	,T.AGF_CODIGO AS 
+            	,T.AGF_CODIGO
             	,TRIM(COALESCE(C.CLL_NOMBRE, '0')) AS CLL_NOMBRE
             	,COALESCE(T.CNT_BIS, '0') AS CNT_BIS 
             	,COALESCE(T.CNT_TORRE_PAGO, '0') AS CNT_TORRE_PAGO
-				,decode(T.cnt_direccion_pago,null,C.cll_nombre||' '||decode(T.cnt_bis,'N',null,T.cnt_bis)||' '||T.cnt_torre_pago||' '||T.cnt_piso_pago||' '||T.cnt_depto_pago,substr(T.cnt_direccion_pago,1,30)) direccion ,decode(T.cnt_direccion_pago,null,'('|| decode(T.srv_codigo,0,P.prs_c_postal,T.cnt_c_postal_pago)|| ') '|| agf.agf_nombre,substr(T.cnt_direccion_pago,31,60)) AS LOCALIDAD
             FROM CONTRATOS T
-            INNER JOIN areas_geograficas agf
-                ON agf.agf_codigo = T.agf_codigo
             LEFT JOIN CALLES C
             	ON (C.AGF_CODIGO = T.AGF_CODIGO AND C.CLL_CODIGO = T.CLL_CODIGO)
-            INNER JOIN PERSONAS P
-                ON (C.cll_codigo = P.cll_codigo AND C.agf_codigo = P.agf_codigo)
             WHERE SRV_CODIGO = {$srv_cod}
             	AND CNT_NUMERO = {$cnt_num}
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_srv_cod" value="{$srv_cod}"/>
+            <qry:set-variable name="actual_srv_cod_contratos" value="{$srv_cod}"/>
             <qry:set-variable name="TBL_contratos" value="#ROW:"/>
             <qry:set-variable name="isEmpty_contratos" value="1"/>
         </qry:out>
@@ -1563,14 +1637,15 @@
     <!-- COMPLETADO: Probado -->
     <qry:query name="Servicios" > 
         <qry:out>
-            <qry:if left="$isEmpty_servicios" operator="equal" right="0" type="integer">
+            <qry:if left="{$isEmpty_servicios}" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryServicios"/>
             <qry:else/>
-                <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
+                <qry:if left="{$actual_srv_cod_servicios}" operator="not-equal" right="{$srv_cod}" type="integer">
                     <qry:insert-query name="QueryServicios"/>
                 </qry:if>
             </qry:if>
             <qry:element name="servicio">
+            <qry:attribute name="srv_cod" value="{$srv_cod}"/>
             <qry:for-each-row  doc="$TBL_servicios:">
                 <qry:set-variable name="s_srv_agf_nombre" value="0"/>
                 
@@ -1766,7 +1841,7 @@
                 WHERE SRV_CODIGO = {$srv_cod}
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_srv_cod" value="$srv_cod"/>
+            <qry:set-variable name="actual_srv_cod_servicios" value="$srv_cod"/>
             <qry:set-variable name="TBL_servicios" value="#ROW:"/>
             <qry:set-variable name="isEmpty_servicios" value="1"/>
         </qry:out>
@@ -1791,11 +1866,12 @@
             <qry:if left="$isEmpty_lecturas" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryLecturas"/>
             <qry:else/>
-                <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
+                <qry:if left="$actual_srv_cod_lecturas" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryLecturas"/>
                 </qry:if>
             </qry:if>
             <qry:element name="lectura">
+                <qry:attribute name="srv_cod" value="{$srv_cod}"/>
                 <qry:for-each-row  doc="$TBL_lecturas:">
                     <qry:if left="{$v_columna}" operator="equal" right="LCT_VALOR_LEIDO" type="string"> 
                         <qry:if left="#ROW:/ROW/@LCT_VALOR_LEIDO" operator="greater" right="0" type="double">
@@ -1822,7 +1898,7 @@
             		)
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_srv_cod" value="$srv_cod"/>
+            <qry:set-variable name="actual_srv_cod_lecturas" value="$srv_cod"/>
             <qry:set-variable name="TBL_lecturas" value="#ROW:"/>
             <qry:set-variable name="isEmpty_lecturas" value="1"/>
         </qry:out>
@@ -1834,11 +1910,12 @@
             <qry:if left="{$isEmpty_ordenativos}" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryOrdenativos"/>
             <qry:else/>
-                <qry:if left="{$actual_nro_ord}" operator="equal" right="{$nro_ord}" type="integer">
+                <qry:if left="{$actual_nro_ord_ordenativos}" operator="equal" right="{$nro_ord}" type="integer">
                     <qry:insert-query name="QueryOrdenativos"/>
                 </qry:if>
             </qry:if>
             <qry:element name="ordenativo">
+                <qry:attribute name="nro_ord" value="{$nro_ord}"/>
                 <qry:for-each-row  doc="$TBL_ordenativos:">
                     <qry:set-variable name="ord_fec" value="{#ROW:/ROW/@ORD_FECHA_GENERACION}"/>
                     <qry:set-variable name="srv_cod_temp" value="{$srv_cod}"/>
@@ -1912,7 +1989,7 @@
             WHERE ORD_NUMERO = {$nro_ord}
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_nro_ord" value="$nro_ord"/>
+            <qry:set-variable name="actual_nro_ord_ordenativos" value="$nro_ord"/>
             <qry:set-variable name="TBL_ordenativos" value="#ROW:"/>
             <qry:set-variable name="isEmpty_ordenativos" value="1"/>
         </qry:out>
@@ -1937,11 +2014,12 @@
             <qry:if left="$isEmpty_potencias" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryPotencias"/>
             <qry:else/>
-                <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
+                <qry:if left="$actual_srv_cod_potencias" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryPotencias"/>
                 </qry:if>
             </qry:if>
             <qry:element name="potencia">
+                <qry:attribute name="srv_cod" value="{$srv_cod}"/>
                 <qry:for-each-row  doc="$TBL_potencias:">
                     <qry:if left="{$v_columna}" operator="equal" right="POT_VALOR" type="string">
                         <qry:attribute name="valor" value="{#ROW:/ROW/@POT_VALOR}" length="$largos" align="left" format-number=" 2"/>
@@ -1971,7 +2049,7 @@
 	            	)
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_srv_cod" value="$srv_cod"/>
+            <qry:set-variable name="actual_srv_cod_potencias" value="$srv_cod"/>
             <qry:set-variable name="TBL_potencias" value="#ROW:"/>
             <qry:set-variable name="isEmpty_potencias" value="1"/>
         </qry:out>
@@ -1983,11 +2061,12 @@
             <qry:if left="$isEmpty_stock_equipos" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryStock_Equipos"/>
             <qry:else/>
-                <qry:if left="$actual_srv_cod" operator="not-equal" right="$srv_cod" type="integer">
+                <qry:if left="$actual_srv_cod_stock_equipos" operator="not-equal" right="$srv_cod" type="integer">
                     <qry:insert-query name="QueryStock_Equipos"/>
                 </qry:if>
             </qry:if>
             <qry:element name="stock_equipos">
+                <qry:attribute name="srv_cod" value="{$srv_cod}"/>
                 <qry:for-each-row  doc="$TBL_stock_equipos:">
                     <qry:if left="{$v_columna}" operator="equal" right="STE_NUMERO" type="string">
                         <qry:attribute name="numero" value="#ROW:/ROW/@STE_NUMERO" length="$largos" align="left" format-number=" 2"/>
@@ -2014,7 +2093,7 @@
             	AND E.EQP_ESTADO IS NULL
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_srv_cod" value="$srv_cod"/>
+            <qry:set-variable name="actual_srv_cod_stock_equipos" value="$srv_cod"/>
             <qry:set-variable name="TBL_stock_equipos" value="#ROW:"/>
             <qry:set-variable name="isEmpty_stock_equipos" value="1"/>
         </qry:out>
@@ -2031,6 +2110,7 @@
                 </qry:if>
             </qry:if>
             <qry:element name="sucursal">
+                <qry:attribute name="scf_cod" value="{$scf_cod}"/>
                 <qry:for-each-row  doc="$TBL_sucursales:">
                     <qry:if left="{$v_columna}" operator="equal" right="SCF_DESCRIPCION" type="string">
                         <qry:attribute name="descripcion" value="#ROW:/ROW/@SCF_DESCRIPCION" length="$largos" align="left"/>
@@ -2071,6 +2151,7 @@
                 </qry:if>
             </qry:if>
             <qry:element name="banco">
+                <qry:attribute name="agf_cod" value="{$agf_cod}"/>
                 <qry:for-each-row  doc="$TBL_bancos:">
                     <qry:attribute name="descripcion" value="#ROW:/ROW/@URC_DESCRIPCION_ALT" length="$largos" align="left" />
                 </qry:for-each-row>
@@ -2197,6 +2278,7 @@
                 </qry:if>
             </qry:if>
             <qry:element name="tipoIVA">
+                <qry:attribute name="ivv_cod" value="{$ivv_cod}"/>
                 <qry:for-each-row  doc="$TBL_tipos_iva:">
                     <qry:if left="{$v_columna}" operator="equal" right="TCL_DESCRIPCION" type="string">
                         <qry:attribute name="ivv_descripcion" value="#ROW:/ROW/@IVV_DESCRIPCION" length="$largos" align="left"/>
@@ -2233,6 +2315,7 @@
             </qry:if>
 
             <qry:element name="tarifa">
+                <qry:attribute name="tcl_cod" value="{$tcl_cod}"/>
                 <qry:for-each-row  doc="$TBL_tarifas:">
                     <qry:if left="{$v_columna}" operator="equal" right="TCL_DESCRIPCION" type="string">
                         <qry:attribute name="tcl_descripcion" value="#ROW:/ROW/@TCL_DESCRIPCION" length="$largos" align="left"/>
@@ -2264,7 +2347,7 @@
                 <qry:if left="$isEmpty_documentos_doc" operator="equal" right="0" type="integer">
                     <qry:insert-query name="QueryDocumentos"/>
                 <qry:else/>
-                    <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
+                    <qry:if left="$actual_nro_ord_documentos" operator="equal" right="$nro_ord" type="integer">
                         <qry:insert-query name="QueryDocumentos"/>
                     </qry:if>
                 </qry:if>
@@ -2272,13 +2355,16 @@
                 <qry:if left="$isEmpty_documentos_ori" operator="equal" right="0" type="integer">
                     <qry:insert-query name="QueryDocumentos"/>
                 <qry:else/>
-                    <qry:if left="$actual_nro_ord" operator="equal" right="$nro_ord" type="integer">
+                    <qry:if left="$actual_nro_ord_documentos" operator="equal" right="$nro_ord" type="integer">
                         <qry:insert-query name="QueryDocumentos"/>
                     </qry:if>
                 </qry:if>
             </qry:if>
             <qry:element name="documento">
+
+                <qry:attribute name="nro_ord" value="{$nro_ord}"/>
                 <qry:set-variable name="t_doc_saldo" value="0"/>
+                <qry:set-variable name="ImporteDelAviso" value="0"/>
                 <qry:for-each-row  doc="$TBL_documentos:">
                     <qry:element name="item">
                         <qry:set-variable name="nro_linea" value="1" operation="+"/>
@@ -2348,7 +2434,7 @@
                             <qry:attribute name="sin_datos" value="" length="12" align="left"/>
                         </qry:if>
                         <qry:attribute name="importe" value="#ROW:/ROW/@DOC_IMPORTE" align="left" format-number=" 2"/>
-                        <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>
+                        <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE" operation="+"/>
                         <qry:attribute name="importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" align="left" format-number=" 2"/>
                         <qry:attribute name="saldo" value="#ROW:/ROW/@DOC_SALDO" length="12" align="right" format-number=" 2"/>
                         <qry:attribute name="fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="12" align="left"/>
@@ -2359,6 +2445,14 @@
                         <qry:attribute name="estado" value="#ROW:/ROW/@DOC_ESTADO" align="left"/>
                         <qry:attribute name="llamada_sit_x" value="#ROW:/ROW/@LLAMADA_SIT_X" length="3" align="left"/>                                                                              
                     </qry:element>
+
+                    <qry:set-variable name="id_queryes" value="1" operation="+"/>
+                    <qry:element name="SqlCommand">
+                        <qry:attribute name="type" value="INSERT"/>
+                        <qry:attribute name="id" value="{$id_queryes}"/>
+                        <qry:text value="INSERT INTO CANCEL_DEUDA_DOC(cad_numero, doc_tipo, doc_numero, doc_fec_vto, doc_importe) VALUES ({$nro_aviso},'{#ROW:/ROW/@DOC_TIPO}',{#ROW:/ROW/@DOC_NUMERO},TO_DATE('{#ROW:/ROW/@DOC_FECHA_VENC_INSERT}', 'MM/DD/YYYY'),TO_NUMBER('{#ROW:/ROW/@DOC_SALDO_INSERT}'));"/>
+                    </qry:element>
+
                 </qry:for-each-row>
                 <!--<qry:set-variable name="num_rows_doc" value="1" operation="-"/>-->
                 <qry:while left="$nro_linea" operator="less" right="$num_rows_doc" type="integer">
@@ -2368,46 +2462,58 @@
                     </qry:element>
 			    </qry:while>
                 <qry:attribute name="saldo_total" value="{$t_doc_saldo}" format-number=" 2"/>
+
+                <qry:set-variable name="id_queryes" value="1" operation="+"/>
+                <qry:element name="SqlCommand">
+                    <qry:attribute name="type" value="INSERT"/>
+                    <qry:attribute name="id" value="{$id_queryes}"/>
+                    <qry:text value="INSERT INTO CANCEL_DEUDA(cad_numero,cad_tipo,srv_codigo,cnt_numero,prs_numero,cad_emision,cad_vto,cad_importe,cad_estado,usuarioid,aviso_nro) VALUES ({$nro_aviso},'{$Tor_codigo}',{$srv_cod},{$cnt_num},{$prs_num},trunc(sysdate),TO_DATE('{$sysdate_total_insert}', 'MM/DD/YYYY'),{$ImporteDelAviso},'D',{$l_usr_numero},{$nro_aviso});"/>
+                </qry:element>
+
             </qry:element>
         </qry:out>
     </qry:query>
 
     <qry:query name="QueryDocumentos" > 
         <qry:select dump="0">
-            SELECT /*+ rule */ TO_CHAR(d.DOC_NUMERO) AS DOC_NUMERO
-            	,d.DOC_TIPO
-            	,to_char(d.DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
-            	,COALESCE(d.DOC_PERIODO, 0) AS DOC_PERIODO
-            	,COALESCE(d.DOC_ANIO, 0) AS DOC_ANIO
-            	,COALESCE(d.DOC_CUOTA, 0) AS DOC_CUOTA
-            	,COALESCE(d.DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
-            	,TO_CHAR(COALESCE(d.DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
-            	,COALESCE(d.DOC_CONSUMO, 0) AS DOC_CONSUMO
-            	,COALESCE(d.ORD_NUMERO, 0) AS ORD_NUMERO
-            	,COALESCE(d.URC_CODIGO, 0) AS URC_CODIGO
-            	,COALESCE(d.ASI_NUMERO, 0) AS ASI_NUMERO
-            	,TO_CHAR(d.DOC_IMPORTE, '9999999999990.0000') AS DOC_IMPORTE
-            	,TO_CHAR(COALESCE(d.DOC_IMPORTE_BASICO, 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
-            	,TO_CHAR(nvl(d.DOC_SALDO, d.DOC_IMPORTE), '9999999999990.0000') AS DOC_SALDO
-            	,COALESCE(to_char(d.DOC_FECHA_VENC, 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
-            	,COALESCE(to_char(d.DOC_FECHA_VENC_1, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
-                ,COALESCE(to_char(d.DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
-                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
-                ,COALESCE(to_char(d.DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
-                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
-                ,d.DOC_ESTADO AS DOC_ESTADO
-                ,decode(d.doc_situacion, 'X', '(*)', '   ') LLAMADA_SIT_X
+            SELECT /*+ rule */ TO_CHAR(nvl(tal.talon_numero, d.DOC_NUMERO)) AS DOC_NUMERO
+                  ,nvl(tal.talon_tipo, d.DOC_TIPO) doc_tipo
+                  ,to_char(d.DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
+                  ,COALESCE(d.DOC_PERIODO, 0) AS DOC_PERIODO
+                  ,COALESCE(d.DOC_ANIO, 0) AS DOC_ANIO
+                  ,COALESCE(d.DOC_CUOTA, 0) AS DOC_CUOTA
+                  ,COALESCE(d.DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
+                  ,TO_CHAR(COALESCE(d.DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
+                  ,COALESCE(d.DOC_CONSUMO, 0) AS DOC_CONSUMO
+                  ,COALESCE(d.ORD_NUMERO, 0) AS ORD_NUMERO
+                  ,COALESCE(d.URC_CODIGO, 0) AS URC_CODIGO
+                  ,COALESCE(d.ASI_NUMERO, 0) AS ASI_NUMERO
+                  ,TO_CHAR(nvl(tal.importe, d.DOC_IMPORTE), '9999999999990.0000') AS DOC_IMPORTE
+                  ,TO_CHAR(COALESCE(nvl(tal.saldo, d.DOC_IMPORTE_BASICO), 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
+                  ,TO_CHAR(nvl(tal.saldo ,nvl(d.DOC_SALDO, d.DOC_IMPORTE)), '9999999999990.0000') AS DOC_SALDO
+                  ,REPLACE(TO_CHAR(nvl(tal.saldo ,nvl(d.DOC_SALDO, d.DOC_IMPORTE)),'9999999999990.00'),'.',',') AS DOC_SALDO_INSERT
+                  ,COALESCE(to_char(nvl(tal.fecha_vto, d.DOC_FECHA_VENC), 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
+                  ,COALESCE(to_char(nvl(tal.fecha_vto, d.DOC_FECHA_VENC), 'mm/dd/yyyy'), '0') AS DOC_FECHA_VENC_INSERT
+                  ,COALESCE(to_char(nvl(tal.fecha_vto, d.DOC_FECHA_VENC_1), 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
+                  ,COALESCE(to_char(d.DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
+                  ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
+                  ,COALESCE(to_char(d.DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
+                  ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
+                  ,d.DOC_ESTADO AS DOC_ESTADO
+                  ,decode(d.doc_situacion, 'X', '(*)', '   ') LLAMADA_SIT_X
             FROM documentos d
             INNER JOIN documentos_estadistica_view de 
-            	ON (d.doc_tipo = de.doc_tipo AND d.doc_numero = de.doc_numero)
-            WHERE nvl(nvl(d.DOC_SALDO, d.DOC_IMPORTE), 0) &gt; 0
-            	AND de.ord_numero = {$nro_ord}
-            	AND d.doc_situacion &lt;&gt; 'X'
+                ON (d.doc_tipo = de.doc_tipo AND d.doc_numero = de.doc_numero)
+            LEFT JOIN documentos_talones tal  
+                ON (d.doc_tipo = tal.doc_tipo and d.doc_numero = tal.doc_numero)
+            WHERE nvl(nvl(tal.saldo ,nvl(d.DOC_SALDO, d.DOC_IMPORTE)), 0) &gt; 0
+                AND de.ord_numero = {$nro_ord}
+                AND d.doc_situacion &lt;&gt; 'X'
                 AND ROWNUM &lt; {$num_rows_doc}
-            ORDER BY DOC_FECHA_VENC_1
+            ORDER BY d.DOC_FECHA_VENC_1
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_nro_ord" value="$nro_ord"/>
+            <qry:set-variable name="actual_nro_ord_documentos" value="$nro_ord"/>
             <qry:set-variable name="TBL_documentos" value="#ROW:"/>
             <qry:if left="document_tbl_type" operator="equal" right="DOC" type="string">
                 <qry:set-variable name="isEmpty_documentos_doc" value="1"/>
@@ -2426,7 +2532,7 @@
                 <qry:if left="$isEmpty_documentos_doc" operator="equal" right="0" type="integer">
                     <qry:insert-query name="QueryDocumentosD2"/>
                 <qry:else/>
-                    <qry:if left="{$actual_trt_num}" operator="equal" right="{$trt_num}" type="integer">
+                    <qry:if left="{$actual_trt_num_documentos" operator="equal" right="{$trt_num}" type="integer">
                         <qry:insert-query name="QueryDocumentosD2"/>
                     </qry:if>
                 </qry:if>
@@ -2434,13 +2540,15 @@
                 <qry:if left="$isEmpty_documentos_ori" operator="equal" right="0" type="integer">
                     <qry:insert-query name="QueryDocumentosD2"/>
                 <qry:else/>
-                    <qry:if left="{$actual_trt_num}" operator="equal" right="{$trt_num}" type="integer">
+                    <qry:if left="{$actual_trt_num_documentos}" operator="equal" right="{$trt_num}" type="integer">
                         <qry:insert-query name="QueryDocumentosD2"/>
                     </qry:if>
                 </qry:if>
             </qry:if>
-            <qry:element name="documentoD2">
+            <qry:element name="documento">
+                <qry:attribute name="trt_num" value="{$trt_num}"/>
                 <qry:set-variable name="t_doc_saldo" value="0"/>
+                <qry:set-variable name="ImporteDelAviso" value="0"/>
                 <qry:for-each-row  doc="$TBL_documentos:">
                     <qry:element name="item">
                         <qry:set-variable name="nro_linea" value="1" operation="+"/>
@@ -2510,7 +2618,7 @@
                             <qry:attribute name="sin_datos" value="" length="12" align="left"/>
                         </qry:if>                                              
                         <qry:attribute name="importe" value="#ROW:/ROW/@DOC_IMPORTE" align="left" format-number=" 2"/>
-                        <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" operation="+"/>                                                  
+                        <qry:set-variable name="ImporteDelAviso" value="#ROW:/ROW/@DOC_IMPORTE" operation="+"/>                                            
                         <qry:attribute name="importe_basico" value="#ROW:/ROW/@DOC_IMPORTE_BASICO" align="left" format-number=" 2"/>                                                      
                         <qry:attribute name="saldo" value="#ROW:/ROW/@DOC_SALDO" length="12" align="right" format-number=" 2"/>                                                        
                         <qry:attribute name="fecha_venc" value="#ROW:/ROW/@DOC_FECHA_VENC" length="12" align="left"/>                                                              
@@ -2536,38 +2644,40 @@
 
     <qry:query name="QueryDocumentosD2">
         <qry:select dump="0">
-            SELECT /*+ rule */ TO_CHAR(DOC_NUMERO) AS DOC_NUMERO
-            	,DOC_TIPO
-            	,to_char(DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
-            	,COALESCE(DOC_PERIODO, 0) AS DOC_PERIODO
-            	,COALESCE(DOC_ANIO, 0) AS DOC_ANIO
-            	,COALESCE(DOC_CUOTA, 0) AS DOC_CUOTA
-            	,COALESCE(DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
-            	,TO_CHAR(COALESCE(DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
-            	,COALESCE(DOC_CONSUMO, 0) AS DOC_CONSUMO
-            	,COALESCE(ORD_NUMERO, 0) AS ORD_NUMERO
-            	,COALESCE(URC_CODIGO, 0) AS URC_CODIGO
-            	,COALESCE(ASI_NUMERO, 0) AS ASI_NUMERO
-            	,TO_CHAR(DOC_IMPORTE, '9999999999990.0000') AS DOC_IMPORTE
-            	,TO_CHAR(COALESCE(DOC_IMPORTE_BASICO, 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
-            	,TO_CHAR(nvl(DOC_SALDO, DOC_IMPORTE), '9999999999990.0000') AS DOC_SALDO
-            	,COALESCE(to_char(DOC_FECHA_VENC, 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
-            	,COALESCE(to_char(DOC_FECHA_VENC_1, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
-            	,COALESCE(to_char(DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
-            	,TO_CHAR(COALESCE(DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
-            	,COALESCE(to_char(DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
-            	,TO_CHAR(COALESCE(DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
-            	,DOC_ESTADO
-            	,decode(doc_situacion, 'X', '(*)', 'C1', '(*)', 'C2', '(*)', 'C3', '(*)', '   ') LLAMADA_SIT_X
-            FROM DOCUMENTOS
+            SELECT /*+ rule */ TO_CHAR(nvl(tal.talon_numero, d.DOC_NUMERO)) AS DOC_NUMERO
+                ,nvl(tal.talon_tipo, d.DOC_TIPO) as doc_tipo
+                ,to_char(d.DOC_FECHA_EMISION, 'dd/mm/yyyy') AS DOC_FECHA_EMISION
+                ,COALESCE(d.DOC_PERIODO, 0) AS DOC_PERIODO
+                ,COALESCE(d.DOC_ANIO, 0) AS DOC_ANIO
+                ,COALESCE(d.DOC_CUOTA, 0) AS DOC_CUOTA
+                ,COALESCE(d.DOC_TIPO_ORIGEN, '0') AS DOC_TIPO_ORIGEN
+                ,TO_CHAR(COALESCE(d.DOC_NUMERO_ORIGEN, 0)) AS DOC_NUMERO_ORIGEN
+                ,COALESCE(d.DOC_CONSUMO, 0) AS DOC_CONSUMO
+                ,COALESCE(d.ORD_NUMERO, 0) AS ORD_NUMERO
+                ,COALESCE(d.URC_CODIGO, 0) AS URC_CODIGO
+                ,COALESCE(d.ASI_NUMERO, 0) AS ASI_NUMERO
+                ,TO_CHAR(nvl(tal.importe, d.DOC_IMPORTE), '9999999999990.0000') AS DOC_IMPORTE
+                ,TO_CHAR(COALESCE(nvl(tal.saldo, d.DOC_IMPORTE_BASICO), 0), '9999999999990.0000') AS DOC_IMPORTE_BASICO
+                ,TO_CHAR(nvl(tal.saldo, nvl(d.DOC_SALDO, d.DOC_IMPORTE)), '9999999999990.0000') AS DOC_SALDO
+                ,COALESCE(to_char(nvl(tal.fecha_vto, d.DOC_FECHA_VENC), 'dd/mm/yy'), '0') AS DOC_FECHA_VENC
+                ,COALESCE(to_char(nvl(tal.fecha_vto, d.DOC_FECHA_VENC_1), 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_1
+                ,COALESCE(to_char(d.DOC_FECHA_VENC_2, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_2
+                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_2, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_2
+                ,COALESCE(to_char(d.DOC_FECHA_VENC_3, 'dd/mm/yyyy'), '0') AS DOC_FECHA_VENC_3
+                ,TO_CHAR(COALESCE(d.DOC_RECARGO_VENC_3, 0), '9999999999990.0000') AS DOC_RECARGO_VENC_3
+                ,d.DOC_ESTADO
+                ,decode(d.doc_situacion, 'X', '(*)', 'C1', '(*)', 'C2', '(*)', 'C3', '(*)', '   ') LLAMADA_SIT_X
+            FROM DOCUMENTOS d
+            LEFT JOIN documentos_talones tal  
+                ON (d.doc_tipo = tal.doc_tipo and d.doc_numero = tal.doc_numero)
             WHERE TRT_NUMERO = {$trt_num}
-            	AND NVL(NVL(DOC_SALDO, DOC_IMPORTE), 0) &gt; 0
-            	AND doc_situacion &lt;&gt; 'X'
+                AND NVL(nvl(tal.saldo, NVL(d.DOC_SALDO, d.DOC_IMPORTE)), 0) &gt; 0
+                AND d.doc_situacion &lt;&gt; 'X'
                 AND ROWNUM &lt; {$num_rows_doc}
-            ORDER BY DOC_FECHA_VENC_1
+            ORDER BY nvl(tal.fecha_vto, d.DOC_FECHA_VENC_1)
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_trt_num" value="{$trt_num}"/>
+            <qry:set-variable name="actual_trt_num_documentos" value="{$trt_num}"/>
             <qry:set-variable name="TBL_documentos" value="#ROW:"/>
             <qry:if left="document_tbl_type" operator="equal" right="DOC" type="string">
                 <qry:set-variable name="isEmpty_documentos_doc" value="1"/>
@@ -2585,11 +2695,12 @@
             <qry:if left="$isEmpty_totales_tramites" operator="equal" right="0" type="integer">
                 <qry:insert-query name="QueryTotales_Tramite"/>
             <qry:else/>
-                <qry:if left="{$actual_trt_num}" operator="equal" right="{$trt_num}" type="integer">
+                <qry:if left="{$actual_trt_num_tramites}" operator="equal" right="{$trt_num}" type="integer">
                     <qry:insert-query name="QueryTotales_Tramite"/>
                 </qry:if>
             </qry:if>
             <qry:element name="totalesTramite">
+                <qry:attribute name="trt_num" value="{$trt_num}"/>
                 <qry:for-each-row  doc="$TBL_totales_tramites:">    
                     <qry:if left="{$v_columna}" operator="equal" right="TTR_CANT_DOC" type="string">
                         <qry:attribute name="cant_doc" value="#ROW:/ROW/@TTR_CANT_DOC" length="$largos" align="left"/>
@@ -2619,7 +2730,7 @@
             WHERE TRT_NUMERO = {$trt_num}
         </qry:select>
         <qry:out>
-            <qry:set-variable name="actual_trt_num" value="{$trt_num}"/>
+            <qry:set-variable name="actual_trt_num_tramites" value="{$trt_num}"/>
             <qry:set-variable name="TBL_totales_tramites" value="#ROW:"/>
             <qry:set-variable name="isEmpty_totales_tramites" value="1"/>
         </qry:out>
@@ -2672,10 +2783,10 @@
             SELECT LPAD({$nro_ord}, 10, '0') AS NRO_ORD
                 ,LPAD('81', 2, '0') AS COD_EMPRESA
                 ,LPAD('87', 2, '0') AS TIPO_COMPROBANTE
-                ,LPAD({$nro_ord}, 10, '0') AS NRO_COMPROBANTE
-                ,LPAD((REPLACE('123454.54', '.')), 12, '0') AS IMPORTE
-                ,LPAD((REPLACE({$sysdate}, '/')), 8, '0') AS FECHA_LIMITE_1
-                ,LPAD((REPLACE({$sysdate}, '/')), 8, '0') AS FECHA_LIMITE_2
+                ,LPAD({$nro_aviso}, 10, '0') AS NRO_COMPROBANTE
+                ,LPAD(SUBSTR(REPLACE({$t_doc_saldo}, '.'), 1 ,LENGTH({$t_doc_saldo}) - 5), 12, '0') AS IMPORTE
+                ,LPAD((REPLACE({$sysdate_total}, '/')), 8, '0') AS FECHA_LIMITE_1
+                ,LPAD((REPLACE({$sysdate_total}, '/')), 8, '0') AS FECHA_LIMITE_2
                 ,LPAD('1', 1, '0') AS TIPO_FACTURA
                 ,LPAD('0', 1, '0') AS DIGITO_VERIFICADOR
             FROM DUAL
@@ -2685,7 +2796,7 @@
             <!-- Como hacer con el tema de la impresion del codigo de barras -->
             <qry:element name="codigoBarras">
                 <qry:for-each-row>
-                    <qry:print output="stdout" value="                                  TEST: Fecha {$sysdate}"/>
+                    <!--<qry:print output="stdout" value="                                  TEST: Fecha {$sysdate}"/>-->
                     <qry:set-variable name="barras_litoral_var" value="{#ROW:/ROW/@COD_EMPRESA}{#ROW:/ROW/@TIPO_COMPROBANTE}{#ROW:/ROW/@NRO_COMPROBANTE}{#ROW:/ROW/@IMPORTE}{#ROW:/ROW/@FECHA_LIMITE_1}{#ROW:/ROW/@FECHA_LIMITE_2}{#ROW:/ROW/@TIPO_FACTURA}{#ROW:/ROW/@DIGITO_VERIFICADOR}"/>
                     <qry:set-variable name="nrobarra" value="#ROW:/ROW/@NRO_ORD"/>
                     <qry:set-variable name="barras_correo_var" value="#ROW:/ROW/@NRO_ORD"/>
